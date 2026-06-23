@@ -21,6 +21,10 @@ config/icon="res://icon.svg"
 window/size/viewport_width=1280
 window/size/viewport_height=720
 
+[dotnet]
+
+project/assembly_name="别按那个键"
+
 [global_group]
 
 ClickedButtons="触发各类BUFF的按钮"

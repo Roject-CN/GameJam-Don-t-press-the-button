@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://gfcjptk77qr7"]
 
-[ext_resource type="Script" uid="uid://dgg1636dhv3v8" path="res://scripts/buttons/base_button.gd" id="1_0os8n"]
+[ext_resource type="Script" uid="uid://cdogl7swhdyu6" path="res://scripts/buttons/base_button.gd" id="1_0os8n"]
 
 [node name="BaseButton" type="Node2D" unique_id=115424014 groups=["ClickedButtons"]]
 scale = Vector2(2, 2)

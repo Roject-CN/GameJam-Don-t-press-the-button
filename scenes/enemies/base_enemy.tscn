@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dp7qcvgcmvebd"]
 
-[ext_resource type="Script" uid="uid://b4u6imqd3v5r1" path="res://scripts/enemies/base_enemy.gd" id="1_r5xb8"]
+[ext_resource type="Script" uid="uid://kkicuxworwtd" path="res://scripts/enemies/base_enemy.gd" id="1_r5xb8"]
 [ext_resource type="Texture2D" uid="uid://dbhsmxlbt03rt" path="res://assets/mouse.png" id="2_qf3h2"]
 
 [sub_resource type="Animation" id="Animation_qf3h2"]

@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bhd1c03in3wtx"]
+
+[ext_resource type="PackedScene" uid="uid://bi4uder0xrmn3" path="res://ui/main_ui.tscn" id="1_gex7r"]
+
+[node name="SceneTest" type="Node2D" unique_id=1132354873]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1489677348]
+limit_left = 0
+limit_top = 0
+limit_right = 1280
+limit_bottom = 720
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1334872911]
+
+[node name="MainUi" parent="CanvasLayer" unique_id=701478321 instance=ExtResource("1_gex7r")]
