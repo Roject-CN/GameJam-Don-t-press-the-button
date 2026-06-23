@@ -15,6 +15,7 @@ enum Stage { BUILD, BATTLE, SETTLE }
 @export var buff_emitter : BuffEmitter
 @export var ready_button: Button
 @export var countdown_label: Label
+@export var player_container: PlayerContainer
 # 可配置参数
 @export var total_waves: int = 5
 @export var start_fragments: int = 100
@@ -40,6 +41,13 @@ signal game_lost
 func _ready() -> void:
 	fragments = start_fragments
 	lives = max_lives
+
+	# ── 所有模块信号集中连接 ──
+	ready_button.pressed.connect(start_battle)
+	count_timer.timeout.connect(_tick_countdown)
+	enemy_container.battle_over.connect(end_battle)
+	player_container.life_lost.connect(lose_life)
+
 	_enter_stage(current_stage)
 
 
@@ -58,15 +66,10 @@ func change_stage(new_stage: Stage) -> void:
 # BUILD — 进入时激活按钮 + 倒计时显示
 func _enter_build() -> void:
 	ready_button.visible = true
-	if not ready_button.pressed.is_connected(start_battle):
-		ready_button.pressed.connect(start_battle)
-
 	_countdown = int(wave_interval_time)
 	if countdown_label:
 		countdown_label.visible = true
 		countdown_label.text = "%d秒" % _countdown
-	if not count_timer.timeout.is_connected(_tick_countdown):
-		count_timer.timeout.connect(_tick_countdown)
 	count_timer.start()
 
 func _tick_countdown() -> void:
@@ -79,10 +82,6 @@ func _tick_countdown() -> void:
 
 func _exit_build() -> void:
 	ready_button.visible = false
-	if ready_button.pressed.is_connected(start_battle):
-		ready_button.pressed.disconnect(start_battle)
-	if count_timer.timeout.is_connected(_tick_countdown):
-		count_timer.timeout.disconnect(_tick_countdown)
 	count_timer.stop()
 	if countdown_label:
 		countdown_label.visible = false
@@ -91,12 +90,10 @@ func _exit_build() -> void:
 
 # BATTLE — 进入时开始出怪 / 退出时停止出怪 + Buff 倒计数
 func _enter_battle() -> void:
-	if not enemy_container.battle_over.is_connected(end_battle):
-		enemy_container.battle_over.connect(end_battle)
+	pass  # battle_over → end_battle 已在 _ready 连接
 
 func _exit_battle() -> void:
-	if enemy_container.battle_over.is_connected(end_battle):
-		enemy_container.battle_over.disconnect(end_battle)
+	pass
 
 # SETTLE
 func _enter_settle() -> void:
@@ -145,6 +142,7 @@ func lose_life(amount: int = 1) -> void:
 	lives_changed.emit(lives, amount)
 	if lives <= 0:
 		_settle(false)
+		print("Lose the game")
 
 
 func _settle(is_win: bool) -> void:

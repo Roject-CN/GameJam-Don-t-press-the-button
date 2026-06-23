@@ -5,7 +5,11 @@
 [ext_resource type="Script" uid="uid://flw361nemoec" path="res://scripts/main/stage_manager.gd" id="2_ow5a4"]
 [ext_resource type="PackedScene" uid="uid://gfcjptk77qr7" path="res://scenes/buttons/base_button.tscn" id="3_k2fmo"]
 [ext_resource type="Script" uid="uid://clvu01ei4t0ok" path="res://scripts/main/enemy_container.gd" id="4_ow5a4"]
+[ext_resource type="Script" uid="uid://djr3furmdwn7t" path="res://scripts/buffs/buff_effect.gd" id="5_b1x3f"]
 [ext_resource type="Script" uid="uid://b3htg0ge6sw2a" path="res://scripts/buffs/buff_container.gd" id="5_hujxm"]
+[ext_resource type="Resource" uid="uid://j5et20fj6woj" path="res://resources/buff_effect/test.tres" id="6_a8run"]
+[ext_resource type="Script" uid="uid://bri4j10tha24r" path="res://scripts/players/player_container.gd" id="6_xxx"]
+[ext_resource type="Resource" path="res://resources/buff_effect/failure_effect.tres" id="7_xxx"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_iuonh"]
 vertices = PackedVector2Array(1272.0781, 712.0625, 3, 720.9219, 3, 10, 1277.9219, 10)
@@ -26,12 +30,13 @@ enemy_container = NodePath("BuffEmitter/EnemyContainer")
 visible = false
 navigation_polygon = SubResource("NavigationPolygon_iuonh")
 
-[node name="StageManager" type="Node2D" parent="." unique_id=2044738098 node_paths=PackedStringArray("enemy_container", "buff_emitter", "ready_button", "countdown_label")]
+[node name="StageManager" type="Node2D" parent="." unique_id=2044738098 node_paths=PackedStringArray("enemy_container", "buff_emitter", "ready_button", "countdown_label", "player_container")]
 script = ExtResource("2_ow5a4")
 enemy_container = NodePath("../BuffEmitter/EnemyContainer")
 buff_emitter = NodePath("../BuffEmitter")
 ready_button = NodePath("../Control/ready")
 countdown_label = NodePath("../Control/countdown_label")
+player_container = NodePath("../BuffEmitter/PlayerContainer")
 metadata/_custom_type_script = "uid://flw361nemoec"
 
 [node name="BuffEmitter" type="Node2D" parent="." unique_id=940784806 node_paths=PackedStringArray("enemy_container", "defense_container", "player_container", "terrain_container", "button_container")]
@@ -48,14 +53,17 @@ metadata/_custom_type_script = "uid://2vgttshvm8nr"
 [node name="BaseButton" parent="BuffEmitter/ButtonContainer" unique_id=115424014 instance=ExtResource("3_k2fmo")]
 position = Vector2(265, 361)
 text = "测速1"
+buff_effect = Array[ExtResource("5_b1x3f")]([ExtResource("6_a8run")])
 
 [node name="BaseButton2" parent="BuffEmitter/ButtonContainer" unique_id=1450460267 instance=ExtResource("3_k2fmo")]
 position = Vector2(946, 406)
 text = "测速2"
+buff_effect = Array[ExtResource("5_b1x3f")]([ExtResource("6_a8run")])
 
 [node name="BaseButton3" parent="BuffEmitter/ButtonContainer" unique_id=772291618 instance=ExtResource("3_k2fmo")]
 position = Vector2(677, 148)
 text = "测速3"
+buff_effect = Array[ExtResource("5_b1x3f")]([ExtResource("7_xxx")])
 
 [node name="EnemyContainer" type="Node2D" parent="BuffEmitter" unique_id=224789222]
 script = ExtResource("4_ow5a4")
@@ -67,7 +75,7 @@ target_type = 1
 metadata/_custom_type_script = "uid://b3htg0ge6sw2a"
 
 [node name="PlayerContainer" type="Node2D" parent="BuffEmitter" unique_id=1759217496]
-script = ExtResource("5_hujxm")
+script = ExtResource("6_xxx")
 target_type = 2
 metadata/_custom_type_script = "uid://b3htg0ge6sw2a"
 
@@ -95,7 +103,7 @@ offset_bottom = 54.0
 grow_horizontal = 2
 text = "确认开始"
 
-[node name="countdown_label" type="Label" parent="Control" unique_id=2773874621]
+[node name="countdown_label" type="Label" parent="Control" unique_id=-1521092675]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -109,5 +117,3 @@ text = "10秒"
 horizontal_alignment = 1
 
 [node name="CountTimer" type="Timer" parent="." unique_id=682289423]
-wait_time = 1.0
-one_shot = false

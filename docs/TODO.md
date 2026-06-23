@@ -12,7 +12,7 @@
 ---
 
 ## 待做
-- [ ] FailureEffect 按钮效果（被点击扣命，连接 StageManager.lose_life）
+- [x] FailureEffect 按钮效果（PlayerContainer + failure_effect.tres → StageManager.lose_life）
 - [ ] 敌人生成系统（wave_resource 定义每波敌人类型+数量）
 - [ ] 防御设施（炮塔放置 + 自动射击）
 - [ ] HUD（波次 / 碎片 / 命数 / 冷却显示）

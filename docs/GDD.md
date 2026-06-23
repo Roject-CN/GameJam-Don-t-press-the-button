@@ -105,16 +105,28 @@
 
 ---
 
+## PlayerContainer — 玩家容器
+
+> `scripts/players/player_container.gd` | 继承 BuffContainer → class_name PlayerContainer
+
+接收 PLAYER 目标的 BuffEffect。`apply_buff()` 覆写：按 `effect.prop` 值发射 `life_lost` 信号，由 StageManager 连接 → `lose_life()`。
+
+方法: `apply_buff(e)` `remove_buff(e)`
+信号: `life_lost(amount: int)`
+
+---
+
 ## StageManager — 阶段状态机
 
 > `scripts/main/stage_manager.gd` | Node2D → class_name StageManager
 
-FSM 模式管理 BUILD → BATTLE → SETTLE 三个阶段。`change_stage()` 为唯一转换入口，每个阶段有 `_enter_xxx` / `_exit_xxx` 钩子。通过 @export 持有模块引用并直接调用接口。然后利用模块的信号连接change_stage()，实现阶段切换，比如敌人模块EnemyContainer发射battle_over → StageManager.end_battle() → change_stage(SETTLE)。
+FSM 模式管理 BUILD → BATTLE → SETTLE 三个阶段。`change_stage()` 为唯一转换入口，每个阶段有 `_enter_xxx` / `_exit_xxx` 钩子。所有模块信号在 `_ready()` 中一次性集中连接，enter/exit 只负责阶段行为（UI 显隐、Timer 启停、生成敌人）。
 
 | 导出 | 说明 |
 |---|---|
 | enemy_container | EnemyContainer 引用 |
 | buff_emitter | BuffEmitter 引用 |
+| player_container | PlayerContainer 引用 |
 | total_waves 等 | 波数/碎片/命数配置 |
 
 枚举: `Stage { BUILD, BATTLE, SETTLE }`
@@ -122,9 +134,10 @@ FSM 模式管理 BUILD → BATTLE → SETTLE 三个阶段。`change_stage()` 为
 信号: `fragments_changed` `lives_changed` `game_won` `game_lost`
 
 当前行为:
-- BUILD 进入: 显示 Ready 按钮，连接点击/倒计时 → start_battle
-- BUILD 退出: 隐藏按钮，断连信号，spawn 5 敌人
-- BATTLE 进入: 连接 battle_over → end_battle
+- _ready: 集中连接所有模块信号 (ready_button, count_timer, battle_over, life_lost)
+- BUILD 进入: 显示 Ready 按钮 + 倒计时，启动 Timer
+- BUILD 退出: 隐藏 UI，停 Timer，spawn 5 敌人
+- BATTLE 进入: pass（信号已在 _ready 连接）
 - SETTLE 进入: buff_emitter.disconnect_all()
 
 ---
@@ -154,7 +167,6 @@ FSM 模式管理 BUILD → BATTLE → SETTLE 三个阶段。`change_stage()` 为
 
 ## 尚未实现
 
-- FailureEffect（扣命逻辑连接 StageManager）
 - wave_resource 波次数据
 - 防御设施
 - HUD / UI

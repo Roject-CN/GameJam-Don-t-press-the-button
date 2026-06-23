@@ -1,6 +1,10 @@
 # 更新日志 — "别按那个键"
 
 ## 2026-06-23
+- 实现 PlayerContainer（继承 BuffContainer，life_lost 信号 → StageManager.lose_life）
+- 创建 failure_effect.tres（扣命 BuffEffect，target=PLAYER prop=1.0）
+- StageManager 信号重构：4 条 connect 集中 _ready()，删除 enter/exit 中的动态连接/断连
+- 主场景更新：PlayerContainer 脚本绑定，测试按钮挂载 failure_effect
 - 实现 BuffContainer + BuffEmitter（Buff 路由链路）
 - 实现 StageManager FSM（BUILD/BATTLE/SETTLE 三阶段状态机）
 - 实现 EnemyContainer（继承 BuffContainer，敌人生成 + battle_over 信号）

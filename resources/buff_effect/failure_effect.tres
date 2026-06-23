@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://djr3furmdwn7t" path="res://scripts/buffs/buff_effect.gd" id="1_xxx"]
+
+[resource]
+script = ExtResource("1_xxx")
+buff_name = "扣命"
+target = 2
+prop = 1.0
+duration_waves = 0

@@ -46,8 +46,8 @@
 - `BuffContainer` — `scripts/buffs/buff_container.gd`，Buff 容器基类（apply/remove + 信号）
 - `BuffEmitter` — `scripts/buffs/buff_emitter.gd`，Buff 触发路由（按钮信号 → 容器）
 - `EnemyContainer` — `scripts/main/enemy_container.gd`，敌人容器（继承 BuffContainer，生成 + 存活计数）
-- `StageManager` — `scripts/main/stage_manager.gd`，阶段状态机（BUILD/BATTLE/SETTLE FSM）
-- ⏳ `FailureEffect` — 扣命按钮效果，尚未实现
+- `StageManager` — `scripts/main/stage_manager.gd`，阶段状态机（BUILD/BATTLE/SETTLE FSM，信号集中 _ready 连接）
+- `PlayerContainer` — `scripts/players/player_container.gd`，玩家容器（继承 BuffContainer，life_lost → StageManager.lose_life）
 
 ## 目录结构
 ```
@@ -74,6 +74,8 @@ GameJam/
 │   │   ├── main.gd            ✅ 主场景脚本（调试）
 │   │   ├── stage_manager.gd   ✅ StageManager FSM
 │   │   └── enemy_container.gd ✅ EnemyContainer
+│   ├── players/
+│   │   └── player_container.gd ✅ PlayerContainer
 │   ├── level_control/         🆕 队友的关卡模块
 │   │   ├── level.gd           ✅ 关卡定义
 │   │   └── level_loader.gd    ✅ 关卡加载器
@@ -94,7 +96,9 @@ GameJam/
 │   ├── effects/               ⏳ 空
 │   └── ui/                    ⏳ 空
 ├── resources/
-│   ├── buffs/                 ⏳ 空（BuffEffect .tres 将放在此）
+│   ├── buff_effect/
+│   │   ├── test.tres            ✅ 测试用
+│   │   └── failure_effect.tres   ✅ 扣命效果（target=PLAYER, prop=1.0）
 │   ├── defenses/              ⏳ 空
 │   ├── enemies/               ⏳ 空
 │   ├── upgrades/              ⏳ 空
@@ -119,10 +123,11 @@ GameJam/
 - ✅ BuffEffect Resource（Target 枚举 + prop + duration_waves）
 - ✅ BuffContainer + BuffEmitter（Buff 路由链路）
 - ✅ EnemyContainer（继承 BuffContainer，敌人生成 + battle_overd）
-- ✅ StageManager FSM（BUILD/BATTLE/SETTLE 状态机）
+- ✅ StageManager FSM（信号集中 _ready，阶段守卫防呆）
+- ✅ PlayerContainer（继承 BuffContainer，life_lost → StageManager.lose_life）
+- ✅ FailureEffect（failure_effect.tres，target=PLAYER prop=1.0）
 - ✅ 调试敌人生成器（右键生成敌人）
 - ✅ 队友关卡模块（level.gd / level_loader.gd）
-- ⏳ FailureEffect（扣命按钮效果）
 - ⏳ wave_resource 波次数据
 - ⏳ 防御设施
 - ⏳ HUD/UI
