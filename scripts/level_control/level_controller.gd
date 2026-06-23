@@ -1,6 +1,6 @@
 extends Node2D
 
-class_name level_controller
+class_name LevelController
 var levels_loaded:Dictionary
 var level_current:level
 # Called when the node enters the scene tree for the first time.
