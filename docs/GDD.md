@@ -98,10 +98,10 @@
 
 > `scripts/main/enemy_container.gd` | 继承 BuffContainer → class_name EnemyContainer
 
-管理敌人生成和存活计数。`enemies_spawn(amount)` 在鼠标附近生成敌人，全灭时发射 `battle_overd`。
+管理敌人生成和存活计数。`enemies_spawn(amount)` 在鼠标附近生成敌人，全灭时发射 `battle_over`。
 
 方法: `enemies_spawn(amount)` `apply_buff(e)` `remove_buff(e)`
-信号: `battle_overd`
+信号: `battle_over`
 
 ---
 
@@ -109,7 +109,7 @@
 
 > `scripts/main/stage_manager.gd` | Node2D → class_name StageManager
 
-FSM 模式管理 BUILD → BATTLE → SETTLE 三个阶段。`change_stage()` 为唯一转换入口，每个阶段有 `_enter_xxx` / `_exit_xxx` 钩子。通过 @export 持有模块引用并直接调用接口。然后利用模块的信号连接change_stage()，实现阶段切换，比如敌人模块EnemyContainer发射battle_overd → StageManager.end_battle() → change_stage(SETTLE)。
+FSM 模式管理 BUILD → BATTLE → SETTLE 三个阶段。`change_stage()` 为唯一转换入口，每个阶段有 `_enter_xxx` / `_exit_xxx` 钩子。通过 @export 持有模块引用并直接调用接口。然后利用模块的信号连接change_stage()，实现阶段切换，比如敌人模块EnemyContainer发射battle_over → StageManager.end_battle() → change_stage(SETTLE)。
 
 | 导出 | 说明 |
 |---|---|
@@ -124,7 +124,7 @@ FSM 模式管理 BUILD → BATTLE → SETTLE 三个阶段。`change_stage()` 为
 当前行为:
 - BUILD 进入: 显示 Ready 按钮，连接点击/倒计时 → start_battle
 - BUILD 退出: 隐藏按钮，断连信号，spawn 5 敌人
-- BATTLE 进入: 连接 battle_overd → end_battle
+- BATTLE 进入: 连接 battle_over → end_battle
 - SETTLE 进入: buff_emitter.disconnect_all()
 
 ---
