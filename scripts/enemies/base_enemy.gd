@@ -18,19 +18,15 @@ class_name BaseEnemy
 			navigation()
 @export var speed := 200 #移动的基础速度
 
+signal enemy_died()
+
 #当前寻路的按钮
 var current_button : BaseClickedButton :
 	set(value):
 		current_button = value
 		navigation_agent_2d.target_position = current_button.global_position
 
-#Buff 实时响应
-var _base_speed : float
-var _buff_mul : float = 1.0
-
-
 func _ready() -> void:
-	_base_speed = speed
 	navigation()
 
 
@@ -55,6 +51,7 @@ func click() -> void:
 func free_self() -> void:
 	animation_player.play("free")
 	await animation_player.animation_finished
+	enemy_died.emit()
 	call_deferred("queue_free")
 
 
@@ -62,9 +59,8 @@ func _physics_process(delta: float) -> void:
 	if not current_button or navigation_agent_2d.is_navigation_finished():
 		return
 
-	var real_speed := _base_speed * _buff_mul
 	var next_pos = navigation_agent_2d.get_next_path_position() - self.global_position
-	var velocity = next_pos.normalized() * real_speed
+	var velocity = next_pos.normalized() * speed
 	self.position += velocity * delta
 
 

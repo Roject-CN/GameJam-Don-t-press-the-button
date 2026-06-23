@@ -9,13 +9,13 @@ enum Target {
 }
 
 ## 效果显示名称（UI 横幅用）
-@export var display_name : String = ""
+@export var buff_name : String
 
 ## 影响目标类型
 @export var target : Target = Target.ENEMY
 
-## 属性修改 — 键为属性名，值为乘数（1.3 = +30%, 0.6 = -40%）
-@export var props : Dictionary = {}
+## 属性修改 — 暂时为测试 后面再考虑怎么搞
+@export var prop : float = 1.0
 
 ## 持续波次数（0 = 永久/手动移除）
 @export var duration_waves : int = 0
