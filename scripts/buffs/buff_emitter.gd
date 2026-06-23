@@ -9,14 +9,15 @@ class_name BuffEmitter
 @export var button_container : Node2D
 
 func _ready() -> void:
+	# 验证所有引用已绑定
+	if not enemy_container or not defense_container \
+	or not player_container or not terrain_container \
+	or not button_container:
+		push_error("BuffEmitter: missing container bindings — check @export vars in editor")
+		return
+
 	# 连接所有按钮的 buff_effect_applied 信号
 	connect_all()
-	
-	if enemy_container and defense_container and player_container \
-	and terrain_container and button_container:
-		pass
-	else:
-		push_error()
 
 
 func connect_all() -> void:
