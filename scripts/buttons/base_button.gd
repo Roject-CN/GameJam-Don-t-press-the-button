@@ -15,4 +15,4 @@ func release() -> void:
 	button.button_pressed = false
 
 func _on_button_pressed() -> void:
-	print("pressed")
+	pass
