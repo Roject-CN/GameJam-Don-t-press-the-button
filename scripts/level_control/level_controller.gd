@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 
 class_name level_controller
 var levels_loaded:Dictionary
