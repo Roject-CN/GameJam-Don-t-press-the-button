@@ -1,7 +1,7 @@
 extends Control
 
 
-@onready var enemy_container: EnemyContainer = $StageManager/EnemyContainer
+@export var enemy_container: EnemyContainer
 
 #用于测试产生敌人
 func _input(event: InputEvent) -> void:
