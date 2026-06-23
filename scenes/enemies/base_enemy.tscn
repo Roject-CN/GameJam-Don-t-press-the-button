@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dbhsmxlbt03rt" path="res://assets/mouse.png" id="2_qf3h2"]
 
 [sub_resource type="Animation" id="Animation_qf3h2"]
-length = 0.19999999999999998
+length = 0.2
 
 [sub_resource type="Animation" id="Animation_lkvl6"]
 resource_name = "clicked"
@@ -24,7 +24,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_n763p"]
 resource_name = "free"
-length = 0.19999999999999998
+length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
