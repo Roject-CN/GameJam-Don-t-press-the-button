@@ -3,9 +3,8 @@
 [ext_resource type="Script" uid="uid://je8caiqy3tid" path="res://scripts/uis/hud/test/debug_button.gd" id="1_276te"]
 [ext_resource type="Script" uid="uid://crlcynar0qg6o" path="res://scripts/uis/hud/hud.gd" id="1_546lt"]
 [ext_resource type="Script" uid="uid://ch38g88corkjr" path="res://scripts/uis/hud/test/debug_label_a.gd" id="2_276te"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_rx7q4"]
-font_size = 130
+[ext_resource type="Script" uid="uid://6cejqk2ul5fg" path="res://scripts/uis/hud/cards.gd" id="4_8qguk"]
+[ext_resource type="PackedScene" uid="uid://b01a4qfs75kyy" path="res://scenes/ui/unit_card.tscn" id="5_136eg"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_v5qxn"]
 font_size = 56
@@ -19,22 +18,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_546lt")
 
-[node name="Label" type="Label" parent="." unique_id=1049679089]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -36.0
-offset_top = -11.5
-offset_right = 36.0
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "testLabel"
-label_settings = SubResource("LabelSettings_rx7q4")
-
 [node name="DebugLabelA" type="Label" parent="." unique_id=156729934]
 layout_mode = 0
 offset_left = 922.0
@@ -45,14 +28,8 @@ text = "current_label"
 label_settings = SubResource("LabelSettings_v5qxn")
 script = ExtResource("2_276te")
 
-[node name="ButtonDebugB" type="Button" parent="." unique_id=2141241674]
-layout_mode = 1
-offset_right = 636.0
-offset_bottom = 89.0
-text = "level_switch_test 关卡切换测试，将会切换到res://scenes/levels/tutorial_level_2.tscn"
-script = ExtResource("1_276te")
-
 [node name="ButtonDeBugA" type="Button" parent="." unique_id=456706260]
+visible = false
 layout_mode = 0
 offset_top = 92.0
 offset_right = 636.0
@@ -60,14 +37,28 @@ offset_bottom = 174.0
 text = "level_switch_test 关卡切换测试，将会切换到res://scenes/levels/tutorial_level_1.tscn"
 script = ExtResource("1_276te")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=233651662]
+[node name="ButtonDebugB" type="Button" parent="." unique_id=2141241674]
+visible = false
+layout_mode = 0
+offset_top = 448.0
+offset_right = 636.0
+offset_bottom = 479.0
+text = "level_switch_test 关卡切换测试，将会切换到res://scenes/levels/tutorial_level_2.tscn"
+script = ExtResource("1_276te")
+
+[node name="Cards" type="Control" parent="." unique_id=1448309258]
 layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_left = 0.14140625
+anchor_top = 0.6513889
+anchor_right = 0.86015624
+anchor_bottom = 0.8055556
 grow_horizontal = 2
 grow_vertical = 0
+script = ExtResource("4_8qguk")
+card_scene = ExtResource("5_136eg")
+card_num = 7
+card_spacing_relative = 3.0
+metadata/_edit_use_anchors_ = true
 
-[connection signal="pressed" from="ButtonDebugB" to="." method="_on_button_debug_b"]
 [connection signal="pressed" from="ButtonDeBugA" to="." method="_on_button_debug_a"]
+[connection signal="pressed" from="ButtonDebugB" to="." method="_on_button_debug_b"]
