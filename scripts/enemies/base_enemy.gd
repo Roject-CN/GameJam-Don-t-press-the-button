@@ -16,7 +16,9 @@ class_name BaseEnemy
 			free_self()
 		else:
 			navigation()
-@export var speed := 200 #移动的速度
+@export var speed := 200 #移动的基础速度
+
+signal enemy_died()
 
 #当前寻路的按钮
 var current_button : BaseClickedButton :
@@ -27,6 +29,7 @@ var current_button : BaseClickedButton :
 func _ready() -> void:
 	navigation()
 
+
 #寻路机制 从全局组 ClickedButtons 中随机选取一个按钮作为目标
 func navigation() -> void:
 	var buttons = get_tree().get_nodes_in_group("ClickedButtons").duplicate(true)
@@ -35,6 +38,7 @@ func navigation() -> void:
 
 	current_button = buttons[randi_range(0, buttons.size() - 1)]
 
+
 func click() -> void:
 	animation_player.play("clicked")
 	current_button.press()
@@ -42,21 +46,21 @@ func click() -> void:
 	current_button.release()
 	click_times -= 1
 
+
 #敌人的删除函数 在点击按钮/被消灭之后触发的函数
 func free_self() -> void:
 	animation_player.play("free")
 	await animation_player.animation_finished
+	enemy_died.emit()
 	call_deferred("queue_free")
 
 
 func _physics_process(delta: float) -> void:
 	if not current_button or navigation_agent_2d.is_navigation_finished():
-		#如果没有当前按钮就返回
 		return
 
 	var next_pos = navigation_agent_2d.get_next_path_position() - self.global_position
 	var velocity = next_pos.normalized() * speed
-
 	self.position += velocity * delta
 
 
