@@ -1,32 +1,113 @@
 [gd_scene format=3 uid="uid://boa0y5ne4rplo"]
 
-[ext_resource type="PackedScene" uid="uid://dp7qcvgcmvebd" path="res://scenes/enemies/base_enemy.tscn" id="1_hyk8p"]
-[ext_resource type="Script" uid="uid://dohsji6dw8xnl" path="res://scenes/main/main.gd" id="1_k2fmo"]
+[ext_resource type="Script" uid="uid://dohsji6dw8xnl" path="res://scripts/main/main.gd" id="1_k2fmo"]
+[ext_resource type="Script" uid="uid://2vgttshvm8nr" path="res://scripts/buffs/buff_emitter.gd" id="2_6q06x"]
+[ext_resource type="Script" uid="uid://flw361nemoec" path="res://scripts/main/stage_manager.gd" id="2_ow5a4"]
 [ext_resource type="PackedScene" uid="uid://gfcjptk77qr7" path="res://scenes/buttons/base_button.tscn" id="3_k2fmo"]
+[ext_resource type="Script" uid="uid://clvu01ei4t0ok" path="res://scripts/main/enemy_container.gd" id="4_ow5a4"]
+[ext_resource type="Script" uid="uid://b3htg0ge6sw2a" path="res://scripts/buffs/buff_container.gd" id="5_hujxm"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_iuonh"]
 vertices = PackedVector2Array(1272.0781, 712.0625, 3, 720.9219, 3, 10, 1277.9219, 10)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
 outlines = Array[PackedVector2Array]([PackedVector2Array(-7, 0, -7, 731, 1282, 722, 1288, 0)])
 
-[node name="Main" type="Node2D" unique_id=1276616182]
+[node name="Main" type="Control" unique_id=1904362382 node_paths=PackedStringArray("enemy_container")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_k2fmo")
+enemy_container = NodePath("BuffEmitter/EnemyContainer")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=1967988127]
 visible = false
 navigation_polygon = SubResource("NavigationPolygon_iuonh")
 
-[node name="BaseButton" parent="." unique_id=115424014 instance=ExtResource("3_k2fmo")]
+[node name="StageManager" type="Node2D" parent="." unique_id=2044738098 node_paths=PackedStringArray("enemy_container", "buff_emitter", "ready_button", "countdown_label")]
+script = ExtResource("2_ow5a4")
+enemy_container = NodePath("../BuffEmitter/EnemyContainer")
+buff_emitter = NodePath("../BuffEmitter")
+ready_button = NodePath("../Control/ready")
+countdown_label = NodePath("../Control/countdown_label")
+metadata/_custom_type_script = "uid://flw361nemoec"
+
+[node name="BuffEmitter" type="Node2D" parent="." unique_id=940784806 node_paths=PackedStringArray("enemy_container", "defense_container", "player_container", "terrain_container", "button_container")]
+script = ExtResource("2_6q06x")
+enemy_container = NodePath("EnemyContainer")
+defense_container = NodePath("DefenseContainer")
+player_container = NodePath("PlayerContainer")
+terrain_container = NodePath("TerrainContainer")
+button_container = NodePath("ButtonContainer")
+metadata/_custom_type_script = "uid://2vgttshvm8nr"
+
+[node name="ButtonContainer" type="Node2D" parent="BuffEmitter" unique_id=1398290658]
+
+[node name="BaseButton" parent="BuffEmitter/ButtonContainer" unique_id=115424014 instance=ExtResource("3_k2fmo")]
 position = Vector2(265, 361)
 text = "测速1"
 
-[node name="BaseButton2" parent="." unique_id=1450460267 instance=ExtResource("3_k2fmo")]
+[node name="BaseButton2" parent="BuffEmitter/ButtonContainer" unique_id=1450460267 instance=ExtResource("3_k2fmo")]
 position = Vector2(946, 406)
 text = "测速2"
 
-[node name="BaseButton3" parent="." unique_id=772291618 instance=ExtResource("3_k2fmo")]
+[node name="BaseButton3" parent="BuffEmitter/ButtonContainer" unique_id=772291618 instance=ExtResource("3_k2fmo")]
 position = Vector2(677, 148)
 text = "测速3"
 
-[node name="BaseEnemy" parent="." unique_id=1293915282 instance=ExtResource("1_hyk8p")]
-position = Vector2(420, 219)
+[node name="EnemyContainer" type="Node2D" parent="BuffEmitter" unique_id=224789222]
+script = ExtResource("4_ow5a4")
+metadata/_custom_type_script = "uid://clvu01ei4t0ok"
+
+[node name="DefenseContainer" type="Node2D" parent="BuffEmitter" unique_id=1081593671]
+script = ExtResource("5_hujxm")
+target_type = 1
+metadata/_custom_type_script = "uid://b3htg0ge6sw2a"
+
+[node name="PlayerContainer" type="Node2D" parent="BuffEmitter" unique_id=1759217496]
+script = ExtResource("5_hujxm")
+target_type = 2
+metadata/_custom_type_script = "uid://b3htg0ge6sw2a"
+
+[node name="TerrainContainer" type="Node2D" parent="BuffEmitter" unique_id=537982981]
+script = ExtResource("5_hujxm")
+target_type = 3
+metadata/_custom_type_script = "uid://b3htg0ge6sw2a"
+
+[node name="Control" type="Control" parent="." unique_id=375376764]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ready" type="Button" parent="Control" unique_id=1685085597]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -111.0
+offset_right = 111.0
+offset_bottom = 54.0
+grow_horizontal = 2
+text = "确认开始"
+
+[node name="countdown_label" type="Label" parent="Control" unique_id=2773874621]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -60.0
+offset_top = 60.0
+offset_right = 60.0
+offset_bottom = 90.0
+grow_horizontal = 2
+text = "10秒"
+horizontal_alignment = 1
+
+[node name="CountTimer" type="Timer" parent="." unique_id=682289423]
+wait_time = 1.0
+one_shot = false

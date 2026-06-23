@@ -6,15 +6,15 @@ class_name StageManager
 # 游戏阶段
 enum Stage { BUILD, BATTLE, SETTLE }
 
-@onready var ready_botton: Button = $"../Ui/Ready"
-@onready var timer: Timer = $"../Timer"
+@onready var count_timer: Timer = $"../CountTimer"
+@export var wave_interval_time: float = 10.0
 
 
 # 模块引用 — 编辑器中手动拖入
 @export var enemy_container: EnemyContainer
 @export var buff_emitter : BuffEmitter
-
-
+@export var ready_button: Button
+@export var countdown_label: Label
 # 可配置参数
 @export var total_waves: int = 5
 @export var start_fragments: int = 100
@@ -25,6 +25,7 @@ enum Stage { BUILD, BATTLE, SETTLE }
 # 运行时状态
 var current_stage: Stage = Stage.BUILD
 var current_wave: int = 0
+var _countdown: int = 0
 var fragments: int
 var lives: int
 
@@ -54,22 +55,38 @@ func change_stage(new_stage: Stage) -> void:
 
 #我们利用一些条件的触发，去执行切换状态函数，比如准备开始的按钮/倒计时结束
 
-# BUILD — 进入时激活按钮 / 退出时不做特殊处理
+# BUILD — 进入时激活按钮 + 倒计时显示
 func _enter_build() -> void:
-	ready_botton.visible = true
-	if not ready_botton.pressed.is_connected(start_battle):
-		ready_botton.pressed.connect(start_battle)
-	if not timer.timeout.is_connected(start_battle):
-		timer.timeout.connect(start_battle)
-	timer.start()
+	ready_button.visible = true
+	if not ready_button.pressed.is_connected(start_battle):
+		ready_button.pressed.connect(start_battle)
+
+	_countdown = int(wave_interval_time)
+	if countdown_label:
+		countdown_label.visible = true
+		countdown_label.text = "%d秒" % _countdown
+	if not count_timer.timeout.is_connected(_tick_countdown):
+		count_timer.timeout.connect(_tick_countdown)
+	count_timer.start()
+
+func _tick_countdown() -> void:
+	_countdown -= 1
+	if countdown_label:
+		countdown_label.text = "%d秒" % _countdown
+	if _countdown <= 0:
+		count_timer.stop()
+		start_battle()
 
 func _exit_build() -> void:
-	ready_botton.visible = false
-	if ready_botton.pressed.is_connected(start_battle):
-		ready_botton.pressed.disconnect(start_battle)
-	if timer.timeout.is_connected(start_battle):
-		timer.timeout.disconnect(start_battle)
-	timer.stop()
+	ready_button.visible = false
+	if ready_button.pressed.is_connected(start_battle):
+		ready_button.pressed.disconnect(start_battle)
+	if count_timer.timeout.is_connected(_tick_countdown):
+		count_timer.timeout.disconnect(_tick_countdown)
+	count_timer.stop()
+	if countdown_label:
+		countdown_label.visible = false
+	_countdown = 0
 	enemy_container.enemies_spawn(5)
 
 # BATTLE — 进入时开始出怪 / 退出时停止出怪 + Buff 倒计数
