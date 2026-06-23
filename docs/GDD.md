@@ -1,93 +1,139 @@
 # GDD — "别按那个键"（工程现状）
 
-> 引擎: Godot 4.7 | 分辨率: 1280×720 | 纹理过滤: Nearest（像素风格）
+> 引擎: Godot 4.7 | 分辨率: 1280×720 | 纹理过滤: Nearest
 
 ## 概述
 
-桌面隐喻风格 2D 塔防。敌人是鼠标光标，试图点击地图上的按钮。玩家部署防御设施保护按钮，阻止它们触发"失败按钮"。
+桌面隐喻风格 2D 塔防。敌人是鼠标光标，试图点击地图上的按钮。玩家部署防御设施保护按钮。
 
 ---
 
-## 已实现
-
-### BaseClickedButton — 按钮基类
+## BaseClickedButton — 按钮基类
 
 > `scripts/buttons/base_button.gd` | `scenes/buttons/base_button.tscn`
 > Node2D → class_name BaseClickedButton | 全局组 `ClickedButtons`
 
-可被敌人点击的按钮。内置 Godot Button 子节点（toggle_mode），由敌人调用 `press()`/`release()` 模拟按下弹起动画。点击时触发 `_on_button_pressed()`，子类覆写此方法实现具体效果。
+内置 Godot Button 子节点。可搭载多个 BuffEffect，点击时逐一发射 `buff_effect_applied` 信号。
 
-| 导出 | 默认 | 说明 |
+| 导出 | 类型 | 说明 |
 |---|---|---|
-| text | "" | 按钮显示文本 |
+| text | String | 按钮显示文本 |
+| buff_effect | Array[BuffEffect] | 搭载的效果列表 |
 
 方法: `press()` `release()` `_on_button_pressed()`
-
+信号: `buff_effect_applied(effect: BuffEffect)`
 场景: `Node2D (×2)` → `Button (8×8, toggle_mode)`
 
 ---
 
-### BaseEnemy — 敌人（鼠标光标）
+## BaseEnemy — 敌人
 
 > `scripts/enemies/base_enemy.gd` | `scenes/enemies/base_enemy.tscn`
 > Node2D → class_name BaseEnemy
 
-鼠标光标外观的敌人。从 `ClickedButtons` 组中随机选取目标，NavigationAgent2D 自动寻路。到达后播放点击动画、调用按钮的 press/release。点击次数耗尽后播放淡出动画并销毁。
+鼠标光标外观。从 ClickedButtons 组随机选目标，NavigationAgent2D 寻路，到达后播放点击动画。click_times 耗尽后播放淡出动画，发射 `enemy_died` 信号并销毁。
 
 | 导出 | 默认 | 说明 |
 |---|---|---|
-| health | 1 | （预留，未使用） |
-| click_times | 2 | 剩余点击次数，≤0 时触发 free_self() |
+| health | 1 | 预留 |
+| click_times | 2 | 剩余点击次数，≤0 → free_self() |
 | speed | 200 | 移动速度 |
 
-click_times setter: ≤0 → `free_self()`; >0 → `navigation()` 重新寻路
-
-current_button setter: 赋值时自动同步 `navigation_agent_2d.target_position`
-
+信号: `enemy_died()`
 方法: `navigation()` `click()` `free_self()` `_physics_process(delta)` `_on_navigation_agent_2d_navigation_finished()`
 
-场景:
-```
-Node2D (×0.5)
-├── Sprite2D (mouse.png, rot≈28.5°)
-├── AnimationPlayer (RESET / clicked / free)
-├── Area2D → CollisionShape2D (CircleShape2D, r≈24)
-└── NavigationAgent2D
-```
+场景: `Node2D (×0.5)` → Sprite2D + AnimationPlayer (RESET/clicked/free) + Area2D + NavigationAgent2D
 
 ---
 
-### BuffEffect — 效果数据 Resource
+## BuffEffect — 效果数据 Resource
 
-> `scripts/buffs/buff_effect.gd`
-> Resource → class_name BuffEffect
+> `scripts/buffs/buff_effect.gd` | Resource → class_name BuffEffect
 
-纯数据容器。描述一个 Buff：目标类型、属性乘数、持续波次。可在编辑器中创建 `.tres` 文件定义具体效果。目前仅数据定义，尚未接入任何系统。
+纯数据容器。描述 Buff 的目标类型、属性乘数、持续波次。
 
 | 导出 | 类型 | 说明 |
 |---|---|---|
-| display_name | String | UI 显示名 |
+| buff_name | String | 效果名称 |
 | target | Target 枚举 | ENEMY / DEFENSE / PLAYER / TERRAIN |
-| props | Dictionary | 属性乘数，如 `{"speed": 1.3}` |
-| duration_waves | int | 持续波次数，0 = 永久 |
+| prop | float | 属性乘数（1.3=+30%） |
+| duration_waves | int | 持续波次，0=永久 |
 
-方法: `init()` — 初始化计数器; `tick_wave()` → bool — 波次结束倒计数，返回 true 表示过期
+枚举: `Target { ENEMY, DEFENSE, PLAYER, TERRAIN }`
+方法: `init()` `tick_wave()` → bool
 
 ---
 
-### main.tscn — 主场景
+## BuffContainer — Buff 容器
 
-> `scenes/main/main.tscn` | 脚本 `scenes/main/main.gd`
+> `scripts/buffs/buff_container.gd` | Node2D → class_name BuffContainer
 
-根场景。预置 1 个敌人 + 3 个按钮 + 导航区域。`main.gd` 监听 `left_mouse`，左键点击在鼠标位置生成敌人——纯调试用途。
+维护活跃 Buff 列表。`apply_buff`/`remove_buff` 时发信号。具体逻辑由子类（如 EnemyContainer）覆写。
 
-场景:
-```
-Main (Node2D)
-├── NavigationRegion2D (~1280×720, 隐藏)
-├── BaseButton ×3（测速1/2/3）
-└── BaseEnemy ×1
-```
+| 导出 | 说明 |
+|---|---|
+| target_type | 本容器对应哪种 Target |
+
+方法: `apply_buff(effect)` `remove_buff(effect)`
+信号: `buff_applied` `buff_expired` `buffs_changed`
+
+---
+
+## BuffEmitter — Buff 触发路由
+
+> `scripts/buffs/buff_emitter.gd` | Node2D → class_name BuffEmitter
+
+遍历 button_container 下所有 BaseClickedButton，连接 `buff_effect_applied` 信号。收到后 duplicate BuffEffect → 查 target → 调用对应 BuffContainer 的 `apply_buff()`。
+
+| 导出 | 说明 |
+|---|---|
+| enemy_container 等 | BuffContainer 引用，编辑器拖入 |
+| button_container | 按钮父节点 |
+
+方法: `connect_all()` `disconnect_all()`
+
+---
+
+## EnemyContainer — 敌人容器
+
+> `scripts/main/enemy_container.gd` | 继承 BuffContainer → class_name EnemyContainer
+
+管理敌人生成和存活计数。`enemies_spawn(amount)` 在鼠标附近生成敌人，全灭时发射 `battle_overd`。
+
+方法: `enemies_spawn(amount)` `apply_buff(e)` `remove_buff(e)`
+信号: `battle_overd`
+
+---
+
+## StageManager — 阶段状态机
+
+> `scripts/main/stage_manager.gd` | Node2D → class_name StageManager
+
+FSM 模式管理 BUILD → BATTLE → SETTLE 三个阶段。`change_stage()` 为唯一转换入口，每个阶段有 `_enter_xxx` / `_exit_xxx` 钩子。通过 @export 持有模块引用并直接调用接口。然后利用模块的信号连接change_stage()，实现阶段切换，比如敌人模块EnemyContainer发射battle_overd → StageManager.end_battle() → change_stage(SETTLE)。
+
+| 导出 | 说明 |
+|---|---|
+| enemy_container | EnemyContainer 引用 |
+| buff_emitter | BuffEmitter 引用 |
+| total_waves 等 | 波数/碎片/命数配置 |
+
+枚举: `Stage { BUILD, BATTLE, SETTLE }`
+方法: `change_stage(s)` `start_battle()` `end_battle()` `lose_life(n)` `add_fragments(n)`
+信号: `fragments_changed` `lives_changed` `game_won` `game_lost`
+
+当前行为:
+- BUILD 进入: 显示 Ready 按钮，连接点击/倒计时 → start_battle
+- BUILD 退出: 隐藏按钮，断连信号，spawn 5 敌人
+- BATTLE 进入: 连接 battle_overd → end_battle
+- SETTLE 进入: buff_emitter.disconnect_all()
+
+---
+
+## main.gd — 主场景脚本
+
+> `scripts/main/main.gd` | extends Control
+
+调试用。右键点击 → EnemyContainer 生成 5 个敌人。
 
 ---
 
@@ -95,7 +141,8 @@ Main (Node2D)
 
 | 动作 | 绑定 | 用途 |
 |---|---|---|
-| left_mouse | 鼠标左键 | 调试生成敌人 |
+| left_mouse | 鼠标左键 | 预留 |
+| right_mouse | 鼠标右键 | 调试生成敌人 |
 | slam_ability | 空格 | 预留 |
 | cancel_action | 鼠标右键 | 预留 |
 
@@ -107,11 +154,8 @@ Main (Node2D)
 
 ## 尚未实现
 
-- SignalBus / GameState Autoloads
-- FailureButton / DebuffButton 子类
-- BaseEnemy 接入 Buff 系统
-- 波次生成系统
-- 防御设施（炮塔等）
-- 碎片经济系统
-- HUD / UI / 商店面板
-- 音效 / 美术素材
+- FailureEffect（扣命逻辑连接 StageManager）
+- wave_resource 波次数据
+- 防御设施
+- HUD / UI
+- 音效 / 美术

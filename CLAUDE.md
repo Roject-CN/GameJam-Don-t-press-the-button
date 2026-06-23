@@ -11,6 +11,7 @@
 ## 文档角色说明
 - `docs/GDD.md` — **工程现状文档**。只描述已实现的类设计、系统设计和运行时行为。所有 agent 的权威参考。
 - `docs/TODO.md` — 需要我们完成的任务列表。**agent 只执行此文件中的任务。**
+- `docs/log.md` — 团队更新日志，记录 commit 级别的变更。
 - `docs/IDEA.md` — 个人想法存储和灵感草稿。**agent 不需要读取此文件**，里面的设计不一定是要做的。
 
 ## 命名规范（编写 GDScript 时必须遵循）
@@ -38,16 +39,15 @@
 ### 全局组 (Global Groups)
 - `"ClickedButtons"` — 所有按钮节点，供敌人寻路查询目标
 
-### Autoloads (全局单例)
-- `SignalBus` — `scripts/autoloads/signal_bus.gd`（buff_applied / buff_expired / button_clicked）
-- `GameState` — `scripts/autoloads/game_state.gd`（fragments / lives / active_buffs / query / modifier）
-
 ### 全局类 (class_name)
-- `BuffEffect` (Resource) — `scripts/buffs/buff_effect.gd`，Buff 效果数据（Target 枚举 + props）
-- `BaseClickedButton` — `scripts/buttons/base_button.gd`，按钮基类
-- `FailureButton` — `scripts/buttons/failure_button.gd`，失败按钮（占位）
-- `DebuffButton` — `scripts/buttons/debuff_button.gd`，负面效果按钮（占位）
-- `BaseEnemy` — `scripts/enemies/base_enemy.gd`，敌人基类，集成 Buff 系统实时速度响应
+- `BuffEffect` (Resource) — `scripts/buffs/buff_effect.gd`，Buff 效果数据（Target 枚举 + prop + duration_waves）
+- `BaseClickedButton` — `scripts/buttons/base_button.gd`，按钮基类（buff_effect + buff_effect_applied 信号）
+- `BaseEnemy` — `scripts/enemies/base_enemy.gd`，敌人基类（寻路 + 点击 + 死亡 + enemy_died 信号）
+- `BuffContainer` — `scripts/buffs/buff_container.gd`，Buff 容器基类（apply/remove + 信号）
+- `BuffEmitter` — `scripts/buffs/buff_emitter.gd`，Buff 触发路由（按钮信号 → 容器）
+- `EnemyContainer` — `scripts/main/enemy_container.gd`，敌人容器（继承 BuffContainer，生成 + 存活计数）
+- `StageManager` — `scripts/main/stage_manager.gd`，阶段状态机（BUILD/BATTLE/SETTLE FSM）
+- ⏳ `FailureEffect` — 扣命按钮效果，尚未实现
 
 ## 目录结构
 ```
@@ -63,16 +63,21 @@ GameJam/
 │   └── TODO.md                ⏳ 任务列表（空）
 ├── scripts/
 │   ├── buttons/
-│   │   ├── base_button.gd     ✅ BaseClickedButton 类
-│   │   ├── failure_button.gd  ✅ FailureButton 占位
-│   │   └── debuff_button.gd   ✅ DebuffButton 占位
+│   │   └── base_button.gd     ✅ BaseClickedButton 类
 │   ├── enemies/
-│   │   └── base_enemy.gd      ✅ BaseEnemy 类（集成 Buff 系统）
+│   │   └── base_enemy.gd      ✅ BaseEnemy 类
 │   ├── buffs/
-│   │   └── buff_effect.gd     ✅ BuffEffect Resource
-│   ├── autoloads/
-│   │   ├── signal_bus.gd      ✅ SignalBus
-│   │   └── game_state.gd      ✅ GameState
+│   │   ├── buff_effect.gd     ✅ BuffEffect Resource
+│   │   ├── buff_container.gd  ✅ BuffContainer 基类
+│   │   └── buff_emitter.gd    ✅ BuffEmitter 路由
+│   ├── main/
+│   │   ├── main.gd            ✅ 主场景脚本（调试）
+│   │   ├── stage_manager.gd   ✅ StageManager FSM
+│   │   └── enemy_container.gd ✅ EnemyContainer
+│   ├── level_control/         🆕 队友的关卡模块
+│   │   ├── level.gd           ✅ 关卡定义
+│   │   └── level_loader.gd    ✅ 关卡加载器
+│   ├── autoloads/             ⏳ 空目录
 │   ├── components/            ⏳ 空
 │   ├── defenses/              ⏳ 空
 │   ├── systems/               ⏳ 空
@@ -107,20 +112,20 @@ GameJam/
 > ✅ = 已实现  ⏳ = 空目录/待填充  📝 = 参考文档
 
 ## 当前进度
-- ✅ 设计文档 (GDD.md — 工程现状)
 - ✅ Godot 项目骨架 (project.godot)
-- ✅ 主场景 main.tscn（预置敌人 + 导航区域）
-- ✅ BaseClickedButton 基类（press/release + SignalBus 集成）
-- ✅ FailureButton + DebuffButton 占位类
-- ✅ BaseEnemy 基类（NavigationAgent2D 寻路 + Buff 实时速度响应）
-- ✅ BuffEffect Resource + SignalBus + GameState Autoloads
-- ✅ 调试敌人生成器（鼠标左键点击生成敌人）
-- ✅ README 团队协作规范
-- ⏳ 按钮点击的实际效果（FailureButton/DebuffButton 子类逻辑）
-- ⏳ 波次系统
+- ✅ 主场景 main.tscn（按钮 + 敌人 + 导航区域）
+- ✅ BaseClickedButton 基类（buff_effect 数组 + buff_effect_applied 信号）
+- ✅ BaseEnemy 基类（NavigationAgent2D 寻路 / 点击 / 死亡动画 / enemy_died 信号）
+- ✅ BuffEffect Resource（Target 枚举 + prop + duration_waves）
+- ✅ BuffContainer + BuffEmitter（Buff 路由链路）
+- ✅ EnemyContainer（继承 BuffContainer，敌人生成 + battle_overd）
+- ✅ StageManager FSM（BUILD/BATTLE/SETTLE 状态机）
+- ✅ 调试敌人生成器（右键生成敌人）
+- ✅ 队友关卡模块（level.gd / level_loader.gd）
+- ⏳ FailureEffect（扣命按钮效果）
+- ⏳ wave_resource 波次数据
 - ⏳ 防御设施
-- ⏳ 经济系统
-- ⏳ UI/HUD
+- ⏳ HUD/UI
 - ⏳ 音效/美术素材
 
 ## Godot 调试日志路径
