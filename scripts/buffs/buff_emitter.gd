@@ -21,6 +21,8 @@ func _ready() -> void:
 
 
 func connect_all() -> void:
+	if not button_container:
+		return
 	for btn in button_container.get_children():
 		if btn is BaseClickedButton:
 			if not btn.buff_effect_applied.is_connected(_on_buff_effect_applied):
@@ -28,6 +30,8 @@ func connect_all() -> void:
 
 
 func disconnect_all() -> void:
+	if not button_container:
+		return
 	for btn in button_container.get_children():
 		if btn is BaseClickedButton:
 			if btn.buff_effect_applied.is_connected(_on_buff_effect_applied):

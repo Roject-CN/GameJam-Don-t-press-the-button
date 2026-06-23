@@ -7,9 +7,9 @@ var _current_wave_enemy_amount := 0 :
 	set(value):
 		_current_wave_enemy_amount = value
 		if _current_wave_enemy_amount <= 0:
-			battle_overd.emit()
-			
-signal battle_overd()			
+			battle_over.emit()
+
+signal battle_over			
 
 func apply_buff(effect: BuffEffect) -> void:
 	super(effect)

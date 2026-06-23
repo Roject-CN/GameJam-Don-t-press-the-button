@@ -65,14 +65,21 @@ func _enter_build() -> void:
 
 func _exit_build() -> void:
 	ready_botton.visible = false
-	timer.timeout.disconnect(start_battle)
+	if ready_botton.pressed.is_connected(start_battle):
+		ready_botton.pressed.disconnect(start_battle)
+	if timer.timeout.is_connected(start_battle):
+		timer.timeout.disconnect(start_battle)
+	timer.stop()
 	enemy_container.enemies_spawn(5)
 
 # BATTLE — 进入时开始出怪 / 退出时停止出怪 + Buff 倒计数
 func _enter_battle() -> void:
-	enemy_container.battle_overd.connect(end_battle)
+	if not enemy_container.battle_over.is_connected(end_battle):
+		enemy_container.battle_over.connect(end_battle)
+
 func _exit_battle() -> void:
-	print("exit battle")
+	if enemy_container.battle_over.is_connected(end_battle):
+		enemy_container.battle_over.disconnect(end_battle)
 
 # SETTLE
 func _enter_settle() -> void:
