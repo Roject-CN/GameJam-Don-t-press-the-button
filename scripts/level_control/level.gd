@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 #关卡类,制成场景或接受场景
 class_name level
 
