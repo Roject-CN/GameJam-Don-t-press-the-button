@@ -7,7 +7,7 @@ class_name BaseClickedButton
 @export var buff_effect : Array[BuffEffect]
 
 signal buff_effect_applied(effect: BuffEffect)
-
+signal button_clicked()
 
 func _ready() -> void:
 	button.text = text
@@ -20,5 +20,6 @@ func release() -> void:
 	button.button_pressed = false
 
 func _on_button_pressed() -> void:
+	button_clicked.emit()
 	for effect in buff_effect:
 		buff_effect_applied.emit(effect)

@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://c8goie1f18fsy"]
+
+[ext_resource type="Texture2D" uid="uid://dhnxeonufjm0j" path="res://icon.svg" id="1_8ic8v"]
+[ext_resource type="Script" uid="uid://cj582lg3e7fn" path="res://scripts/defenses/base_defense.gd" id="1_base"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8ic8v"]
+radius = 219.00912
+
+[node name="BaseDefense" type="Node2D" unique_id=544454214]
+script = ExtResource("1_base")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=974198124]
+texture = ExtResource("1_8ic8v")
+
+[node name="Area" type="Area2D" parent="." unique_id=1136293830]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area" unique_id=93802236]
+shape = SubResource("CircleShape2D_8ic8v")

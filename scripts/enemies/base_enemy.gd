@@ -17,8 +17,14 @@ class_name BaseEnemy
 		else:
 			navigation()
 @export var speed := 200 #移动的基础速度
+@export var taunt_resistance: float = 0.0   # 钓鱼抵抗概率 0.0-1.0
 
-signal enemy_died()
+
+var buttons_container : Node2D
+
+
+# 被引诱状态
+var taunt_target: BaseClickedButton = null
 
 #当前寻路的按钮
 var current_button : BaseClickedButton :
@@ -29,10 +35,28 @@ var current_button : BaseClickedButton :
 func _ready() -> void:
 	navigation()
 
+signal enemy_died()
+# 钓鱼窗口引诱 — 覆盖导航目标
+func redirect_to(target: BaseClickedButton) -> void:
+	taunt_target = target
+	current_button = taunt_target
+func clear_taunt_target() -> void:
+	taunt_target = null
+	navigation()
+
+# 受到伤害（炮塔等）
+func take_damage(amount: int) -> void:
+	health -= amount
+	if health <= 0:
+		free_self()
+
 
 #寻路机制 从全局组 ClickedButtons 中随机选取一个按钮作为目标
 func navigation() -> void:
-	var buttons = get_tree().get_nodes_in_group("ClickedButtons").duplicate(true)
+	if taunt_target:
+		current_button = taunt_target
+		return  # 被引诱中，不重新选按钮
+	var buttons = buttons_container.get_children()
 	if not buttons:
 		assert(false, "Global Group ClickedButtons doesn't exist")
 

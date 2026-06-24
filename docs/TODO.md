@@ -8,14 +8,17 @@
 - [x] BuffContainer + BuffEmitter（Buff 路由链路）
 - [x] EnemyContainer（继承 BuffContainer，敌人生成 + 波次结束检测）
 - [x] StageManager FSM（BUILD/BATTLE/SETTLE 三阶段状态机）
+- [x] FailureEffect 按钮效果（PlayerContainer + failure_effect.tres → StageManager.lose_life）
+- [x] PlayerContainer（继承 BuffContainer，life_lost 信号）
+- [x] 防御设施 Phase 1（炮塔 + 钓鱼窗口核心逻辑 + Projectile，PlacementManager 测试放置）
+- [x] 临时 HUD（波次显示 / 命数显示 / 结算页面）
 
 ---
 
 ## 待做
-- [ ] FailureEffect 按钮效果（被点击扣命，连接 StageManager.lose_life）
 - [ ] 敌人生成系统（wave_resource 定义每波敌人类型+数量）
-- [ ] 防御设施（炮塔放置 + 自动射击）
-- [ ] HUD（波次 / 碎片 / 命数 / 冷却显示）
+- [ ] HUD Phase 2（碎片 / 冷却 / 商店面板）
+- [ ] 防御设施 Phase 2（正式放置 UI、升级系统、盾牌猛击）
 
 ---
 
