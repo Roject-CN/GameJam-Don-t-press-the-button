@@ -4,211 +4,261 @@
 
 ## 概述
 
-桌面隐喻风格 2D 塔防。敌人是鼠标光标，试图点击地图上的按钮。玩家部署防御设施保护按钮。
+桌面隐喻风格 2D 塔防。敌人是鼠标光标，从生成点移动到目标点，到达后点击附近按钮。玩家部署防御设施保护按钮。
 
 ---
 
-## BaseClickedButton — 按钮基类
+## 运行时架构
 
-> `scripts/buttons/base_button.gd` | `scenes/buttons/base_button.tscn`
-> Node2D → class_name BaseClickedButton | 全局组 `ClickedButtons`
+```
+GlobalManager (信号 hub)
+  ├── HUD (UI 层)
+  │   ├── Ready 按钮 → GlobalManager 首次确认
+  │   ├── LivesLabel / GameOverLabel  ← 监听 GlobalManager 信号
+  │   └── CardContainer → CardDeck 资源 → BaseCard × N
+  ├── WaveController (波次时序)
+  │   ├── WaveData (全部 WaveEntry)
+  │   ├── EnemyCatalog (类型名 → PackedScene + EnemyConfig)
+  │   └── 按 time_offset 生成敌人 → EnemyContainer
+  ├── EnemyContainer (存活计数 → battle_over)
+  ├── PlayerContainer (life_lost → GlobalManager)
+  ├── DefenceManager (ghost 孵化 + 放置 + 列表)
+  └── BuffEmitter (按钮 → 路由 buff 到各容器的 buff_container)
+```
 
-内置 Godot Button 子节点。可搭载多个 BuffEffect，点击时逐一发射 `buff_effect_applied` 信号。
+---
+
+## 子系统
+
+### 波次系统
+
+#### WaveEntry — 单条生成条目
+
+> `scripts/systems/wave_entry.gd` | Resource → class_name WaveEntry
 
 | 导出 | 类型 | 说明 |
 |---|---|---|
-| text | String | 按钮显示文本 |
-| buff_effect | Array[BuffEffect] | 搭载的效果列表 |
+| time_offset | float | 相对本波开始的秒数 |
+| wave_index | int | 所属波次，0 = 纯时序模式（不受波次控制） |
+| enemy_type | String | 敌人类型名，查 EnemyCatalog |
+| spawn_point | String | 产生点，匹配关卡中 SpawnMarker 节点名 |
+| target_point | String | 目标点，匹配关卡中 SpawnMarker 节点名 |
 
-方法: `press()` `release()` `_on_button_pressed()`
-信号: `buff_effect_applied(effect: BuffEffect)`
-场景: `Node2D (×2)` → `Button (8×8, toggle_mode)`
+#### WaveData — 波次数据集合
+
+> `scripts/systems/wave_data.gd` | Resource → class_name WaveData
+
+包装 `Array[WaveEntry]`，提供 `get_wave_entries(wave_index)` 按波次查询。`total_waves` 由 WaveController 自动计算（entries 中最大 wave_index）。
+
+#### EnemyCatalog — 敌人目录
+
+> `scripts/enemies/enemy_catalog.gd` | Resource → class_name EnemyCatalog
+
+| 导出 | 说明 |
+|---|---|
+| mappings | Array[EnemyTypeMapping] |
+
+方法: `get_scene(type_name)` `get_config(type_name)`
+
+#### EnemyTypeMapping — 类型映射条目
+
+> `scripts/enemies/enemy_type_mapping.gd` | Resource → class_name EnemyTypeMapping
+
+| 导出 | 说明 |
+|---|---|
+| type_name | 敌人类型字符串 |
+| scene | PackedScene 引用 |
+| enemy_config | EnemyConfig 引用（可选） |
+
+#### WaveController — 波次控制器
+
+> `scripts/systems/wave_controller.gd` | Node2D → class_name WaveController
+
+| 导出 | 说明 |
+|---|---|
+| wave_data | WaveData 资源 |
+| wave_clear_fragments | 每波通关奖励碎片 |
+| enemy_catalog | EnemyCatalog 资源 |
+| enemy_container | EnemyContainer 引用 |
+
+属性: `total_waves`（自动计算）`all_spawned()`
+方法: `start_wave(n)` `stop_wave()` `is_wave_active()`
+
+#### SpawnMarker — 标记点
+
+> `scripts/systems/spawn_marker.gd` | Node2D → class_name SpawnMarker
+
+关卡中放置，通过节点名被 WaveEntry.spawn_point / target_point 匹配。编辑器中显示彩色圆圈。
 
 ---
 
-## BaseEnemy — 敌人
+### 敌人系统
+
+#### BaseEnemy — 敌人基类
 
 > `scripts/enemies/base_enemy.gd` | `scenes/enemies/base_enemy.tscn`
 > Node2D → class_name BaseEnemy
 
-鼠标光标外观。从 ClickedButtons 组随机选目标，NavigationAgent2D 寻路，到达后播放点击动画。click_times 耗尽后播放淡出动画，发射 `enemy_died` 信号并销毁。
+位置驱动寻路。WaveController 通过 `setup(config, target_pos)` 注入配置和目标，NavigationAgent2D 从生成点移动到目标点，到达后在 `click_range` 内搜索按钮点击。
 
 | 导出 | 默认 | 说明 |
 |---|---|---|
-| health | 1 | 预留 |
-| click_times | 2 | 剩余点击次数，≤0 → free_self() |
-| speed | 200 | 移动速度 |
+| speed / health / click_times / taunt_resistance | — | 可被 EnemyConfig 覆盖 |
+| click_range | 50 | 到达后搜索按钮范围 |
 
 信号: `enemy_died()`
-方法: `navigation()` `click()` `free_self()` `_physics_process(delta)` `_on_navigation_agent_2d_navigation_finished()`
+方法: `setup(config, target_pos)` `_navigate_to(pos)` `redirect_to(btn)` `clear_taunt_target()` `free_self()`
 
-场景: `Node2D (×0.5)` → Sprite2D + AnimationPlayer (RESET/clicked/free) + Area2D + NavigationAgent2D
+#### EnemyConfig — 敌人配置
+
+> `scripts/enemies/enemy_config.gd` | Resource → class_name EnemyConfig
+
+| 导出 | 默认 | 说明 |
+|---|---|---|
+| speed | 200 | 移动速度 |
+| health | 1 | 生命值 |
+| click_times | 2 | 点击次数 |
+| taunt_resistance | 0.0 | 钓鱼抵抗概率 |
+| click_range | 50 | 搜索按钮范围 |
+
+#### EnemyContainer — 敌人管理器
+
+> `scripts/enemies/enemy_container.gd` | Node2D → class_name EnemyContainer
+
+| 导出 | 说明 |
+|---|---|
+| button_container | 按钮容器引用 |
+
+信号: `battle_over`
+方法: `enemies_spawn(amount)` `register_enemy(enemy)`
 
 ---
 
-## BuffEffect — 效果数据 Resource
+### Buff 系统
+
+#### BuffEffect — 效果数据
 
 > `scripts/buffs/buff_effect.gd` | Resource → class_name BuffEffect
 
-纯数据容器。描述 Buff 的目标类型、属性乘数、持续波次。
+| 导出 | 说明 |
+|---|---|
+| target | ENEMY / DEFENSE / PLAYER |
+| prop | 属性乘数 |
+| duration_waves | 持续波次 |
 
-| 导出 | 类型 | 说明 |
-|---|---|---|
-| buff_name | String | 效果名称 |
-| target | Target 枚举 | ENEMY / DEFENSE / PLAYER / TERRAIN |
-| prop | float | 属性乘数（1.3=+30%） |
-| duration_waves | int | 持续波次，0=永久 |
-
-枚举: `Target { ENEMY, DEFENSE, PLAYER, TERRAIN }`
-方法: `init()` `tick_wave()` → bool
-
----
-
-## BuffContainer — Buff 容器
+#### BuffContainer — Buff 容器
 
 > `scripts/buffs/buff_container.gd` | Node2D → class_name BuffContainer
 
-维护活跃 Buff 列表。`apply_buff`/`remove_buff` 时发信号。具体逻辑由子类（如 EnemyContainer）覆写。
+纯路由节点。11 行。`apply_buff()` 发射 `buff_applied` 信号。组合在各管理器中。
 
-| 导出 | 说明 |
-|---|---|
-| target_type | 本容器对应哪种 Target |
-
-方法: `apply_buff(effect)` `remove_buff(effect)`
-信号: `buff_applied` `buff_expired` `buffs_changed`
-
----
-
-## BuffEmitter — Buff 触发路由
+#### BuffEmitter — Buff 路由
 
 > `scripts/buffs/buff_emitter.gd` | Node2D → class_name BuffEmitter
 
-遍历 button_container 下所有 BaseClickedButton，连接 `buff_effect_applied` 信号。收到后 duplicate BuffEffect → 查 target → 调用对应 BuffContainer 的 `apply_buff()`。
-
-| 导出 | 说明 |
-|---|---|
-| enemy_container 等 | BuffContainer 引用，编辑器拖入 |
-| button_container | 按钮父节点 |
-
-方法: `connect_all()` `disconnect_all()`
+遍历 button_container 下所有按钮，连接 `buff_effect_applied`。收到后按 target 路由到对应管理器的 `.buff_container`。缺失容器静默跳过。
 
 ---
 
-## EnemyContainer — 敌人容器
+### 玩家系统
 
-> `scripts/main/enemy_container.gd` | 继承 BuffContainer → class_name EnemyContainer
+#### PlayerContainer — 玩家容器
 
-管理敌人生成和存活计数。`enemies_spawn(amount)` 在鼠标附近生成敌人，全灭时发射 `battle_over`。
+> `scripts/players/player_container.gd` | Node2D → class_name PlayerContainer
 
-方法: `enemies_spawn(amount)` `apply_buff(e)` `remove_buff(e)`
-信号: `battle_over`
+内部持有 `buff_container`，连接 `buff_applied` 信号驱动 `life_lost`。
 
----
-
-## 防御系统 — Phase 1
-
-### BaseDefense — 防御基类
-
-> `scripts/defenses/base_defense.gd` | Node2D → class_name BaseDefense
-
-防御工事基类。`_process` 中未放置时调用 `_ghost()`（跟随鼠标 + modulate.a=0.5 半透明），`place()` 恢复不透明并触发 `_on_placed()`。
-
-| 导出 | 类型 | 说明 |
-|---|---|---|
-| cost | int | 放置消耗碎片 |
-| defense_name | String | 显示名称 |
-
-方法: `place()` `_ghost()` `_on_placed()`（子类覆写）
-
-### TurretDefense — 射击炮塔
-
-> `scripts/defenses/turret_defense.gd` | extends BaseDefense → class_name TurretDefense
-
-自动索敌射击。`_on_placed()` 连接 `area_node.area_entered/area_exited`，`_process` 中选最近敌人发射 Projectile。
-
-| 导出 | 默认 | 说明 |
-|---|---|---|
-| fire_rate | 1.5 | 射击间隔(秒) |
-| damage | 1 | 每发伤害 |
-
-### Projectile — 弹丸
-
-> `scripts/defenses/projectile.gd` | Node2D → class_name Projectile
-
-炮塔发射的弹丸，`_physics_process` 中飞向目标敌人，命中后调用 `take_damage()` 并自毁。
-
-方法: `setup(target, damage)` — 设置目标与伤害
-
-### PhishingWindowDefense — 钓鱼窗口
-
-> `scripts/defenses/phishing_window.gd` | extends BaseDefense → class_name PhishingWindowDefense
-
-引诱范围内敌人改向到内置隐藏 BaseButton。双计数器：`live_count`（引诱次数 → 变灰）、`_life`（被点击次数 → 淡出销毁）。生命归零时遍历已引诱敌人调用 `clear_taunt_target()` 归还正常导航。
-
-| 导出 | 默认 | 说明 |
-|---|---|---|
-| live_count | 10 | 引诱次数上限 |
-| taunt_radius | 150 | 引诱半径(px) |
-
-方法: `on_enemy_click()` `_on_enemy_entered(area)`
-
-### DefenseContainer — 防御容器
-
-> `scripts/defenses/defense_container.gd` | 继承 BuffContainer → class_name DefenseContainer
-
-存放已放置的防御实例，接收 DEFENSE 目标的 Buff。`_ready()` 自设 `target_type = DEFENSE`。
-
-### PlacementManager — 测试放置
-
-> `scripts/defenses/placement_manager.gd` | Node2D → class_name PlacementManager
-
-简单测试放置：按 1/2 选防御 → ghost 跟鼠标 → left_mouse 点击放置 → spend_fragments 扣碎片。
-
----
-
-## PlayerContainer — 玩家容器
-
-> `scripts/players/player_container.gd` | 继承 BuffContainer → class_name PlayerContainer
-
-接收 PLAYER 目标的 BuffEffect。`apply_buff()` 覆写：按 `effect.prop` 值发射 `life_lost` 信号，由 StageManager 连接 → `lose_life()`。
-
-方法: `apply_buff(e)` `remove_buff(e)`
 信号: `life_lost(amount: int)`
 
 ---
 
-## StageManager — 阶段状态机
+### 防御系统
 
-> `scripts/main/stage_manager.gd` | Node2D → class_name StageManager
+#### BaseDefense — 防御基类
 
-FSM 模式管理 BUILD → BATTLE → SETTLE 三个阶段。`change_stage()` 为唯一转换入口，每个阶段有 `_enter_xxx` / `_exit_xxx` 钩子。所有模块信号在 `_ready()` 中一次性集中连接，enter/exit 只负责阶段行为（UI 显隐、Timer 启停、生成敌人）。
+> `scripts/defenses/base_defense.gd` | Node2D → class_name BaseDefense
 
-| 导出 | 说明 |
-|---|---|
-| enemy_container | EnemyContainer 引用 |
-| buff_emitter | BuffEmitter 引用 |
-| player_container | PlayerContainer 引用 |
-| wave_label / lives_label / game_over_label | HUD Label 引用 |
-| total_waves 等 | 波数/碎片/命数配置 |
+ghost 半透明跟随鼠标，`place()` 恢复不透明并触发 `_on_placed()`。
 
-枚举: `Stage { BUILD, BATTLE, SETTLE }`
-方法: `change_stage(s)` `start_battle()` `end_battle()` `lose_life(n)` `add_fragments(n)` `spend_fragments(n) -> bool`
-信号: `fragments_changed` `lives_changed` `game_won` `game_lost`
+#### TurretDefense — 射击炮塔
 
-当前行为:
-- _ready: 集中连接所有模块信号 + lives_changed → _update_lives_label
-- BUILD 进入: 隐藏 game_over_label，显示 Ready + 倒计时，启动 Timer，更新 wave_label
-- BUILD 退出: 隐藏 UI，停 Timer，spawn 5 敌人
-- BATTLE 进入: pass
-- SETTLE 进入: 断开 BuffEmitter，显示 game_over_label（"你赢了/输了"）
+> `scripts/defenses/turret_defense.gd` | extends BaseDefense
+
+自动索敌，发射 Projectile 造成伤害。
+
+#### PhishingWindowDefense — 钓鱼窗口
+
+> `scripts/defenses/window_defense.gd` | extends BaseDefense
+
+双层区域：外层 Area 将敌人导航重定向到窗口中心，内层 AreaClick 秒杀敌人。`lure_count` 耗尽后变灰淡出。
+
+#### Projectile — 弹丸
+
+> `scripts/defenses/projectile.gd` | Node2D → class_name Projectile
+
+飞向目标敌人，命中后造成伤害并自毁。
+
+#### DefenceManager — 防御管理器
+
+> `scripts/defenses/defence_manager.gd` | Node2D → class_name DefenceManager
+
+统一管理防御设施生命周期：`spawn_defence()` 孵化 ghost，`confirm_placement()` 正式放置，`remove_defence()` 移除。内部持有 `buff_container` 接收 DEFENSE 目标的 Buff。
 
 ---
 
-## main.gd — 主场景脚本
+### UI 系统
 
-> `scripts/main/main.gd` | extends Control
+#### HUD — UI 主控
 
-调试用。右键点击 → EnemyContainer 生成 5 个敌人。
+> `scripts/uis/hud/hud.gd` | `scenes/ui/hud.tscn`
+
+监听 GlobalManager 信号驱动显示。管理 Ready 按钮 / 命数 / 结算 / 卡牌容器。
+
+#### BaseCard — 卡牌基类
+
+> `scripts/uis/hud/card_unit.gd` | Control → class_name BaseCard
+
+长按拖拽生成防御 ghost，松手放置。自动从 HUD 获取 DefenceManager 和吸附栅格。
+
+#### CardContainer — 卡牌容器
+
+> `scripts/uis/hud/cards.gd` | Control → class_name CardContainer
+
+从 CardDeck 资源读取配置，实例化多种卡牌并水平排列。
+
+#### CardDeck / CardEntry — 卡组资源
+
+> `scripts/uis/hud/card_deck.gd` `card_entry.gd` | Resource
+
+CardDeck 包装 `Array[CardEntry]`，CardEntry 含 `card_scene: PackedScene` + `count: int`。
+
+---
+
+### 全局管理
+
+#### GlobalManager — 全局信号 hub
+
+> `scripts/global_manager.gd` | Node2D → class_name GlobalManager
+
+纯后端，不持有阶段枚举。Ready 首次确认后自动推进波次序列。
+
+信号: `lives_changed` `wave_started` `game_over(is_win)`
+
+#### LevelController — 关卡切换
+
+> `scripts/level_control/level_controller.gd` | Node2D
+
+加载 / 缓存 / 切换关卡 PackedScene。
+
+---
+
+### 按钮
+
+#### BaseClickedButton — 桌面按钮
+
+> `scripts/buttons/base_button.gd` | Node2D → class_name BaseClickedButton
+
+搭载 Array[BuffEffect]，点击时逐一发射 `buff_effect_applied`。
 
 ---
 
@@ -216,7 +266,7 @@ FSM 模式管理 BUILD → BATTLE → SETTLE 三个阶段。`change_stage()` 为
 
 | 动作 | 绑定 | 用途 |
 |---|---|---|
-| left_mouse | 鼠标左键 | 预留 |
+| left_mouse | 鼠标左键 | 卡牌拖拽放置 / 调试 |
 | right_mouse | 鼠标右键 | 调试生成敌人 |
 | slam_ability | 空格 | 预留 |
 | cancel_action | 鼠标右键 | 预留 |
@@ -226,10 +276,3 @@ FSM 模式管理 BUILD → BATTLE → SETTLE 三个阶段。`change_stage()` 为
 | 组名 | 说明 |
 |---|---|
 | ClickedButtons | 敌人寻路目标池 |
-
-## 尚未实现
-
-- wave_resource 波次数据
-- 防御设施 Phase 2（正式放置 UI / 升级 / 盾牌猛击）
-- HUD Phase 2（碎片显示 / 冷却环 / 商店面板）
-- 音效 / 美术

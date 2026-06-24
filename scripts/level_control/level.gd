@@ -1,14 +1,7 @@
 extends Node2D
-#关卡类,制成场景或接受场景
 class_name level
 
-#接受场景
-@export var level_scene:Node2D
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+## 关卡场景基类 — 每个 .tscn 关卡文件的根节点
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+## 可选：接受的子场景（预留）
+@export var level_scene: Node2D

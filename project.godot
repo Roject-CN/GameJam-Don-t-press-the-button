@@ -12,7 +12,7 @@ config_version=5
 
 config/name="别按那个键"
 config/description="A tower-defense game where mouse cursor enemies try to click forbidden buttons. Defend with phishing windows, turrets, and shield slams."
-run/main_scene="res://scenes/main/main.tscn"
+run/main_scene="uid://dgyb5lw3n28p7"
 config/features=PackedStringArray("4.7")
 config/icon="res://icon.svg"
 
