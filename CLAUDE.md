@@ -41,13 +41,19 @@
 
 ### 全局类 (class_name)
 - `BuffEffect` (Resource) — `scripts/buffs/buff_effect.gd`，Buff 效果数据（Target 枚举 + prop + duration_waves）
-- `BaseClickedButton` — `scripts/buttons/base_button.gd`，按钮基类（buff_effect + buff_effect_applied 信号）
-- `BaseEnemy` — `scripts/enemies/base_enemy.gd`，敌人基类（寻路 + 点击 + 死亡 + enemy_died 信号）
+- `BaseClickedButton` — `scripts/buttons/base_button.gd`，按钮基类（buff_effect + buff_effect_applied + button_clicked 信号）
+- `BaseEnemy` — `scripts/enemies/base_enemy.gd`，敌人基类（寻路 + 点击 + 死亡 + redirect_to + take_damage + enemy_died 信号）
 - `BuffContainer` — `scripts/buffs/buff_container.gd`，Buff 容器基类（apply/remove + 信号）
 - `BuffEmitter` — `scripts/buffs/buff_emitter.gd`，Buff 触发路由（按钮信号 → 容器）
 - `EnemyContainer` — `scripts/main/enemy_container.gd`，敌人容器（继承 BuffContainer，生成 + 存活计数）
 - `StageManager` — `scripts/main/stage_manager.gd`，阶段状态机（BUILD/BATTLE/SETTLE FSM，信号集中 _ready 连接）
 - `PlayerContainer` — `scripts/players/player_container.gd`，玩家容器（继承 BuffContainer，life_lost → StageManager.lose_life）
+- `BaseDefense` — `scripts/defenses/base_defense.gd`，防御基类（ghost 预览 + 放置 + _on_placed 覆写）
+- `TurretDefense` — `scripts/defenses/turret_defense.gd`，射击炮塔（自动索敌 + 弹丸射击）
+- `PhishingWindowDefense` — `scripts/defenses/phishing_window.gd`，钓鱼窗口（引诱 + 双计数器）
+- `Projectile` — `scripts/defenses/projectile.gd`，弹丸（飞行 + 命中伤害）
+- `DefenseContainer` — `scripts/defenses/defense_container.gd`，防御容器（继承 BuffContainer，存放已放置防御）
+- `PlacementManager` — `scripts/defenses/placement_manager.gd`，测试放置（按键 1/2 + 鼠标放置）
 
 ## 目录结构
 ```
@@ -81,7 +87,13 @@ GameJam/
 │   │   └── level_loader.gd    ✅ 关卡加载器
 │   ├── autoloads/             ⏳ 空目录
 │   ├── components/            ⏳ 空
-│   ├── defenses/              ⏳ 空
+│   ├── defenses/
+│   │   ├── base_defense.gd     ✅ BaseDefense 基类
+│   │   ├── turret_defense.gd   ✅ TurretDefense
+│   │   ├── phishing_window.gd  ✅ PhishingWindowDefense
+│   │   ├── projectile.gd       ✅ Projectile
+│   │   ├── defense_container.gd ✅ DefenseContainer
+│   │   └── placement_manager.gd ✅ PlacementManager
 │   ├── systems/               ⏳ 空
 │   └── ui/                    ⏳ 空
 ├── scenes/
@@ -92,7 +104,11 @@ GameJam/
 │   │   └── base_button.tscn   ✅ 按钮场景
 │   ├── enemies/
 │   │   └── base_enemy.tscn    ✅ 敌人场景
-│   ├── defenses/              ⏳ 空
+│   ├── defenses/
+│   │   ├── base_defense.tscn       ✅
+│   │   ├── turret_defense.tscn     ✅
+│   │   ├── phishing_window.tscn    ✅
+│   │   └── projectile.tscn         ✅
 │   ├── effects/               ⏳ 空
 │   └── ui/                    ⏳ 空
 ├── resources/
@@ -128,9 +144,11 @@ GameJam/
 - ✅ FailureEffect（failure_effect.tres，target=PLAYER prop=1.0）
 - ✅ 调试敌人生成器（右键生成敌人）
 - ✅ 队友关卡模块（level.gd / level_loader.gd）
+- ✅ 防御设施 Phase 1（炮塔 + 钓鱼窗口核心逻辑 + Projectile，PlacementManager 测试放置）
+- ✅ 临时 HUD（波次 / 命数 / 结算页面）
 - ⏳ wave_resource 波次数据
-- ⏳ 防御设施
-- ⏳ HUD/UI
+- ⏳ 防御设施 Phase 2（正式放置 UI / 升级 / 盾牌猛击）
+- ⏳ HUD Phase 2（碎片显示 / 冷却环 / 商店面板）
 - ⏳ 音效/美术素材
 
 ## Godot 调试日志路径

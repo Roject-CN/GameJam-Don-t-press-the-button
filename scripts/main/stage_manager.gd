@@ -16,12 +16,15 @@ enum Stage { BUILD, BATTLE, SETTLE }
 @export var ready_button: Button
 @export var countdown_label: Label
 @export var player_container: PlayerContainer
+@export var wave_label: Label
+@export var lives_label: Label
+@export var game_over_label: Label
 # 可配置参数
 @export var total_waves: int = 5
 @export var start_fragments: int = 100
 @export var wave_clear_fragments: int = 50
 @export var early_ready_bonus: int = 20
-@export var max_lives: int = 3
+@export var max_lives: int = 90
 
 # 运行时状态
 var current_stage: Stage = Stage.BUILD
@@ -29,6 +32,7 @@ var current_wave: int = 0
 var _countdown: int = 0
 var fragments: int
 var lives: int
+var _is_win: bool = false
 
 # 信号
 signal fragments_changed(new_amount: int)
@@ -47,6 +51,8 @@ func _ready() -> void:
 	count_timer.timeout.connect(_tick_countdown)
 	enemy_container.battle_over.connect(end_battle)
 	player_container.life_lost.connect(lose_life)
+	lives_changed.connect(_update_lives_label)
+	_update_lives_label(lives, 0)
 
 	_enter_stage(current_stage)
 
@@ -65,12 +71,15 @@ func change_stage(new_stage: Stage) -> void:
 
 # BUILD — 进入时激活按钮 + 倒计时显示
 func _enter_build() -> void:
+	if game_over_label:
+		game_over_label.visible = false
 	ready_button.visible = true
 	_countdown = int(wave_interval_time)
 	if countdown_label:
 		countdown_label.visible = true
 		countdown_label.text = "%d秒" % _countdown
 	count_timer.start()
+	_update_wave_label()
 
 func _tick_countdown() -> void:
 	_countdown -= 1
@@ -99,10 +108,21 @@ func _exit_battle() -> void:
 func _enter_settle() -> void:
 	if buff_emitter:
 		buff_emitter.disconnect_all()
-	print("game over")
+	if game_over_label:
+		game_over_label.text = "你赢了！" if _is_win else "你输了！"
+		game_over_label.visible = true
 
 func _exit_settle() -> void:
 	pass
+
+func _update_wave_label() -> void:
+	if wave_label:
+		wave_label.text = "第%d/%d波" % [current_wave, total_waves]
+
+
+func _update_lives_label(_lives_left: int, _lost: int) -> void:
+	if lives_label:
+		lives_label.text = "命: %d" % lives
 
 # 阶段路由（match 分发）
 func _enter_stage(stage: Stage) -> void:
@@ -124,6 +144,7 @@ func start_battle() -> void:
 	if current_stage != Stage.BUILD:
 		return
 	current_wave += 1
+	_update_wave_label()
 	change_stage(Stage.BATTLE)
 
 
@@ -146,6 +167,7 @@ func lose_life(amount: int = 1) -> void:
 
 
 func _settle(is_win: bool) -> void:
+	_is_win = is_win
 	change_stage(Stage.SETTLE)
 	if is_win:
 		game_won.emit()
@@ -156,3 +178,11 @@ func _settle(is_win: bool) -> void:
 func add_fragments(amount: int) -> void:
 	fragments += amount
 	fragments_changed.emit(fragments)
+
+
+func spend_fragments(amount: int) -> bool:
+	if fragments < amount:
+		return false
+	fragments -= amount
+	fragments_changed.emit(fragments)
+	return true

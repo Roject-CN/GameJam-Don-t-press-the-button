@@ -105,6 +105,67 @@
 
 ---
 
+## 防御系统 — Phase 1
+
+### BaseDefense — 防御基类
+
+> `scripts/defenses/base_defense.gd` | Node2D → class_name BaseDefense
+
+防御工事基类。`_process` 中未放置时调用 `_ghost()`（跟随鼠标 + modulate.a=0.5 半透明），`place()` 恢复不透明并触发 `_on_placed()`。
+
+| 导出 | 类型 | 说明 |
+|---|---|---|
+| cost | int | 放置消耗碎片 |
+| defense_name | String | 显示名称 |
+
+方法: `place()` `_ghost()` `_on_placed()`（子类覆写）
+
+### TurretDefense — 射击炮塔
+
+> `scripts/defenses/turret_defense.gd` | extends BaseDefense → class_name TurretDefense
+
+自动索敌射击。`_on_placed()` 连接 `area_node.area_entered/area_exited`，`_process` 中选最近敌人发射 Projectile。
+
+| 导出 | 默认 | 说明 |
+|---|---|---|
+| fire_rate | 1.5 | 射击间隔(秒) |
+| damage | 1 | 每发伤害 |
+
+### Projectile — 弹丸
+
+> `scripts/defenses/projectile.gd` | Node2D → class_name Projectile
+
+炮塔发射的弹丸，`_physics_process` 中飞向目标敌人，命中后调用 `take_damage()` 并自毁。
+
+方法: `setup(target, damage)` — 设置目标与伤害
+
+### PhishingWindowDefense — 钓鱼窗口
+
+> `scripts/defenses/phishing_window.gd` | extends BaseDefense → class_name PhishingWindowDefense
+
+引诱范围内敌人改向到内置隐藏 BaseButton。双计数器：`live_count`（引诱次数 → 变灰）、`_life`（被点击次数 → 淡出销毁）。生命归零时遍历已引诱敌人调用 `clear_taunt_target()` 归还正常导航。
+
+| 导出 | 默认 | 说明 |
+|---|---|---|
+| live_count | 10 | 引诱次数上限 |
+| taunt_radius | 150 | 引诱半径(px) |
+
+方法: `on_enemy_click()` `_on_enemy_entered(area)`
+
+### DefenseContainer — 防御容器
+
+> `scripts/defenses/defense_container.gd` | 继承 BuffContainer → class_name DefenseContainer
+
+存放已放置的防御实例，接收 DEFENSE 目标的 Buff。`_ready()` 自设 `target_type = DEFENSE`。
+
+### PlacementManager — 测试放置
+
+> `scripts/defenses/placement_manager.gd` | Node2D → class_name PlacementManager
+
+简单测试放置：按 1/2 选防御 → ghost 跟鼠标 → left_mouse 点击放置 → spend_fragments 扣碎片。
+
+---
+
 ## PlayerContainer — 玩家容器
 
 > `scripts/players/player_container.gd` | 继承 BuffContainer → class_name PlayerContainer
@@ -127,18 +188,19 @@ FSM 模式管理 BUILD → BATTLE → SETTLE 三个阶段。`change_stage()` 为
 | enemy_container | EnemyContainer 引用 |
 | buff_emitter | BuffEmitter 引用 |
 | player_container | PlayerContainer 引用 |
+| wave_label / lives_label / game_over_label | HUD Label 引用 |
 | total_waves 等 | 波数/碎片/命数配置 |
 
 枚举: `Stage { BUILD, BATTLE, SETTLE }`
-方法: `change_stage(s)` `start_battle()` `end_battle()` `lose_life(n)` `add_fragments(n)`
+方法: `change_stage(s)` `start_battle()` `end_battle()` `lose_life(n)` `add_fragments(n)` `spend_fragments(n) -> bool`
 信号: `fragments_changed` `lives_changed` `game_won` `game_lost`
 
 当前行为:
-- _ready: 集中连接所有模块信号 (ready_button, count_timer, battle_over, life_lost)
-- BUILD 进入: 显示 Ready 按钮 + 倒计时，启动 Timer
+- _ready: 集中连接所有模块信号 + lives_changed → _update_lives_label
+- BUILD 进入: 隐藏 game_over_label，显示 Ready + 倒计时，启动 Timer，更新 wave_label
 - BUILD 退出: 隐藏 UI，停 Timer，spawn 5 敌人
-- BATTLE 进入: pass（信号已在 _ready 连接）
-- SETTLE 进入: buff_emitter.disconnect_all()
+- BATTLE 进入: pass
+- SETTLE 进入: 断开 BuffEmitter，显示 game_over_label（"你赢了/输了"）
 
 ---
 
@@ -168,6 +230,6 @@ FSM 模式管理 BUILD → BATTLE → SETTLE 三个阶段。`change_stage()` 为
 ## 尚未实现
 
 - wave_resource 波次数据
-- 防御设施
-- HUD / UI
+- 防御设施 Phase 2（正式放置 UI / 升级 / 盾牌猛击）
+- HUD Phase 2（碎片显示 / 冷却环 / 商店面板）
 - 音效 / 美术

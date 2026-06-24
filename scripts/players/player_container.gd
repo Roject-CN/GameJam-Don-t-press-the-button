@@ -5,6 +5,8 @@ class_name PlayerContainer
 
 signal life_lost(amount: int)
 
+func _ready() -> void:
+	target_type = BuffEffect.Target.PLAYER
 
 func apply_buff(effect: BuffEffect) -> void:
 	super(effect)

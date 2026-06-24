@@ -6,7 +6,7 @@ class_name BuffContainer
 
 #这里规定一些基本的方法，具体的还需要针对各个模块的需求重写
 
-@export var target_type: BuffEffect.Target
+var target_type: BuffEffect.Target
 
 var active_buffs: Array[BuffEffect] = []
 
@@ -14,6 +14,9 @@ signal buff_applied(effect: BuffEffect)
 signal buff_expired(effect: BuffEffect)
 signal buffs_changed
 
+func _ready() -> void:
+	if not target_type:
+		print(self.name + "还未设置好相应的target_type")
 
 func apply_buff(effect: BuffEffect) -> void:
 	active_buffs.append(effect)
