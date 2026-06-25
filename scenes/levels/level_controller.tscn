@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://cvjxjadn7o7al"]
+
+[ext_resource type="Script" uid="uid://cs6x6atwxdp8i" path="res://scripts/level_control/level_controller.gd" id="1_ejf3d"]
+
+[node name="LevelController" type="Node2D" unique_id=509448749]
+script = ExtResource("1_ejf3d")
+metadata/_custom_type_script = "uid://cs6x6atwxdp8i"

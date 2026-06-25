@@ -6,8 +6,10 @@
 
 [node name="WindowDefense" unique_id=544454214 instance=ExtResource("1_h213a")]
 script = ExtResource("2_flbmg")
-live_count = 10
-taunt_radius = 150.0
+lure_count = 5
+
+[node name="Sprite2D" parent="." index="0" unique_id=974198124]
+scale = Vector2(0.422, 0.422)
 
 [node name="BaseButton" parent="." index="2" unique_id=115424014 instance=ExtResource("3_dfhqt")]
 visible = false

@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://cbn84ph6ndhqd"]
+
+[ext_resource type="PackedScene" uid="uid://b01a4qfs75kyy" path="res://scenes/ui/cards/card_base.tscn" id="1_base"]
+[ext_resource type="PackedScene" uid="uid://drrc14qtrfcv0" path="res://scenes/defenses/turret_defense.tscn" id="2_o7fnl"]
+
+[sub_resource type="Gradient" id="Gradient_o7fnl"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_o7fnl"]
+gradient = SubResource("Gradient_o7fnl")
+fill_from = Vector2(0.47008547, 0.7606838)
+
+[node name="Card" unique_id=1883003203 instance=ExtResource("1_base")]
+defense_unit_scene = ExtResource("2_o7fnl")
+
+[node name="TextureRect" parent="." index="1" unique_id=317638056]
+offset_left = -51.0
+offset_top = -46.82199
+offset_right = 49.0
+offset_bottom = 53.17801
+texture = SubResource("GradientTexture2D_o7fnl")
+
+[node name="Label" parent="." index="2" unique_id=734087057]
+text = "TURRENT"

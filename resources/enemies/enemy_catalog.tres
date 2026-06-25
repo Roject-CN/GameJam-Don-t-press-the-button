@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EnemyCatalog" format=3 uid="uid://dxh4qk5jm8t3e"]
+
+[ext_resource type="Script" uid="uid://c0m5ig28q0q7b" path="res://scripts/enemies/enemy_catalog.gd" id="1_cat"]
+[ext_resource type="Script" uid="uid://utqyjnqbsb3h" path="res://scripts/enemies/enemy_type_mapping.gd" id="2_map"]
+[ext_resource type="PackedScene" uid="uid://dp7qcvgcmvebd" path="res://scenes/enemies/base_enemy.tscn" id="3_basic"]
+
+[sub_resource type="Resource" id="basic_map"]
+script = ExtResource("2_map")
+type_name = "basic"
+scene = ExtResource("3_basic")
+
+[resource]
+script = ExtResource("1_cat")
+mappings = Array[ExtResource("2_map")]([SubResource("basic_map")])

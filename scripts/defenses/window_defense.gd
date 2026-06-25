@@ -1,50 +1,56 @@
 extends BaseDefense
-class_name PhishingWindowDefense
+class_name WindowDefense
 
-## 钓鱼窗口 — 引诱范围内敌人改向，承受点击后销毁
+## 钓鱼窗口 — 双层区域防御
+## 外层 Area（继承自 BaseDefense）：敌人进入 → 导航重定向到窗口中心
+## 内层 AreaClick：敌人进入 → 秒杀，消耗 lure_count
 
-@export var live_count: int = 10
-
-@export var taunt_radius: float = 150.0
+## 可引诱次数（耗尽后销毁）
+@export var lure_count: int = 5
 
 @onready var base_button: BaseClickedButton = $BaseButton
 @onready var counter_label: Label = $CounterLabel
 
-var _life: int = live_count
-var _taunt_active: bool = true
-var _enemies : Array[BaseEnemy] = [null]
-#signal defense_destroyed()
+var _remaining: int
+var _active: bool = true
+
+func _ready() -> void:
+	_remaining = lure_count
+	counter_label.text = "%d" % _remaining
 
 func _on_placed() -> void:
-	area_node.area_entered.connect(_on_enemy_entered)
-	base_button.button_clicked.connect(on_enemy_click)
-	counter_label.text = "%d" % _life
+	area_node.area_entered.connect(_on_lure)
+	base_button.button_clicked.connect(_on_clicked)
+	# 延迟一帧等待物理服务器完成 AABB 更新，再手动收集已重叠的敌人
+	await get_tree().physics_frame
+	for area in area_node.get_overlapping_areas():
+		_on_lure(area)
 
-func _on_enemy_entered(area: Area2D) -> void:
-	if not _taunt_active:
+
+## 外层吸引：重定向敌人导航到窗口位置
+func _on_lure(area: Area2D) -> void:
+	if not _active:
 		return
-
 	var enemy := area.get_parent() as BaseEnemy
 	if not enemy:
 		return
+	redirect(enemy)
 
-	live_count -= enemy.click_times
-	enemy.redirect_to(base_button)
-	_enemies.append(enemy)
-	if live_count <= 0:
+func redirect(enemy : BaseEnemy) -> void:
+	enemy.redirect_to(base_button.global_position)
+
+
+## 内层击杀：秒杀敌人，计数耗尽后变灰淡出
+func _on_clicked() -> void:
+	if not _active:
+		return
+
+	_remaining -= 1
+	counter_label.text = "%d" % _remaining
+
+	if _remaining <= 0:
+		_active = false
 		modulate = Color.GRAY
-
-
-## 敌人到达窗口后调用 — 敌人自己的 click_times 在 BaseEnemy 里处理
-func on_enemy_click() -> void:
-	_life -= 1
-	counter_label.text = "%d" % _life
-	if _life <= 0:
-		_taunt_active = false
-		for i in _enemies:
-			if i :
-				i.clear_taunt_target()
-			
 		var tween := create_tween()
 		tween.tween_property(self, "modulate:a", 0.0, 2)
 		tween.tween_callback(queue_free)

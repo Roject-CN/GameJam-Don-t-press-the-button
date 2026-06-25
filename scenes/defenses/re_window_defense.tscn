@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://d3yu03fn0nvku"]
+
+[ext_resource type="PackedScene" uid="uid://5iauwwvsffsc" path="res://scenes/defenses/window_defense.tscn" id="1_fur5j"]
+[ext_resource type="Script" uid="uid://81iiuskx3f53" path="res://scripts/defenses/re_window_defense.gd" id="2_asa21"]
+
+[node name="ReWindowDefense" unique_id=544454214 instance=ExtResource("1_fur5j")]
+script = ExtResource("2_asa21")
+lure_count = 15
+
+[node name="Sprite2D" parent="." index="0" unique_id=974198124]
+scale = Vector2(0.844, 0.844)

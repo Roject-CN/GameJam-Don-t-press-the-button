@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b01a4qfs75kyy"]
 
-[ext_resource type="Script" uid="uid://itwt0sukkkdj" path="res://scripts/uis/hud/unit_card.gd" id="1_7d2gs"]
+[ext_resource type="Script" uid="uid://itwt0sukkkdj" path="res://scripts/uis/hud/card_unit.gd" id="1_belkx"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_d8onh"]
 width = 50
@@ -95,6 +95,7 @@ _data = {
 }
 
 [node name="Card" type="Control" unique_id=783367650 node_paths=PackedStringArray("anim_player")]
+z_index = 5
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -104,11 +105,11 @@ anchor_bottom = 0.5
 offset_left = -65.0
 offset_top = -105.17801
 offset_right = 65.0
-offset_bottom = 105.17801
+offset_bottom = 24.821991
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(65, 105.178)
-script = ExtResource("1_7d2gs")
+script = ExtResource("1_belkx")
 anim_player = NodePath("AnimationPlayer")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1791801387]
