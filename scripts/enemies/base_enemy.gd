@@ -28,6 +28,8 @@ var config: EnemyConfig = null
 # 寻路状态
 var _target_pos: Vector2
 var _setup_done: bool = false
+
+var _lure_queue: Array[Vector2] = []
 var lured := false #被引诱状态
 var repeatedly_lured := false #被持续引诱状态
 
@@ -65,10 +67,12 @@ func _navigate_to(pos: Vector2) -> void:
 
 
 ## 钓鱼窗口引诱
-#Roject将引诱的寻路逻辑写在 window defense里面了 
+#Roject将引诱的寻路逻辑写在 window defense 里面了
 #仅保留一个接口
 func redirect_to(pos : Vector2, repeated := false) -> void:
 	if lured:
+		_lure_queue.append(pos)
+		print(_lure_queue)
 		return
 	lured = true
 	repeatedly_lured = repeated
@@ -103,6 +107,18 @@ func _click_button(btn: BaseClickedButton) -> void:
 		if repeatedly_lured:
 			_click_button(btn)
 			return
+		# 非持续引诱：重置引诱状态，消费队列中下一个引诱
+		_reset_lure()
+		
+
+
+## 重置引诱状态，若队列中有待处理的引诱则立即消费
+func _reset_lure() -> void:
+	lured = false
+	if not _lure_queue.is_empty():
+		var pos = _lure_queue.pop_front()
+		redirect_to(pos)
+	else:
 		_navigate_to(_target_pos)
 
 

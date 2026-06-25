@@ -46,7 +46,7 @@ _data = {
 }
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ufgfk"]
-radius = 24.083189
+radius = 44.0
 
 [node name="BaseEnemy" type="Node2D" unique_id=1293915282]
 scale = Vector2(0.5, 0.5)

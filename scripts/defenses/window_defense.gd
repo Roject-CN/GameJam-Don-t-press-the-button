@@ -21,6 +21,10 @@ func _ready() -> void:
 func _on_placed() -> void:
 	area_node.area_entered.connect(_on_lure)
 	base_button.button_clicked.connect(_on_clicked)
+	# 延迟一帧等待物理服务器完成 AABB 更新，再手动收集已重叠的敌人
+	await get_tree().physics_frame
+	for area in area_node.get_overlapping_areas():
+		_on_lure(area)
 
 
 ## 外层吸引：重定向敌人导航到窗口位置
@@ -31,7 +35,7 @@ func _on_lure(area: Area2D) -> void:
 	if not enemy:
 		return
 	redirect(enemy)
-	
+
 func redirect(enemy : BaseEnemy) -> void:
 	enemy.redirect_to(base_button.global_position)
 
