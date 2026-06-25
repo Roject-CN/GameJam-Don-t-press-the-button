@@ -1,28 +1,23 @@
 extends Node2D
 class_name BuffEmitter
 
-@export var enemy_container: BuffContainer
-@export var defense_container: BuffContainer
-@export var player_container: BuffContainer
-@export var terrain_container: BuffContainer
+## Buff 触发器 — 连接按钮信号，将 BuffEffect 路由到对应 BuffContainer
+## 容器按需连接：某路缺失时仅跳过，不报错
 
-@export var button_container : Node2D
+@export var enemy_container: EnemyContainer
+@export var defense_manager: DefenceManager
+@export var player_container: PlayerContainer
+@export var button_container: Node2D
+
 
 func _ready() -> void:
-	# 验证所有引用已绑定
-	if not enemy_container or not defense_container \
-	or not player_container or not terrain_container \
-	or not button_container:
-		push_error("BuffEmitter: missing container bindings — check @export vars in editor")
+	if not button_container:
+		push_error("BuffEmitter: button_container is null")
 		return
-
-	# 连接所有按钮的 buff_effect_applied 信号
 	connect_all()
 
 
 func connect_all() -> void:
-	if not button_container:
-		return
 	for btn in button_container.get_children():
 		if btn is BaseClickedButton:
 			if not btn.buff_effect_applied.is_connected(_on_buff_effect_applied):
@@ -30,8 +25,6 @@ func connect_all() -> void:
 
 
 func disconnect_all() -> void:
-	if not button_container:
-		return
 	for btn in button_container.get_children():
 		if btn is BaseClickedButton:
 			if btn.buff_effect_applied.is_connected(_on_buff_effect_applied):
@@ -39,20 +32,24 @@ func disconnect_all() -> void:
 
 
 func _on_buff_effect_applied(effect: BuffEffect) -> void:
-	var container := _get_container_for(effect.target)
-	if not container:
-		push_error("BuffEmitter: no container found for target: " + str(effect.target))
-		return
+	_route(effect)
 
+
+func _route(effect: BuffEffect) -> void:
+	var container := _resolve(effect.target)
+	if not container:
+		return
 	var instance := effect.duplicate(true) as BuffEffect
 	container.apply_buff(instance)
 
 
-func _get_container_for(target: BuffEffect.Target) -> BuffContainer:
+func _resolve(target: BuffEffect.Target) -> BuffContainer:
 	match target:
-		BuffEffect.Target.ENEMY:   return enemy_container
-		BuffEffect.Target.DEFENSE:  return defense_container
-		BuffEffect.Target.PLAYER:  return player_container
-		BuffEffect.Target.TERRAIN: return terrain_container
-
-	return null
+		BuffEffect.Target.ENEMY:
+			return enemy_container.buff_container if enemy_container else null
+		BuffEffect.Target.DEFENSE:
+			return defense_manager.buff_container if defense_manager else null
+		BuffEffect.Target.PLAYER:
+			return player_container.buff_container if player_container else null
+		_:
+			return null

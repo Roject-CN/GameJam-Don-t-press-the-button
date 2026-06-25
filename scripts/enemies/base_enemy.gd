@@ -1,77 +1,131 @@
 extends Node2D
 class_name BaseEnemy
 
-#引用部分
+## 敌人基类 — 位置驱动寻路，从生成点 → 目标点，到达后点击附近按钮
+
+# 节点引用
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var area_2d: Area2D = $Area2D
-@onready var collision_shape_2d: CollisionShape2D = $Area2D/CollisionShape2D
 @onready var navigation_agent_2d: NavigationAgent2D = $NavigationAgent2D
 
-#属性值部分
-@export var health : int = 1 #生命值
-@export var click_times : int = 2 : #点击 x 次后触发free_self()
-	set(value):
-		click_times = value
+# 属性（编辑器默认值，可由 EnemyConfig 覆盖）
+@export var speed: float = 200.0
+@export var health: int = 1
+@export var click_times: int = 2:
+	set(v):
+		click_times = v
 		if click_times <= 0:
 			free_self()
-		else:
-			navigation()
-@export var speed := 200 #移动的基础速度
-@export var taunt_resistance: float = 0.0   # 钓鱼抵抗概率 0.0-1.0
+		elif _setup_done:
+			_navigate_to(_target_pos)
+@export var taunt_resistance: float = 0.0
 
+## 到达目标后搜索按钮的范围
+@export var click_range: float = 50.0
 
-var buttons_container : Node2D
+# 外部注入
+var buttons_container: Node2D
+var config: EnemyConfig = null
 
+# 寻路状态
+var _target_pos: Vector2
+var _setup_done: bool = false
 
 # 被引诱状态
 var taunt_target: BaseClickedButton = null
 
-#当前寻路的按钮
-var current_button : BaseClickedButton :
-	set(value):
-		current_button = value
-		navigation_agent_2d.target_position = current_button.global_position
+signal enemy_died()
+
 
 func _ready() -> void:
-	navigation()
+	if config:
+		_apply_config()
+		_navigate_to(_target_pos)
+		_setup_done = true
 
-signal enemy_died()
-# 钓鱼窗口引诱 — 覆盖导航目标
+
+## WaveController 调用：存储配置 + 目标，_ready 中启动寻路
+func setup(p_config: EnemyConfig, p_target_pos: Vector2) -> void:
+	config = p_config
+	_target_pos = p_target_pos
+	if is_inside_tree():
+		_apply_config()
+		_navigate_to(_target_pos)
+		_setup_done = true
+
+
+func _apply_config() -> void:
+	if not config:
+		return
+	speed = config.speed if config.speed > 0 else speed
+	health = config.health if config.health > 0 else health
+	click_times = config.click_times
+	taunt_resistance = config.taunt_resistance
+
+
+func _navigate_to(pos: Vector2) -> void:
+	navigation_agent_2d.target_position = pos
+
+
+## 钓鱼窗口引诱 — 重定向到按钮位置
 func redirect_to(target: BaseClickedButton) -> void:
 	taunt_target = target
-	current_button = taunt_target
+	_navigate_to(target.global_position)
+
+
 func clear_taunt_target() -> void:
 	taunt_target = null
-	navigation()
+	_navigate_to(_target_pos)
 
-# 受到伤害（炮塔等）
+
 func take_damage(amount: int) -> void:
 	health -= amount
 	if health <= 0:
 		free_self()
 
 
-#寻路机制 从全局组 ClickedButtons 中随机选取一个按钮作为目标
-func navigation() -> void:
-	if taunt_target:
-		current_button = taunt_target
-		return  # 被引诱中，不重新选按钮
-	var buttons = buttons_container.get_children()
-	if not buttons:
-		assert(false, "Global Group ClickedButtons doesn't exist")
+## 到达目标后查找附近按钮并点击（taunt 目标优先）
+func _try_click() -> void:
+	var btn: BaseClickedButton = null
 
-	current_button = buttons[randi_range(0, buttons.size() - 1)]
+	# 被引诱时优先点击引诱目标按钮
+	if taunt_target and taunt_target.global_position.distance_to(global_position) <= click_range:
+		btn = taunt_target
+	else:
+		btn = _find_nearest_button(global_position)
+		if btn and btn.global_position.distance_to(global_position) > click_range:
+			btn = null
+
+	if btn:
+		_click_button(btn)
 
 
-func click() -> void:
+func _click_button(btn: BaseClickedButton) -> void:
 	animation_player.play("clicked")
-	current_button.press()
+	btn.press()
 	await animation_player.animation_finished
-	current_button.release()
+	btn.release()
 	click_times -= 1
+	if click_times > 0:
+		_navigate_to(_target_pos)
 
 
-#敌人的删除函数 在点击按钮/被消灭之后触发的函数
+func _find_nearest_button(pos: Vector2) -> BaseClickedButton:
+	if not buttons_container:
+		return null
+	var best: BaseClickedButton = null
+	var best_dist := INF
+	for child in buttons_container.get_children():
+		var btn := child as BaseClickedButton
+		if not btn:
+			continue
+		var d := btn.global_position.distance_squared_to(pos)
+		if d < best_dist:
+			best_dist = d
+			best = btn
+	return best
+
+
 func free_self() -> void:
 	animation_player.play("free")
 	await animation_player.animation_finished
@@ -80,13 +134,15 @@ func free_self() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if not current_button or navigation_agent_2d.is_navigation_finished():
+	if not _setup_done:
+		return
+	if navigation_agent_2d.is_navigation_finished():
 		return
 
-	var next_pos = navigation_agent_2d.get_next_path_position() - self.global_position
-	var velocity = next_pos.normalized() * speed
-	self.position += velocity * delta
+	var next_pos := navigation_agent_2d.get_next_path_position() - global_position
+	var velocity := next_pos.normalized() * speed
+	position += velocity * delta
 
 
 func _on_navigation_agent_2d_navigation_finished() -> void:
-	click()
+	_try_click()

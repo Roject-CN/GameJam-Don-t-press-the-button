@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dmtgh6idi6gom"]
+
+[ext_resource type="PackedScene" uid="uid://cbn84ph6ndhqd" path="res://scenes/ui/cards/card_turret_defense.tscn" id="1_s08mw"]
+[ext_resource type="PackedScene" uid="uid://5iauwwvsffsc" path="res://scenes/defenses/window_defense.tscn" id="2_7ea0w"]
+
+[node name="Card" unique_id=1883003203 instance=ExtResource("1_s08mw")]
+defense_unit_scene = ExtResource("2_7ea0w")
+
+[node name="Label" parent="." index="2" unique_id=734087057]
+text = "WINDOW"

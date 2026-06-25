@@ -1,10 +1,15 @@
 extends Node2D
 class_name Projectile
 
-## 炮塔弹丸 — 飞向目标敌人，命中后造成伤害
+## 炮塔弹丸 — 飞向目标敌人，命中后造成伤害并自毁
 
+## 目标敌人
 var target: BaseEnemy
+
+## 命中伤害
 var damage: int = 1
+
+## 飞行速度
 var speed: float = 400
 
 
