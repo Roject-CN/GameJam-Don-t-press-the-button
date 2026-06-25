@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="WaveData" format=3 uid="uid://bqq0em88rn821"]
 
-[ext_resource type="Script" uid="uid://cdvsni7n0r4rt" path="res://scripts/systems/wave_control/wave_entry.gd" id="1_e2fih"]
-[ext_resource type="Script" uid="uid://di35v1vlutb7g" path="res://scripts/systems/wave_control/wave_data.gd" id="2_867x6"]
+[ext_resource type="Script" uid="uid://dfiyq0gqv42y2" path="res://scripts/systems/wave_control/wave_entry.gd" id="1_e2fih"]
+[ext_resource type="Script" uid="uid://bc27wyjj6a7ex" path="res://scripts/systems/wave_control/wave_data.gd" id="2_867x6"]
 
 [sub_resource type="Resource" id="w1e1"]
 script = ExtResource("1_e2fih")

@@ -192,6 +192,12 @@ ghost 半透明跟随鼠标，`place()` 恢复不透明并触发 `_on_placed()`�
 
 双层区域：外层 Area 将敌人导航重定向到窗口中心，内层 AreaClick 秒杀敌人。`lure_count` 耗尽后变灰淡出。
 
+#### ReWindowDefense — 持续引诱窗口
+
+> `scripts/defenses/re_window_defense.gd` | extends WindowDefense
+
+覆盖 `redirect()`，传入 repeated=true，使敌人被引诱后反复点击窗口而不返回原路线。
+
 #### Projectile — 弹丸
 
 > `scripts/defenses/projectile.gd` | Node2D → class_name Projectile

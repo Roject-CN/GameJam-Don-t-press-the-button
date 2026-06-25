@@ -37,3 +37,11 @@ func _on_button_pressed() -> void:
 	button_clicked.emit()
 	for effect in buff_effect:
 		buff_effect_applied.emit(effect)
+
+
+func _on_button_mouse_entered() -> void:
+	button.toggle_mode = false
+
+
+func _on_button_mouse_exited() -> void:
+	button.toggle_mode = true

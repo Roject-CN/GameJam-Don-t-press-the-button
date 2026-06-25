@@ -1,5 +1,11 @@
 # 更新日志 — "别按那个键"
 
+## 2026-06-25 — feature_re_window
+- 新增 ReWindowDefense：继承窗口防御，持续引诱模式（redirect repeated=true）
+- 修复：删除 enemy_container 和 wave_controller 中对不存在的 buttons_container 字段的赋值
+- BaseButton：鼠标悬停时取消 toggle_mode，离开恢复
+- 卡组调整：新增 re_window_defense 卡牌（2张），炮塔数量 4→2
+
 ## 2026-06-25 — rebuild_64f
 - 架构重构：StageManager → GlobalManager，移除阶段枚举，纯信号 hub
 - 波次系统：WaveEntry + WaveData + EnemyCatalog + WaveController，时间戳驱动生成

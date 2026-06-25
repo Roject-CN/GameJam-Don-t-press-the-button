@@ -97,7 +97,7 @@ func _spawn(entry: WaveEntry) -> void:
 		if target_node:
 			target_pos = target_node.global_position
 
-	enemy.buttons_container = enemy_container.button_container
+
 	var econfig := enemy_catalog.get_config(entry.enemy_type) if enemy_catalog else null
 	if not econfig:
 		econfig = EnemyConfig.new()

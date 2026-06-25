@@ -39,7 +39,6 @@ func enemies_spawn(amount: int) -> void:
 		var enemy := base_enemy.instantiate() as BaseEnemy
 		var pos := get_global_mouse_position() + Vector2(randi_range(1, 50), randi_range(1, 50))
 		enemy.global_position = pos
-		enemy.buttons_container = button_container
 		enemy.enemy_died.connect(func(): _current_wave_enemy_amount -= 1)
 		self.add_child(enemy)
 

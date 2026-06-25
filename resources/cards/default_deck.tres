@@ -1,20 +1,27 @@
 [gd_resource type="Resource" script_class="CardDeck" format=3 uid="uid://bafytq6aoqtwj"]
 
-[ext_resource type="Script" uid="uid://dfjdg61jfhw1h" path="res://scripts/uis/hud/card_deck.gd" id="1_deck"]
-[ext_resource type="Script" uid="uid://crfnm6kswxao3" path="res://scripts/uis/hud/card_entry.gd" id="2_entry"]
+[ext_resource type="Script" uid="uid://d0a5ii5g3q7ww" path="res://scripts/uis/hud/card_deck.gd" id="1_deck"]
+[ext_resource type="Script" uid="uid://di4v5ywxoc6pm" path="res://scripts/uis/hud/card_entry.gd" id="2_entry"]
 [ext_resource type="PackedScene" uid="uid://dmtgh6idi6gom" path="res://scenes/ui/cards/card_window.tscn" id="3_kuiqe"]
 [ext_resource type="PackedScene" uid="uid://cbn84ph6ndhqd" path="res://scenes/ui/cards/card_turret_defense.tscn" id="3_turret"]
+[ext_resource type="PackedScene" uid="uid://ci1c4hs5osasx" path="res://scenes/ui/cards/card_re_window_defense.tscn" id="4_vqi02"]
 
 [sub_resource type="Resource" id="turret"]
 script = ExtResource("2_entry")
 card_scene = ExtResource("3_turret")
-count = 4
+count = 2
 
 [sub_resource type="Resource" id="Resource_ej7l4"]
 script = ExtResource("2_entry")
 card_scene = ExtResource("3_kuiqe")
 count = 2
 
+[sub_resource type="Resource" id="Resource_dambs"]
+script = ExtResource("2_entry")
+card_scene = ExtResource("4_vqi02")
+count = 2
+metadata/_custom_type_script = "uid://di4v5ywxoc6pm"
+
 [resource]
 script = ExtResource("1_deck")
-entries = Array[ExtResource("2_entry")]([SubResource("turret"), SubResource("Resource_ej7l4")])
+entries = Array[ExtResource("2_entry")]([SubResource("turret"), SubResource("Resource_ej7l4"), SubResource("Resource_dambs")])
