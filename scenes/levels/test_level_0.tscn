@@ -5,7 +5,9 @@
 [ext_resource type="Script" uid="uid://digiawkctxn0k" path="res://scripts/defenses/defence_manager.gd" id="3_ldb5k"]
 [ext_resource type="Script" uid="uid://c8t8pga0p36jt" path="res://scripts/global_manager.gd" id="4_47a1b"]
 [ext_resource type="Script" uid="uid://obig7agb5r1l" path="res://scripts/buffs/buff_emitter.gd" id="5_57bs3"]
+[ext_resource type="Script" uid="uid://dfiyq0gqv42y2" path="res://scripts/systems/wave_control/wave_entry.gd" id="6_57bs3"]
 [ext_resource type="PackedScene" uid="uid://gfcjptk77qr7" path="res://scenes/buttons/base_button.tscn" id="6_dambs"]
+[ext_resource type="Script" uid="uid://bc27wyjj6a7ex" path="res://scripts/systems/wave_control/wave_data.gd" id="7_dambs"]
 [ext_resource type="Script" uid="uid://tawsagnmapoi" path="res://scripts/buffs/buff_effect.gd" id="7_dsfq4"]
 [ext_resource type="Resource" uid="uid://j5et20fj6woj" path="res://resources/buff_effect/test.tres" id="8_wah2a"]
 [ext_resource type="Resource" path="res://resources/buff_effect/failure_effect.tres" id="9_jjdy8"]
@@ -14,7 +16,6 @@
 [ext_resource type="Script" uid="uid://b8i6wt3cm6s4i" path="res://scripts/enemies/enemy_controller.gd" id="14_ctrl"]
 [ext_resource type="Script" uid="uid://dqgiqiaesvcnp" path="res://scripts/systems/path_control/spawn_marker.gd" id="15_marker"]
 [ext_resource type="Resource" uid="uid://dxh4qk5jm8t3e" path="res://resources/enemies/enemy_catalog.tres" id="16_cat"]
-[ext_resource type="Resource" uid="uid://bqq0em88rn821" path="res://resources/waves/test_wave_data.tres" id="17_wdata"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bblh5"]
 texture = ExtResource("2_veify")
@@ -30,6 +31,11 @@ sources/0 = SubResource("TileSetAtlasSource_bblh5")
 vertices = PackedVector2Array(1137.3203, 521.7578, 1140.6563, 629.3672, 616.96094, 598.5703, 662.84375, 557.7969, 615.96094, 339.4922, 667, 283, 1151.1563, 77.42969, 1152.8203, 182.28125, 667, 149.29688, 611.2031, 100.57031, 615.21875, 291.32813, 73.17969, 366.46875, 74.82031, 274.3125)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(3, 2, 4, 5), PackedInt32Array(6, 7, 8, 9), PackedInt32Array(10, 9, 8, 5), PackedInt32Array(10, 5, 4), PackedInt32Array(4, 11, 12, 10)])
 outlines = Array[PackedVector2Array]([PackedVector2Array(65, 264, 63, 377, 606, 350, 607, 608, 1151, 640, 1147, 511, 673, 547, 677, 283, 677, 160, 1163, 193, 1161, 67, 601, 91, 605, 281)])
+
+[sub_resource type="Resource" id="Resource_ldb5k"]
+script = ExtResource("7_dambs")
+csv_path = "uid://direplyjnd64q"
+metadata/_custom_type_script = "uid://bc27wyjj6a7ex"
 
 [node name="TestLevel0" type="Node2D" unique_id=998247491]
 script = ExtResource("1_67rw1")
@@ -54,7 +60,7 @@ player_container = NodePath("PlayerContainer")
 
 [node name="EnemyController" type="Node2D" parent="GlobalManager" unique_id=274618293 node_paths=PackedStringArray("mount_node")]
 script = ExtResource("14_ctrl")
-wave_data = ExtResource("17_wdata")
+wave_data = SubResource("Resource_ldb5k")
 enemy_catalog = ExtResource("16_cat")
 mount_node = NodePath("../..")
 

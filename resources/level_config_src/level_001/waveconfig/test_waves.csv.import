@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://direplyjnd64q"
+
+[deps]
+
+files=["res://resources/level_config_src/level_001/waveconfig/test_waves.wave.translation", "res://resources/level_config_src/level_001/waveconfig/test_waves.enemy.translation", "res://resources/level_config_src/level_001/waveconfig/test_waves.spawn.translation", "res://resources/level_config_src/level_001/waveconfig/test_waves.target.translation"]
+
+source_file="res://resources/level_config_src/level_001/waveconfig/test_waves.csv"
+dest_files=["res://resources/level_config_src/level_001/waveconfig/test_waves.wave.translation", "res://resources/level_config_src/level_001/waveconfig/test_waves.enemy.translation", "res://resources/level_config_src/level_001/waveconfig/test_waves.spawn.translation", "res://resources/level_config_src/level_001/waveconfig/test_waves.target.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true
