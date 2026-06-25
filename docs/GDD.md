@@ -28,6 +28,18 @@ GlobalManager (信号 hub)
 
 ---
 
+## 关卡设计范式
+
+### 敌人进攻
+
+应通过关卡的csv配置设计敌人进攻，纯时间/分波次，其依赖的出生点，目标点机制还未实现脱离场景，正在考虑必要性
+
+### 路径
+
+目前的路径系统基于自动寻路，关卡设计不能容忍这个瑕疵，将会在下次关卡设计范式更新中将其与出生点，目标点机制联动
+
+由路径表维护定义在关卡场景上的路径 & 可行/不可行字典似乎是一个不错的选择。
+
 ## 子系统
 
 ### 波次系统
@@ -36,13 +48,13 @@ GlobalManager (信号 hub)
 
 > `scripts/systems/wave_entry.gd` | Resource → class_name WaveEntry
 
-| 导出 | 类型 | 说明 |
-|---|---|---|
-| time_offset | float | 相对本波开始的秒数 |
-| wave_index | int | 所属波次，0 = 纯时序模式（不受波次控制） |
-| enemy_type | String | 敌人类型名，查 EnemyCatalog |
-| spawn_point | String | 产生点，匹配关卡中 SpawnMarker 节点名 |
-| target_point | String | 目标点，匹配关卡中 SpawnMarker 节点名 |
+| 导出         | 类型   | 说明                                     |
+| ------------ | ------ | ---------------------------------------- |
+| time_offset  | float  | 相对本波开始的秒数                       |
+| wave_index   | int    | 所属波次，0 = 纯时序模式（不受波次控制） |
+| enemy_type   | String | 敌人类型名，查 EnemyCatalog              |
+| spawn_point  | String | 产生点，匹配关卡中 SpawnMarker 节点名    |
+| target_point | String | 目标点，匹配关卡中 SpawnMarker 节点名    |
 
 #### WaveData — 波次数据集合
 
@@ -54,8 +66,8 @@ GlobalManager (信号 hub)
 
 > `scripts/enemies/enemy_catalog.gd` | Resource → class_name EnemyCatalog
 
-| 导出 | 说明 |
-|---|---|
+| 导出     | 说明                    |
+| -------- | ----------------------- |
 | mappings | Array[EnemyTypeMapping] |
 
 方法: `get_scene(type_name)` `get_config(type_name)`
@@ -64,22 +76,22 @@ GlobalManager (信号 hub)
 
 > `scripts/enemies/enemy_type_mapping.gd` | Resource → class_name EnemyTypeMapping
 
-| 导出 | 说明 |
-|---|---|
-| type_name | 敌人类型字符串 |
-| scene | PackedScene 引用 |
+| 导出         | 说明                     |
+| ------------ | ------------------------ |
+| type_name    | 敌人类型字符串           |
+| scene        | PackedScene 引用         |
 | enemy_config | EnemyConfig 引用（可选） |
 
 #### WaveController — 波次控制器
 
 > `scripts/systems/wave_controller.gd` | Node2D → class_name WaveController
 
-| 导出 | 说明 |
-|---|---|
-| wave_data | WaveData 资源 |
-| wave_clear_fragments | 每波通关奖励碎片 |
-| enemy_catalog | EnemyCatalog 资源 |
-| enemy_container | EnemyContainer 引用 |
+| 导出                 | 说明                |
+| -------------------- | ------------------- |
+| wave_data            | WaveData 资源       |
+| wave_clear_fragments | 每波通关奖励碎片    |
+| enemy_catalog        | EnemyCatalog 资源   |
+| enemy_container      | EnemyContainer 引用 |
 
 属性: `total_waves`（自动计算）`all_spawned()`
 方法: `start_wave(n)` `stop_wave()` `is_wave_active()`
@@ -101,10 +113,10 @@ GlobalManager (信号 hub)
 
 位置驱动寻路。WaveController 通过 `setup(config, target_pos)` 注入配置和目标，NavigationAgent2D 从生成点移动到目标点，到达后在 `click_range` 内搜索按钮点击。
 
-| 导出 | 默认 | 说明 |
-|---|---|---|
-| speed / health / click_times / taunt_resistance | — | 可被 EnemyConfig 覆盖 |
-| click_range | 50 | 到达后搜索按钮范围 |
+| 导出                                            | 默认 | 说明                  |
+| ----------------------------------------------- | ---- | --------------------- |
+| speed / health / click_times / taunt_resistance | —   | 可被 EnemyConfig 覆盖 |
+| click_range                                     | 50   | 到达后搜索按钮范围    |
 
 信号: `enemy_died()`
 方法: `setup(config, target_pos)` `_navigate_to(pos)` `redirect_to(btn)` `clear_taunt_target()` `free_self()`
@@ -113,20 +125,20 @@ GlobalManager (信号 hub)
 
 > `scripts/enemies/enemy_config.gd` | Resource → class_name EnemyConfig
 
-| 导出 | 默认 | 说明 |
-|---|---|---|
-| speed | 200 | 移动速度 |
-| health | 1 | 生命值 |
-| click_times | 2 | 点击次数 |
-| taunt_resistance | 0.0 | 钓鱼抵抗概率 |
-| click_range | 50 | 搜索按钮范围 |
+| 导出             | 默认 | 说明         |
+| ---------------- | ---- | ------------ |
+| speed            | 200  | 移动速度     |
+| health           | 1    | 生命值       |
+| click_times      | 2    | 点击次数     |
+| taunt_resistance | 0.0  | 钓鱼抵抗概率 |
+| click_range      | 50   | 搜索按钮范围 |
 
 #### EnemyContainer — 敌人管理器
 
 > `scripts/enemies/enemy_container.gd` | Node2D → class_name EnemyContainer
 
-| 导出 | 说明 |
-|---|---|
+| 导出             | 说明         |
+| ---------------- | ------------ |
 | button_container | 按钮容器引用 |
 
 信号: `battle_over`
@@ -140,11 +152,11 @@ GlobalManager (信号 hub)
 
 > `scripts/buffs/buff_effect.gd` | Resource → class_name BuffEffect
 
-| 导出 | 说明 |
-|---|---|
-| target | ENEMY / DEFENSE / PLAYER |
-| prop | 属性乘数 |
-| duration_waves | 持续波次 |
+| 导出           | 说明                     |
+| -------------- | ------------------------ |
+| target         | ENEMY / DEFENSE / PLAYER |
+| prop           | 属性乘数                 |
+| duration_waves | 持续波次                 |
 
 #### BuffContainer — Buff 容器
 
@@ -270,15 +282,15 @@ CardDeck 包装 `Array[CardEntry]`，CardEntry 含 `card_scene: PackedScene` + `
 
 ## 输入映射
 
-| 动作 | 绑定 | 用途 |
-|---|---|---|
-| left_mouse | 鼠标左键 | 卡牌拖拽放置 / 调试 |
-| right_mouse | 鼠标右键 | 调试生成敌人 |
-| slam_ability | 空格 | 预留 |
-| cancel_action | 鼠标右键 | 预留 |
+| 动作          | 绑定     | 用途                |
+| ------------- | -------- | ------------------- |
+| left_mouse    | 鼠标左键 | 卡牌拖拽放置 / 调试 |
+| right_mouse   | 鼠标右键 | 调试生成敌人        |
+| slam_ability  | 空格     | 预留                |
+| cancel_action | 鼠标右键 | 预留                |
 
 ## 全局组
 
-| 组名 | 说明 |
-|---|---|
+| 组名           | 说明           |
+| -------------- | -------------- |
 | ClickedButtons | 敌人寻路目标池 |
