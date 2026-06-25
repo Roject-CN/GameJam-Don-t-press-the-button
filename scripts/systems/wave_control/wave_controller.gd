@@ -15,13 +15,23 @@ var total_waves: int:
 				m = e.wave_index
 		return m
 
+var total_enemy:int:
+	get:
+		if not wave_data:
+			return 0
+		var m := wave_data.entries.size()
+		return m
+
 @export var wave_clear_fragments: int = 50
 @export var enemy_catalog: EnemyCatalog
 @export var enemy_container: EnemyContainer
 
+
 var _current_wave: int = 0
 var _wave_timer: float = 0.0
 var _spawned: Array[int] = []
+
+#控制是否继续波次
 var _active: bool = false
 
 
@@ -43,17 +53,18 @@ func stop_wave() -> void:
 	_active = false
 	_current_wave = 0
 
-
-func is_wave_active() -> bool:
-	return _active
-
-
 ## 当前波次是否已生成全部条目
 func all_spawned() -> bool:
 	if not wave_data:
 		return true
 	var entries := wave_data.get_wave_entries(_current_wave)
 	return _spawned.size() >= entries.size()
+
+
+
+func is_wave_active() -> bool:
+	return _active
+
 
 
 func _check_spawns() -> void:
@@ -66,7 +77,6 @@ func _check_spawns() -> void:
 		var entry := entries[i]
 		if entry.time_offset > _wave_timer:
 			continue
-
 		_spawn(entry)
 		_spawned.append(i)
 
