@@ -5,8 +5,6 @@ class_name EnemyContainer
 
 const base_enemy := preload("res://scenes/enemies/base_enemy.tscn")
 
-@export var button_container: Node2D
-
 ## 内部 Buff 容器（组合代替继承）
 var buff_container: BuffContainer
 
@@ -17,6 +15,7 @@ var total_spawned: int = 0
 var enemies_killed: int = 0:
 	set(v):
 		enemies_killed = v
+		enemies_killed_count_changed.emit(enemies_killed)
 		if total_spawned > 0 and enemies_killed >= total_spawned:
 			all_enemies_defeated.emit()
 
@@ -25,6 +24,9 @@ var enemies_alive: int = 0
 
 ## 所有已生成敌人全部被击杀时发射
 signal all_enemies_defeated
+
+## 击杀数变化时发射（供 HUD 等监听）
+signal enemies_killed_count_changed(count: int)
 
 
 func _ready() -> void:
@@ -43,7 +45,6 @@ func enemies_spawn(amount: int) -> void:
 		var enemy := base_enemy.instantiate() as BaseEnemy
 		var pos := get_global_mouse_position() + Vector2(randi_range(1, 50), randi_range(1, 50))
 		enemy.global_position = pos
-		enemy.buttons_container = button_container
 		enemy.enemy_died.connect(_on_enemy_died)
 		add_child(enemy)
 		total_spawned += 1
@@ -52,7 +53,6 @@ func enemies_spawn(amount: int) -> void:
 
 ## WaveController 注册已预配置的敌人
 func register_enemy(enemy: BaseEnemy) -> void:
-	enemy.buttons_container = button_container
 	enemy.enemy_died.connect(_on_enemy_died)
 	add_child(enemy)
 	total_spawned += 1

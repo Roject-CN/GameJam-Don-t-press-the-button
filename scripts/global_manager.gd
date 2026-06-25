@@ -17,7 +17,6 @@ var _settled: bool = false
 signal wave_started(wave: int)
 signal game_over(is_win: bool)
 
-
 func _ready() -> void:
 	enemy_container.all_enemies_defeated.connect(_on_all_enemies_defeated)
 	player_container.lives_depleted.connect(_on_lives_depleted)

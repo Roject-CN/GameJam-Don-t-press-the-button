@@ -12,7 +12,7 @@ class_name HUD
 @onready var ready_button: Button = $Ready
 @onready var game_over_label: Label = $GameOverLabel
 @onready var lives_label: Label = $LivesLabel
-
+@onready var count_label:ConutLabel =$CountLabel
 
 func _ready() -> void:
 	game_over_label.visible = false
@@ -29,8 +29,9 @@ func _ready() -> void:
 		# 初始显示
 		_on_life_lost(0)  # 用 0 loss 触发首次刷新
 		_on_fragments_changed(player_container.fragments)
-
-
+	if count_label:
+		global_manager.enemy_container.enemies_killed_count_changed.connect(
+			count_label.on_killed_count_changed)
 ## 首波开始后隐藏 Ready 按钮
 func _on_wave_started(_wave: int) -> void:
 	ready_button.visible = false
