@@ -55,7 +55,6 @@ enemy_container = NodePath("../EnemyContainer")
 wave_controller = NodePath("../WaveController")
 buff_emitter = NodePath("../BuffEmitter")
 player_container = NodePath("../PlayerContainer")
-max_lives = 8
 
 [node name="EnemyContainer" type="Node2D" parent="." unique_id=5117532 node_paths=PackedStringArray("button_container")]
 script = ExtResource("12_7q0pn")
@@ -108,7 +107,8 @@ position = Vector2(122, 325)
 script = ExtResource("15_marker")
 marker_color = Color(9.62615e-08, 0.6395904, 0.34871265, 1)
 
-[node name="HUD" parent="." unique_id=701478321 node_paths=PackedStringArray("defense_manager", "logic_grid", "global_manager") instance=ExtResource("13_20cmf")]
+[node name="HUD" parent="." unique_id=701478321 node_paths=PackedStringArray("defense_manager", "logic_grid", "global_manager", "player_container") instance=ExtResource("13_20cmf")]
 defense_manager = NodePath("../DefenceManager")
 logic_grid = NodePath("../BaseMapLayer")
 global_manager = NodePath("../GlobalManager")
+player_container = NodePath("../PlayerContainer")

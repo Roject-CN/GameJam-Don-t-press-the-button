@@ -1,16 +1,33 @@
 extends Node2D
 class_name PlayerContainer
 
-## 玩家容器 — 接收 PLAYER 目标的 BuffEffect，处理扣命等效果
-## 采用组合持有 BuffContainer，通过 buff_applied 信号驱动 life_lost
-
-signal life_lost(amount: int)
+## 玩家容器 — 血量 + 费用 + PLAYER Buff 路由
 
 ## 内部 Buff 容器（组合代替继承）
 var buff_container: BuffContainer
 
+# ── 血量 ──
+@export var max_lives: int = 8
+var current_lives: int
+
+# ── 费用 ──
+@export var start_fragments: int = 100
+var fragments: int
+
+## 单次扣命（供 HUD/动画）
+signal life_lost(amount: int)
+
+## 血量归零 = 游戏失败
+signal lives_depleted
+
+## 费用变化（供 HUD）
+signal fragments_changed(new_amount: int)
+
 
 func _ready() -> void:
+	current_lives = max_lives
+	fragments = start_fragments
+
 	buff_container = BuffContainer.new()
 	buff_container.target_type = BuffEffect.Target.PLAYER
 	buff_container.name = "PlayerBuffContainer"
@@ -21,5 +38,22 @@ func _ready() -> void:
 
 func _on_buff_applied(effect: BuffEffect) -> void:
 	var loss := int(effect.prop)
-	if loss > 0:
-		life_lost.emit(loss)
+	if loss <= 0:
+		return
+	current_lives -= loss
+	life_lost.emit(loss)
+	if current_lives <= 0:
+		lives_depleted.emit()
+
+
+func add_fragments(amount: int) -> void:
+	fragments += amount
+	fragments_changed.emit(fragments)
+
+
+func spend_fragments(amount: int) -> bool:
+	if fragments < amount:
+		return false
+	fragments -= amount
+	fragments_changed.emit(fragments)
+	return true

@@ -72,8 +72,8 @@ scripts/
 │   └── spawn_marker.gd
 ├── level_control/level.gd / level_controller.gd
 └── uis/hud/
-    ├── hud.gd / cards.gd / card_unit.gd
-    ├── card_deck.gd / card_entry.gd
+	├── hud.gd / cards.gd / card_unit.gd
+	├── card_deck.gd / card_entry.gd
 
 scenes/
 ├── enemies/base_enemy.tscn
