@@ -16,23 +16,20 @@ class_name BaseEnemy
 		click_times = v
 		if click_times <= 0:
 			free_self()
-		elif _setup_done:
-			_navigate_to(_target_pos)
+
 @export var taunt_resistance: float = 0.0
 
 ## 到达目标后搜索按钮的范围
 @export var click_range: float = 50.0
 
 # 外部注入
-var buttons_container: Node2D
 var config: EnemyConfig = null
 
 # 寻路状态
 var _target_pos: Vector2
 var _setup_done: bool = false
-
-# 被引诱状态
-var taunt_target: BaseClickedButton = null
+var lured := false #被引诱状态
+var repeatedly_lured := false #被持续引诱状态
 
 signal enemy_died()
 
@@ -67,15 +64,15 @@ func _navigate_to(pos: Vector2) -> void:
 	navigation_agent_2d.target_position = pos
 
 
-## 钓鱼窗口引诱 — 重定向到按钮位置
-func redirect_to(target: BaseClickedButton) -> void:
-	taunt_target = target
-	_navigate_to(target.global_position)
-
-
-func clear_taunt_target() -> void:
-	taunt_target = null
-	_navigate_to(_target_pos)
+## 钓鱼窗口引诱
+#Roject将引诱的寻路逻辑写在 window defense里面了 
+#仅保留一个接口
+func redirect_to(pos : Vector2, repeated := false) -> void:
+	if lured:
+		return
+	lured = true
+	repeatedly_lured = repeated
+	_navigate_to(pos)
 
 
 func take_damage(amount: int) -> void:
@@ -88,13 +85,9 @@ func take_damage(amount: int) -> void:
 func _try_click() -> void:
 	var btn: BaseClickedButton = null
 
-	# 被引诱时优先点击引诱目标按钮
-	if taunt_target and taunt_target.global_position.distance_to(global_position) <= click_range:
-		btn = taunt_target
-	else:
-		btn = _find_nearest_button(global_position)
-		if btn and btn.global_position.distance_to(global_position) > click_range:
-			btn = null
+	btn = _find_nearest_button(global_position)
+	if btn and btn.global_position.distance_to(global_position) > click_range:
+		btn = null
 
 	if btn:
 		_click_button(btn)
@@ -107,19 +100,18 @@ func _click_button(btn: BaseClickedButton) -> void:
 	btn.release()
 	click_times -= 1
 	if click_times > 0:
+		if repeatedly_lured:
+			_click_button(btn)
+			return
 		_navigate_to(_target_pos)
 
 
 func _find_nearest_button(pos: Vector2) -> BaseClickedButton:
-	if not buttons_container:
-		return null
+	#利用get_nodes_in_group "CLickedButtons"
 	var best: BaseClickedButton = null
 	var best_dist := INF
-	for child in buttons_container.get_children():
-		var btn := child as BaseClickedButton
-		if not btn:
-			continue
-		var d := btn.global_position.distance_squared_to(pos)
+	for btn in get_tree().get_nodes_in_group("ClickedButtons"):
+		var d : float = btn.global_position.distance_squared_to(pos)
 		if d < best_dist:
 			best_dist = d
 			best = btn

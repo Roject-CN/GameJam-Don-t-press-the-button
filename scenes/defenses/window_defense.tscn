@@ -1,28 +1,21 @@
 [gd_scene format=3 uid="uid://5iauwwvsffsc"]
 
 [ext_resource type="PackedScene" uid="uid://c8goie1f18fsy" path="res://scenes/defenses/base_defense.tscn" id="1_h213a"]
-[ext_resource type="Script" uid="uid://qrpqa57lnto8" path="res://scripts/defenses/window_defense.gd" id="2_flbmg"]
+[ext_resource type="Script" uid="uid://d7m5ml3oylba" path="res://scripts/defenses/window_defense.gd" id="2_flbmg"]
 [ext_resource type="PackedScene" uid="uid://gfcjptk77qr7" path="res://scenes/buttons/base_button.tscn" id="3_dfhqt"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_dfhqt"]
-size = Vector2(130, 130)
 
 [node name="WindowDefense" unique_id=544454214 instance=ExtResource("1_h213a")]
 script = ExtResource("2_flbmg")
 lure_count = 5
-kill_radius = 150.0
 
-[node name="AreaClick" type="Area2D" parent="." index="2" unique_id=761554431]
+[node name="Sprite2D" parent="." index="0" unique_id=974198124]
+scale = Vector2(0.422, 0.422)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaClick" index="0" unique_id=829116797]
-position = Vector2(1, -3)
-shape = SubResource("RectangleShape2D_dfhqt")
-
-[node name="BaseButton" parent="." index="3" unique_id=115424014 instance=ExtResource("3_dfhqt")]
+[node name="BaseButton" parent="." index="2" unique_id=115424014 instance=ExtResource("3_dfhqt")]
 visible = false
 text = "windows"
 
-[node name="CounterLabel" type="Label" parent="." index="4" unique_id=294752767]
+[node name="CounterLabel" type="Label" parent="." index="3" unique_id=294752767]
 offset_left = -20.0
 offset_top = -30.0
 offset_right = 20.0

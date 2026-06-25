@@ -46,7 +46,6 @@ func enemies_spawn(amount: int) -> void:
 
 ## WaveController 注册已预配置的敌人（实例化+定位已完成）
 func register_enemy(enemy: BaseEnemy) -> void:
-	enemy.buttons_container = button_container
 	enemy.enemy_died.connect(_on_registered_enemy_died)
 	_current_wave_enemy_amount += 1
 	add_child(enemy)

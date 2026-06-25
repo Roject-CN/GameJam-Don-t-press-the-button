@@ -1,5 +1,5 @@
 extends BaseDefense
-class_name PhishingWindowDefense
+class_name WindowDefense
 
 ## 钓鱼窗口 — 双层区域防御
 ## 外层 Area（继承自 BaseDefense）：敌人进入 → 导航重定向到窗口中心
@@ -8,17 +8,19 @@ class_name PhishingWindowDefense
 ## 可引诱次数（耗尽后销毁）
 @export var lure_count: int = 5
 
-@onready var area_click: Area2D = $AreaClick
+@onready var base_button: BaseClickedButton = $BaseButton
 @onready var counter_label: Label = $CounterLabel
 
-var _remaining: int = lure_count
+var _remaining: int
 var _active: bool = true
 
+func _ready() -> void:
+	_remaining = lure_count
+	counter_label.text = "%d" % _remaining
 
 func _on_placed() -> void:
 	area_node.area_entered.connect(_on_lure)
-	area_click.area_entered.connect(_on_kill)
-	counter_label.text = "%d" % _remaining
+	base_button.button_clicked.connect(_on_clicked)
 
 
 ## 外层吸引：重定向敌人导航到窗口位置
@@ -28,18 +30,17 @@ func _on_lure(area: Area2D) -> void:
 	var enemy := area.get_parent() as BaseEnemy
 	if not enemy:
 		return
-	enemy._navigate_to(global_position)
+	redirect(enemy)
+	
+func redirect(enemy : BaseEnemy) -> void:
+	enemy.redirect_to(base_button.global_position)
 
 
 ## 内层击杀：秒杀敌人，计数耗尽后变灰淡出
-func _on_kill(area: Area2D) -> void:
+func _on_clicked() -> void:
 	if not _active:
 		return
-	var enemy := area.get_parent() as BaseEnemy
-	if not enemy:
-		return
 
-	enemy.free_self()
 	_remaining -= 1
 	counter_label.text = "%d" % _remaining
 
