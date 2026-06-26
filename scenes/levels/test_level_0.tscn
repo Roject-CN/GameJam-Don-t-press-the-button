@@ -1,21 +1,21 @@
 [gd_scene format=4 uid="uid://dgyb5lw3n28p7"]
 
-[ext_resource type="Script" uid="uid://bp5b3pew866sj" path="res://scripts/level_control/level.gd" id="1_67rw1"]
+[ext_resource type="Script" uid="uid://4lqjf8vfj00" path="res://scripts/level_control/level.gd" id="1_67rw1"]
 [ext_resource type="Texture2D" uid="uid://bvugwx4xsj2ds" path="res://assets/debug_res/placeholder.png" id="2_veify"]
 [ext_resource type="Script" uid="uid://digiawkctxn0k" path="res://scripts/defenses/defence_manager.gd" id="3_ldb5k"]
-[ext_resource type="Script" uid="uid://civ0md0g1lfxs" path="res://scripts/global_manager.gd" id="4_47a1b"]
-[ext_resource type="Script" uid="uid://2vgttshvm8nr" path="res://scripts/buffs/buff_emitter.gd" id="5_57bs3"]
+[ext_resource type="Script" uid="uid://c8t8pga0p36jt" path="res://scripts/global_manager.gd" id="4_47a1b"]
+[ext_resource type="Script" uid="uid://obig7agb5r1l" path="res://scripts/buffs/buff_emitter.gd" id="5_57bs3"]
+[ext_resource type="Script" uid="uid://dfiyq0gqv42y2" path="res://scripts/systems/wave_control/wave_entry.gd" id="6_57bs3"]
 [ext_resource type="PackedScene" uid="uid://gfcjptk77qr7" path="res://scenes/buttons/base_button.tscn" id="6_dambs"]
-[ext_resource type="Script" uid="uid://djr3furmdwn7t" path="res://scripts/buffs/buff_effect.gd" id="7_dsfq4"]
+[ext_resource type="Script" uid="uid://bc27wyjj6a7ex" path="res://scripts/systems/wave_control/wave_data.gd" id="7_dambs"]
+[ext_resource type="Script" uid="uid://tawsagnmapoi" path="res://scripts/buffs/buff_effect.gd" id="7_dsfq4"]
 [ext_resource type="Resource" uid="uid://j5et20fj6woj" path="res://resources/buff_effect/test.tres" id="8_wah2a"]
 [ext_resource type="Resource" path="res://resources/buff_effect/failure_effect.tres" id="9_jjdy8"]
-[ext_resource type="Script" uid="uid://bri4j10tha24r" path="res://scripts/players/player_container.gd" id="10_833sg"]
-[ext_resource type="Script" uid="uid://cbemnm0cmfgvu" path="res://scripts/enemies/enemy_container.gd" id="12_7q0pn"]
+[ext_resource type="Script" uid="uid://byp141knontup" path="res://scripts/players/player_container.gd" id="10_833sg"]
 [ext_resource type="PackedScene" uid="uid://bi4uder0xrmn3" path="res://scenes/ui/hud.tscn" id="13_20cmf"]
-[ext_resource type="Script" uid="uid://j53kooupcuoe" path="res://scripts/systems/wave_control/wave_controller.gd" id="14_wctrl"]
+[ext_resource type="Script" uid="uid://b8i6wt3cm6s4i" path="res://scripts/enemies/enemy_controller.gd" id="14_ctrl"]
 [ext_resource type="Script" uid="uid://dqgiqiaesvcnp" path="res://scripts/systems/path_control/spawn_marker.gd" id="15_marker"]
 [ext_resource type="Resource" uid="uid://dxh4qk5jm8t3e" path="res://resources/enemies/enemy_catalog.tres" id="16_cat"]
-[ext_resource type="Resource" uid="uid://bqq0em88rn821" path="res://resources/waves/test_wave_data.tres" id="17_wdata"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bblh5"]
 texture = ExtResource("2_veify")
@@ -32,6 +32,11 @@ vertices = PackedVector2Array(1137.3203, 521.7578, 1140.6563, 629.3672, 616.9609
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(3, 2, 4, 5), PackedInt32Array(6, 7, 8, 9), PackedInt32Array(10, 9, 8, 5), PackedInt32Array(10, 5, 4), PackedInt32Array(4, 11, 12, 10)])
 outlines = Array[PackedVector2Array]([PackedVector2Array(65, 264, 63, 377, 606, 350, 607, 608, 1151, 640, 1147, 511, 673, 547, 677, 283, 677, 160, 1163, 193, 1161, 67, 601, 91, 605, 281)])
 
+[sub_resource type="Resource" id="Resource_ldb5k"]
+script = ExtResource("7_dambs")
+csv_path = "uid://direplyjnd64q"
+metadata/_custom_type_script = "uid://bc27wyjj6a7ex"
+
 [node name="TestLevel0" type="Node2D" unique_id=998247491]
 script = ExtResource("1_67rw1")
 
@@ -47,49 +52,51 @@ level_scene = NodePath("..")
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=98350041]
 navigation_polygon = SubResource("NavigationPolygon_rlayw")
 
-[node name="GlobalManager" type="Node2D" parent="." unique_id=256218982 node_paths=PackedStringArray("enemy_container", "wave_controller", "buff_emitter", "player_container")]
+[node name="GlobalManager" type="Node2D" parent="." unique_id=256218982 node_paths=PackedStringArray("enemy_controller", "buff_emitter", "player_container")]
 script = ExtResource("4_47a1b")
-enemy_container = NodePath("../EnemyContainer")
-wave_controller = NodePath("../WaveController")
-buff_emitter = NodePath("../BuffEmitter")
-player_container = NodePath("../PlayerContainer")
+enemy_controller = NodePath("EnemyController")
+buff_emitter = NodePath("BuffEmitter")
+player_container = NodePath("PlayerContainer")
 
-[node name="EnemyContainer" type="Node2D" parent="." unique_id=5117532 node_paths=PackedStringArray("button_container")]
-script = ExtResource("12_7q0pn")
-button_container = NodePath("../ButtonContainer")
-
-[node name="WaveController" type="Node2D" parent="." unique_id=274618293 node_paths=PackedStringArray("enemy_container")]
-script = ExtResource("14_wctrl")
-wave_data = ExtResource("17_wdata")
+[node name="EnemyController" type="Node2D" parent="GlobalManager" unique_id=274618293 node_paths=PackedStringArray("mount_node")]
+script = ExtResource("14_ctrl")
+wave_data = SubResource("Resource_ldb5k")
 enemy_catalog = ExtResource("16_cat")
-enemy_container = NodePath("../EnemyContainer")
+mount_node = NodePath("../..")
 
-[node name="PlayerContainer" type="Node2D" parent="." unique_id=1379033782]
+[node name="PlayerContainer" type="Node2D" parent="GlobalManager" unique_id=1379033782]
 script = ExtResource("10_833sg")
 
-[node name="ButtonContainer" type="Node2D" parent="." unique_id=573457783]
+[node name="ButtonContainer" type="Node2D" parent="GlobalManager" unique_id=573457783]
 
-[node name="BaseButton" parent="ButtonContainer" unique_id=115424014 instance=ExtResource("6_dambs")]
+[node name="BaseButton" parent="GlobalManager/ButtonContainer" unique_id=115424014 instance=ExtResource("6_dambs")]
 position = Vector2(149, 56)
 text = "测速1"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("8_wah2a")])
 
-[node name="BaseButton2" parent="ButtonContainer" unique_id=222218216 instance=ExtResource("6_dambs")]
+[node name="BaseButton2" parent="GlobalManager/ButtonContainer" unique_id=222218216 instance=ExtResource("6_dambs")]
 position = Vector2(336, 56)
 text = "测速2"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("8_wah2a")])
 
-[node name="BaseButton3" parent="ButtonContainer" unique_id=863942862 instance=ExtResource("6_dambs")]
+[node name="BaseButton3" parent="GlobalManager/ButtonContainer" unique_id=863942862 instance=ExtResource("6_dambs")]
 position = Vector2(127, 315)
 text = "别碰！"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("9_jjdy8")])
 
-[node name="BuffEmitter" type="Node2D" parent="." unique_id=609066498 node_paths=PackedStringArray("enemy_container", "defense_manager", "player_container", "button_container")]
+[node name="BuffEmitter" type="Node2D" parent="GlobalManager" unique_id=609066498 node_paths=PackedStringArray("enemy_controller", "defense_manager", "player_container", "button_container")]
 script = ExtResource("5_57bs3")
-enemy_container = NodePath("../EnemyContainer")
-defense_manager = NodePath("../DefenceManager")
+enemy_controller = NodePath("../EnemyController")
+defense_manager = NodePath("../../DefenceManager")
 player_container = NodePath("../PlayerContainer")
 button_container = NodePath("../ButtonContainer")
+
+[node name="HUD" parent="GlobalManager" unique_id=701478321 node_paths=PackedStringArray("defense_manager", "logic_grid", "global_manager", "player_container", "enemy_controller") instance=ExtResource("13_20cmf")]
+defense_manager = NodePath("../../DefenceManager")
+logic_grid = NodePath("../../BaseMapLayer")
+global_manager = NodePath("..")
+player_container = NodePath("../PlayerContainer")
+enemy_controller = NodePath("../EnemyController")
 
 [node name="SpawnA" type="Node2D" parent="." unique_id=2084419812]
 position = Vector2(1085, 135)
@@ -104,9 +111,3 @@ script = ExtResource("15_marker")
 position = Vector2(122, 325)
 script = ExtResource("15_marker")
 marker_color = Color(9.62615e-08, 0.6395904, 0.34871265, 1)
-
-[node name="HUD" parent="." unique_id=701478321 node_paths=PackedStringArray("defense_manager", "logic_grid", "global_manager", "player_container") instance=ExtResource("13_20cmf")]
-defense_manager = NodePath("../DefenceManager")
-logic_grid = NodePath("../BaseMapLayer")
-global_manager = NodePath("../GlobalManager")
-player_container = NodePath("../PlayerContainer")
