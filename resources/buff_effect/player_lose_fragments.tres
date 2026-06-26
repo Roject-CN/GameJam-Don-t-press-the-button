@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="PropertyBuffEffect" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/buffs/property_buff_effect.gd" id="1_xxx"]
+
+[resource]
+script = ExtResource("1_xxx")
+buff_name = "扣费"
+description = "玩家损失 30 碎片。\n钱被扣走了！"
+target = 2
+duration_waves = 0
+property_name = "fragments"
+operation = 0
+value = -30.0

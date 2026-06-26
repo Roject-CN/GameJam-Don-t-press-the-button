@@ -27,12 +27,12 @@ Godot 4.7 2D 塔防，"桌面隐喻"风格。敌人是鼠标光标，从生成�
 ### 运行时节点
 - `BaseEnemy` — `scripts/enemies/base_enemy.gd`，敌人基类（位置驱动寻路 + setup + EnemyConfig）
 - `EnemyContainer` — `scripts/enemies/enemy_container.gd`，敌人管理器（组合 BuffContainer + 存活计数 + battle_over）
-- `PlayerContainer` — `scripts/players/player_container.gd`，玩家容器（组合 BuffContainer + life_lost）
+- `PlayerContainer` — `scripts/players/player_container.gd`，玩家容器（组合 BuffContainer + lives_changed/life_lost/lives_depleted）
 - `DefenceManager` — `scripts/defenses/defence_manager.gd`，防御管理器（组合 BuffContainer + ghost 孵化 + 放置）
 - `GlobalManager` — `scripts/global_manager.gd`，全局信号 hub（无阶段枚举，波次参数从 WaveController 获取）
 - `WaveController` — `scripts/systems/wave_controller.gd`，波次控制器（时序生成 + 传递 config/target）
-- `BuffEmitter` — `scripts/buffs/buff_emitter.gd`，Buff 路由（按钮信号 → 各容器 .buff_container）
-- `BuffContainer` — `scripts/buffs/buff_container.gd`，纯路由节点（apply_buff → buff_applied）
+- `BuffEmitter` — `scripts/buffs/buff_emitter.gd`，Buff 路由（按钮信号 → 各容器 .buff_container，含 `tick_all_waves()`）
+- `BuffContainer` — `scripts/buffs/buff_container.gd`，Buff 存储+路由节点（组合模式，含 `tick_wave()` 波次过期）
 - `SpawnMarker` — `scripts/systems/spawn_marker.gd`，关卡标记点
 - `BaseClickedButton` — `scripts/buttons/base_button.gd`，桌面按钮
 - `BaseDefense` — `scripts/defenses/base_defense.gd`，防御基类（ghost + place）
@@ -42,9 +42,11 @@ Godot 4.7 2D 塔防，"桌面隐喻"风格。敌人是鼠标光标，从生成�
 - `BaseCard` — `scripts/uis/hud/card_unit.gd`，卡牌基类（长按拖拽放置）
 - `CardContainer` — `scripts/uis/hud/cards.gd`，卡牌容器（从 CardDeck 初始化）
 - `HUD` — `scripts/uis/hud/hud.gd`，UI 主控
+- `DebugBuffPanel` — `scripts/debug/debug_buff_panel.gd`，调试面板（实时属性 + buff 状态）
 
 ### Resource
-- `BuffEffect` — `scripts/buffs/buff_effect.gd`，Buff 效果数据（Target: ENEMY/DEFENSE/PLAYER）
+- `BuffEffect` — `scripts/buffs/buff_effect.gd`，Buff 效果抽象基类（策略模式，Target: ENEMY/DEFENSE/PLAYER）
+- `PropertyBuffEffect` — `scripts/buffs/property_buff_effect.gd`，属性修改 Buff 子类（ADD/MULTIPLY/SET）
 - `EnemyConfig` — `scripts/enemies/enemy_config.gd`，敌人配置（speed/health/click_times 等）
 - `WaveEntry` — `scripts/systems/wave_entry.gd`，生成条目（time_offset/wave_index/enemy_type/spawn_point/target_point）
 - `WaveData` — `scripts/systems/wave_data.gd`，波次数据集合

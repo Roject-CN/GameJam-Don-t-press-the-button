@@ -7,8 +7,7 @@
 [ext_resource type="Script" uid="uid://2vgttshvm8nr" path="res://scripts/buffs/buff_emitter.gd" id="5_57bs3"]
 [ext_resource type="PackedScene" uid="uid://gfcjptk77qr7" path="res://scenes/buttons/base_button.tscn" id="6_dambs"]
 [ext_resource type="Script" uid="uid://djr3furmdwn7t" path="res://scripts/buffs/buff_effect.gd" id="7_dsfq4"]
-[ext_resource type="Resource" uid="uid://j5et20fj6woj" path="res://resources/buff_effect/test.tres" id="8_wah2a"]
-[ext_resource type="Resource" path="res://resources/buff_effect/failure_effect.tres" id="9_jjdy8"]
+[ext_resource type="Resource" uid="uid://cuav8g6x3d6vi" path="res://resources/buff_effect/failure_effect.tres" id="9_jjdy8"]
 [ext_resource type="Script" uid="uid://bri4j10tha24r" path="res://scripts/players/player_container.gd" id="10_833sg"]
 [ext_resource type="Script" uid="uid://cbemnm0cmfgvu" path="res://scripts/enemies/enemy_container.gd" id="12_7q0pn"]
 [ext_resource type="PackedScene" uid="uid://bi4uder0xrmn3" path="res://scenes/ui/hud.tscn" id="13_20cmf"]
@@ -16,6 +15,17 @@
 [ext_resource type="Script" uid="uid://dqgiqiaesvcnp" path="res://scripts/systems/path_control/spawn_marker.gd" id="15_marker"]
 [ext_resource type="Resource" uid="uid://dxh4qk5jm8t3e" path="res://resources/enemies/enemy_catalog.tres" id="16_cat"]
 [ext_resource type="Resource" uid="uid://bqq0em88rn821" path="res://resources/waves/test_wave_data.tres" id="17_wdata"]
+[ext_resource type="Script" uid="uid://bq2rp3ntjcjt7" path="res://scripts/debug/debug_buff_panel.gd" id="18_debug"]
+[ext_resource type="Resource" path="res://resources/buff_effect/enemy_speed_up.tres" id="19_buf1"]
+[ext_resource type="Resource" path="res://resources/buff_effect/enemy_slow_down.tres" id="20_buf2"]
+[ext_resource type="Resource" path="res://resources/buff_effect/enemy_health_up.tres" id="21_buf3"]
+[ext_resource type="Resource" path="res://resources/buff_effect/enemy_more_clicks.tres" id="22_buf4"]
+[ext_resource type="Resource" path="res://resources/buff_effect/enemy_taunt_resist.tres" id="23_buf5"]
+[ext_resource type="Resource" path="res://resources/buff_effect/defense_fire_rate_up.tres" id="24_buf6"]
+[ext_resource type="Resource" uid="uid://n6wrhoi8lwrp" path="res://resources/buff_effect/defense_damage_up.tres" id="25_buf7"]
+[ext_resource type="Resource" path="res://resources/buff_effect/defense_lure_up.tres" id="26_buf8"]
+[ext_resource type="Resource" path="res://resources/buff_effect/player_gain_life.tres" id="27_buf9"]
+[ext_resource type="Resource" path="res://resources/buff_effect/player_lose_fragments.tres" id="28_buf10"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bblh5"]
 texture = ExtResource("2_veify")
@@ -66,22 +76,63 @@ enemy_container = NodePath("../EnemyContainer")
 
 [node name="PlayerContainer" type="Node2D" parent="." unique_id=1379033782]
 script = ExtResource("10_833sg")
+max_lives = 999
 
 [node name="ButtonContainer" type="Node2D" parent="." unique_id=573457783]
 
-[node name="BaseButton" parent="ButtonContainer" unique_id=115424014 instance=ExtResource("6_dambs")]
-position = Vector2(149, 56)
-text = "测速1"
-buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("8_wah2a")])
+[node name="Btn_speed_up" parent="ButtonContainer" unique_id=1409506804 instance=ExtResource("6_dambs")]
+position = Vector2(200, 40)
+text = "⚡加速"
+buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("19_buf1")])
 
-[node name="BaseButton2" parent="ButtonContainer" unique_id=222218216 instance=ExtResource("6_dambs")]
-position = Vector2(336, 56)
-text = "测速2"
-buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("8_wah2a")])
+[node name="Btn_slow_down" parent="ButtonContainer" unique_id=13987849 instance=ExtResource("6_dambs")]
+position = Vector2(380, 40)
+text = "🐌减速"
+buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("20_buf2")])
 
-[node name="BaseButton3" parent="ButtonContainer" unique_id=863942862 instance=ExtResource("6_dambs")]
+[node name="Btn_health_up" parent="ButtonContainer" unique_id=1423833835 instance=ExtResource("6_dambs")]
+position = Vector2(560, 40)
+text = "❤️加血"
+buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("21_buf3")])
+
+[node name="Btn_more_clicks" parent="ButtonContainer" unique_id=1967175385 instance=ExtResource("6_dambs")]
+position = Vector2(740, 40)
+text = "🖱️多点"
+buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("22_buf4")])
+
+[node name="Btn_taunt_resist" parent="ButtonContainer" unique_id=801737191 instance=ExtResource("6_dambs")]
+position = Vector2(920, 40)
+text = "🛡️抵抗"
+buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("23_buf5")])
+
+[node name="Btn_fire_rate" parent="ButtonContainer" unique_id=2081892982 instance=ExtResource("6_dambs")]
+position = Vector2(1100, 40)
+text = "🔫射速"
+buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("24_buf6")])
+
+[node name="Btn_damage" parent="ButtonContainer" unique_id=974128141 instance=ExtResource("6_dambs")]
+position = Vector2(200, 95)
+text = "💥伤害"
+buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("25_buf7")])
+
+[node name="Btn_lure" parent="ButtonContainer" unique_id=1999347810 instance=ExtResource("6_dambs")]
+position = Vector2(380, 95)
+text = "🎣引诱"
+buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("26_buf8")])
+
+[node name="Btn_gain_life" parent="ButtonContainer" unique_id=2102680974 instance=ExtResource("6_dambs")]
+position = Vector2(560, 95)
+text = "💚回血"
+buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("27_buf9")])
+
+[node name="Btn_lose_frags" parent="ButtonContainer" unique_id=1129608420 instance=ExtResource("6_dambs")]
+position = Vector2(740, 95)
+text = "💰扣费"
+buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("28_buf10")])
+
+[node name="Btn_lose_life" parent="ButtonContainer" unique_id=1440352496 instance=ExtResource("6_dambs")]
 position = Vector2(127, 315)
-text = "别碰！"
+text = "💀扣命"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("9_jjdy8")])
 
 [node name="BuffEmitter" type="Node2D" parent="." unique_id=609066498 node_paths=PackedStringArray("enemy_container", "defense_manager", "player_container", "button_container")]
@@ -110,3 +161,9 @@ defense_manager = NodePath("../DefenceManager")
 logic_grid = NodePath("../BaseMapLayer")
 global_manager = NodePath("../GlobalManager")
 player_container = NodePath("../PlayerContainer")
+
+[node name="DebugBuffPanel" type="Node2D" parent="." unique_id=1588038898 node_paths=PackedStringArray("enemy_container", "player_container", "defense_manager")]
+script = ExtResource("18_debug")
+enemy_container = NodePath("../EnemyContainer")
+player_container = NodePath("../PlayerContainer")
+defense_manager = NodePath("../DefenceManager")

@@ -51,6 +51,10 @@ func _on_all_enemies_defeated() -> void:
 
 	player_container.add_fragments(wave_controller.wave_clear_fragments)
 
+	# Buff 波次过期 — 每波结束时 tick 所有容器的 buff
+	if buff_emitter:
+		buff_emitter.tick_all_waves()
+
 	if wave_controller.total_waves == 0:
 		_settle(true)
 		return

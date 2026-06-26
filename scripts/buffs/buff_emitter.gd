@@ -53,3 +53,14 @@ func _resolve(target: BuffEffect.Target) -> BuffContainer:
 			return player_container.buff_container if player_container else null
 		_:
 			return null
+
+
+## 所有容器执行波次 tick — 过期 buff 自动移除
+## 由 GlobalManager 在每波结束时调用
+func tick_all_waves() -> void:
+	if enemy_container and enemy_container.buff_container:
+		enemy_container.buff_container.tick_wave()
+	if defense_manager and defense_manager.buff_container:
+		defense_manager.buff_container.tick_wave()
+	if player_container and player_container.buff_container:
+		player_container.buff_container.tick_wave()

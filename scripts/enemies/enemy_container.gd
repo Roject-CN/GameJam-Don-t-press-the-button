@@ -33,6 +33,9 @@ func _ready() -> void:
 	buff_container.name = "EnemyBuffContainer"
 	add_child(buff_container)
 
+	buff_container.buff_applied.connect(_on_buff_applied)
+	buff_container.buff_removed.connect(_on_buff_removed)
+
 
 ## 调试生成 — 鼠标附近一次性生成指定数量
 func enemies_spawn(amount: int) -> void:
@@ -46,17 +49,32 @@ func enemies_spawn(amount: int) -> void:
 		enemy.buttons_container = button_container
 		enemy.enemy_died.connect(_on_enemy_died)
 		add_child(enemy)
+		for buff in buff_container.get_active_buffs():
+			buff.apply(enemy)
 		total_spawned += 1
 		enemies_alive += 1
 
 
 ## WaveController 注册已预配置的敌人
 func register_enemy(enemy: BaseEnemy) -> void:
-	enemy.buttons_container = button_container
 	enemy.enemy_died.connect(_on_enemy_died)
 	add_child(enemy)
+	for buff in buff_container.get_active_buffs():
+		buff.apply(enemy)
 	total_spawned += 1
 	enemies_alive += 1
+
+
+func _on_buff_applied(effect: BuffEffect) -> void:
+	for child in get_children():
+		if child is BaseEnemy:
+			effect.apply(child)
+
+
+func _on_buff_removed(effect: BuffEffect) -> void:
+	for child in get_children():
+		if child is BaseEnemy:
+			effect.remove(child)
 
 
 func _on_enemy_died() -> void:

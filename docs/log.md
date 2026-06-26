@@ -1,5 +1,19 @@
 # 更新日志 — "别按那个键"
 
+## 2026-06-26 — buff_system_fill
+- BuffEffect 策略模式重构：删 prop，加 apply(target)/remove(target) 虚方法
+- 新增 PropertyBuffEffect：ADD/MULTIPLY/SET 三种运算，_modified 存储原始值可逆还原
+- BuffContainer 升级：_active_buffs 存储 + tick_wave() 波次过期 + buff_removed 信号
+- BuffEmitter 新增 tick_all_waves()，GlobalManager 波次结束时调用
+- 三条路径全部打通：ENEMY/DEFENSE/PLAYER 容器均连接 buff_applied/buff_removed
+- 新实体注册时自动 apply 当前所有活跃 buff，移除防御时自动 remove
+- PlayerContainer：current_lives 加 setter + lives_changed 信号（回血也能刷新 UI）
+- WindowDefense：_remaining → _used（buff 改 lure_count 后实时生效），_on_lure() 加 taunt_resistance 抵抗判定
+- HUD：life_lost → lives_changed，扣命回血均同步
+- 新增 DebugBuffPanel：CanvasLayer 实时调试面板，合并同类 buff 显示
+- 场景添加 11 个测试按钮，每个挂一种 buff 资源
+- 11 个 Buff 资源文件：5 ENEMY + 3 DEFENSE + 3 PLAYER
+
 ## 2026-06-25 — feature_re_window
 - 新增 ReWindowDefense：继承窗口防御，持续引诱模式（redirect repeated=true）
 - 修复：删除 enemy_container 和 wave_controller 中对不存在的 buttons_container 字段的赋值

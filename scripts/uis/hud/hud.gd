@@ -24,28 +24,24 @@ func _ready() -> void:
 		global_manager._connect_ready()
 
 	if player_container:
-		player_container.life_lost.connect(_on_life_lost)
+		player_container.lives_changed.connect(_on_lives_changed)
 		player_container.fragments_changed.connect(_on_fragments_changed)
-		# 初始显示
-		_on_life_lost(0)  # 用 0 loss 触发首次刷新
+		_on_lives_changed(player_container.current_lives)
 		_on_fragments_changed(player_container.fragments)
 
 
-## 首波开始后隐藏 Ready 按钮
 func _on_wave_started(_wave: int) -> void:
 	ready_button.visible = false
 
 
-func _on_life_lost(_amount: int) -> void:
-	if player_container:
-		lives_label.text = "命: %d" % player_container.current_lives
+func _on_lives_changed(current: int) -> void:
+	lives_label.text = "命: %d" % current
 
 
 func _on_fragments_changed(new_amount: int) -> void:
 	pass  # TODO: 碎片 UI 显示
 
 
-## 胜 / 负结算显示
 func _on_game_over(is_win: bool) -> void:
 	game_over_label.text = "you_win" if is_win else "you_lose"
 	game_over_label.visible = true
