@@ -1,7 +1,7 @@
 extends Node2D
 class_name PlayerManager
 
-## 玩家容器 — 血量 + 费用 + PLAYER Buff 路由
+## 玩家管理器 — 血量 + 费用 + PLAYER Buff 路由
 
 ## 内部 Buff 容器（组合代替继承）
 var buff_container: BuffContainer

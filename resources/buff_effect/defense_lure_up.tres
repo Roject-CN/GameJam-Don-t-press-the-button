@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="PropertyBuffEffect" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/buffs/property_buff_effect.gd" id="1_xxx"]
+
+[resource]
+script = ExtResource("1_xxx")
+buff_name = "窗口引诱次数增加"
+description = "钓鱼窗口可引诱次数 +3。\n再来一个！"
+target = 1
+duration_waves = 3
+property_name = "lure_count"
+operation = 0
+value = 3.0

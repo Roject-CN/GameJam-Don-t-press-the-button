@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="BuffEffect" format=3 uid="uid://j5et20fj6woj"]
-
-[ext_resource type="Script" uid="uid://tawsagnmapoi" path="res://scripts/buffs/buff_effect.gd" id="1_h12uu"]
-
-[resource]
-script = ExtResource("1_h12uu")
-buff_name = "测试效果"
-prop = 5.0

@@ -4,9 +4,9 @@ class_name BuffEmitter
 ## Buff 触发器 — 连接按钮信号，将 BuffEffect 路由到对应 BuffContainer
 ## 容器按需连接：某路缺失时仅跳过，不报错
 
-@export var enemy_controller: EnemyController
+@export var enemy_manager: EnemyManager
 @export var defense_manager: DefenceManager
-@export var player_container: PlayerContainer
+@export var player_manager: PlayerManager
 @export var button_container: Node2D
 
 
@@ -46,10 +46,21 @@ func _route(effect: BuffEffect) -> void:
 func _resolve(target: BuffEffect.Target) -> BuffContainer:
 	match target:
 		BuffEffect.Target.ENEMY:
-			return enemy_controller.buff_container if enemy_controller else null
+			return enemy_manager.buff_container if enemy_manager else null
 		BuffEffect.Target.DEFENSE:
 			return defense_manager.buff_container if defense_manager else null
 		BuffEffect.Target.PLAYER:
-			return player_container.buff_container if player_container else null
+			return player_manager.buff_container if player_manager else null
 		_:
 			return null
+
+
+## 所有容器执行波次 tick — 过期 buff 自动移除
+## 由 GlobalManager 在每波结束时调用
+func tick_all_waves() -> void:
+	if enemy_manager and enemy_manager.buff_container:
+		enemy_manager.buff_container.tick_wave()
+	if defense_manager and defense_manager.buff_container:
+		defense_manager.buff_container.tick_wave()
+	if player_manager and player_manager.buff_container:
+		player_manager.buff_container.tick_wave()

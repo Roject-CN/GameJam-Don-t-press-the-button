@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="PropertyBuffEffect" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/buffs/property_buff_effect.gd" id="1_xxx"]
+
+[resource]
+script = ExtResource("1_xxx")
+buff_name = "回血"
+description = "玩家恢复 1 点生命值。\n原来按钮也不全是坏的？"
+target = 2
+duration_waves = 0
+property_name = "current_lives"
+operation = 0
+value = 1.0

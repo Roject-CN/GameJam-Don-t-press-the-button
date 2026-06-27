@@ -19,9 +19,9 @@ GlobalManager (信号 hub)
   ├── WaveController (波次时序)
   │   ├── WaveData (全部 WaveEntry)
   │   ├── EnemyCatalog (类型名 → PackedScene + EnemyConfig)
-  │   └── 按 time_offset 生成敌人 → EnemyContainer
-  ├── EnemyContainer (存活计数 → battle_over)
-  ├── PlayerContainer (life_lost → GlobalManager)
+  │   └── 按 time_offset 生成敌人 → EnemyManager
+  ├── EnemyManager (存活计数 → battle_over)
+  ├── PlayerManager (life_lost → GlobalManager)
   ├── DefenceManager (ghost 孵化 + 放置 + 列表)
   └── BuffEmitter (按钮 → 路由 buff 到各容器的 buff_container)
 ```
@@ -86,12 +86,12 @@ GlobalManager (信号 hub)
 
 > `scripts/systems/wave_controller.gd` | Node2D → class_name WaveController
 
-| 导出                 | 说明                |
-| -------------------- | ------------------- |
-| wave_data            | WaveData 资源       |
-| wave_clear_fragments | 每波通关奖励碎片    |
-| enemy_catalog        | EnemyCatalog 资源   |
-| enemy_container      | EnemyContainer 引用 |
+| 导出 | 说明 |
+|---|---|
+| wave_data | WaveData 资源 |
+| wave_clear_fragments | 每波通关奖励碎片 |
+| enemy_catalog | EnemyCatalog 资源 |
+| enemy_manager | EnemyManager 引用 |
 
 属性: `total_waves`（自动计算）`all_spawned()`
 方法: `start_wave(n)` `stop_wave()` `is_wave_active()`
@@ -133,9 +133,9 @@ GlobalManager (信号 hub)
 | taunt_resistance | 0.0  | 钓鱼抵抗概率 |
 | click_range      | 50   | 搜索按钮范围 |
 
-#### EnemyContainer — 敌人管理器
+#### EnemyManager — 敌人管理器
 
-> `scripts/enemies/enemy_container.gd` | Node2D → class_name EnemyContainer
+> `scripts/enemies/enemy_manager.gd` | Node2D → class_name EnemyManager
 
 | 导出             | 说明         |
 | ---------------- | ------------ |
@@ -144,14 +144,33 @@ GlobalManager (信号 hub)
 信号: `battle_over`
 方法: `enemies_spawn(amount)` `register_enemy(enemy)`
 
+内部创建 `BuffContainer`，连接 `buff_applied` / `buff_removed`，遍历子 BaseEnemy apply/remove 活跃 buff。新敌人生成时自动 apply 当前所有活跃 buff。
+
 ---
 
 ### Buff 系统
 
-#### BuffEffect — 效果数据
+#### BuffEffect — 效果基类
 
 > `scripts/buffs/buff_effect.gd` | Resource → class_name BuffEffect
 
+策略模式抽象基类。子类覆写 `apply(target: Object)` / `remove(target: Object)`。
+
+| 导出 | 说明 |
+|---|---|
+| buff_name | 显示名称 |
+| description | 多行描述文本 |
+| target | ENEMY / DEFENSE / PLAYER |
+| duration_waves | 持续波次（0 = 永久） |
+
+方法: `init()` `tick_wave()` `apply(target)` `remove(target)`
+
+#### PropertyBuffEffect — 属性修改 Buff
+
+> `scripts/buffs/property_buff_effect.gd` | Resource → class_name PropertyBuffEffect
+
+继承 BuffEffect，通过 `get()`/`set()` 修改目标导出属性。支持 ADD / MULTIPLY / SET 三种运算。
+`_modified: Dictionary` 存储原始值，`remove()` 时还原。
 | 导出           | 说明                     |
 | -------------- | ------------------------ |
 | target         | ENEMY / DEFENSE / PLAYER |
@@ -162,25 +181,30 @@ GlobalManager (信号 hub)
 
 > `scripts/buffs/buff_container.gd` | Node2D → class_name BuffContainer
 
-纯路由节点。11 行。`apply_buff()` 发射 `buff_applied` 信号。组合在各管理器中。
+存储活跃 Buff 列表，路由信号到管理层。组合在各管理器中。
+
+信号: `buff_applied` `buff_removed`
+方法: `apply_buff()` `tick_wave()` `get_active_buffs()`
 
 #### BuffEmitter — Buff 路由
 
 > `scripts/buffs/buff_emitter.gd` | Node2D → class_name BuffEmitter
 
-遍历 button_container 下所有按钮，连接 `buff_effect_applied`。收到后按 target 路由到对应管理器的 `.buff_container`。缺失容器静默跳过。
+遍历 button_container 下所有按钮，连接 `buff_effect_applied`。收到后 duplicate 并路由到对应 BuffContainer。
+
+方法: `tick_all_waves()` — 依次调用三个容器的 `tick_wave()`（由 GlobalManager 在波次结束时调用）
 
 ---
 
 ### 玩家系统
 
-#### PlayerContainer — 玩家容器
+#### PlayerManager — 玩家容器
 
-> `scripts/players/player_container.gd` | Node2D → class_name PlayerContainer
+> `scripts/players/player_manager.gd` | Node2D → class_name PlayerManager
 
-内部持有 `buff_container`，连接 `buff_applied` 信号驱动 `life_lost`。
+内部持有 `buff_container`，连接 `buff_applied` / `buff_removed` 信号。`current_lives` 含 setter，自动发射 `life_lost` + `lives_changed` + `lives_depleted`。`_on_buff_applied` 策略化：`effect.apply(self)`。
 
-信号: `life_lost(amount: int)`
+信号: `life_lost(amount)` `lives_changed(current)` `lives_depleted` `fragments_changed(new_amount)`
 
 ---
 
@@ -220,7 +244,7 @@ ghost 半透明跟随鼠标，`place()` 恢复不透明并触发 `_on_placed()`�
 
 > `scripts/defenses/defence_manager.gd` | Node2D → class_name DefenceManager
 
-统一管理防御设施生命周期：`spawn_defence()` 孵化 ghost，`confirm_placement()` 正式放置，`remove_defence()` 移除。内部持有 `buff_container` 接收 DEFENSE 目标的 Buff。
+统一管理防御设施生命周期：`spawn_defence()` 孵化 ghost，`confirm_placement()` 正式放置，`remove_defence()` 移除。内部持有 `buff_container` 接收 DEFENSE 目标的 Buff，连接 `buff_applied` / `buff_removed`，遍历 `placed_defenses` apply/remove。新防御放置时自动 apply 活跃 buff，移除时 remove。
 
 ---
 
@@ -236,7 +260,7 @@ ghost 半透明跟随鼠标，`place()` 恢复不透明并触发 `_on_placed()`�
 
 > `scripts/uis/hud/card_unit.gd` | Control → class_name BaseCard
 
-长按拖拽生成防御 ghost，松手放置。自动从 HUD 获取 DefenceManager 和吸附栅格。
+长按拖拽生成防御 ghost，松手放置，右键取消。自动从 HUD 获取 DefenceManager 和吸附栅格。
 
 #### CardContainer — 卡牌容器
 
