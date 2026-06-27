@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="DialogueSequence" format=3 uid="uid://cmi48ys8pgc3o"]
+
+[ext_resource type="Script" uid="uid://d2woqdud07pqo" path="res://scripts/dialogues/dialogue_sequence.gd" id="1_seq"]
+[ext_resource type="Script" uid="uid://7ek8pedcmhkq" path="res://scripts/dialogues/dialogue_line.gd" id="2_line"]
+
+[sub_resource type="Resource" id="line_0"]
+script = ExtResource("2_line")
+speaker_name = "系统提示"
+text = "欢迎来到教程关卡！在这里你将学习如何部署防御设施来保护按钮。"
+
+[sub_resource type="Resource" id="line_1"]
+script = ExtResource("2_line")
+speaker_name = "系统提示"
+text = "鼠标光标敌人会从地图边缘生成，并尝试点击地图上的按钮。你的任务是在它们到达按钮之前消灭它们。"
+
+[sub_resource type="Resource" id="line_2"]
+script = ExtResource("2_line")
+speaker_name = "系统提示"
+text = "从底部卡牌栏中长按拖拽，可以部署[b]射击炮塔[/b]和[b]钓鱼窗口[/b]。试试看吧！"
+
+[sub_resource type="Resource" id="line_3"]
+script = ExtResource("2_line")
+text = "（点击屏幕任意位置继续...）"
+box_position = Vector2(400, 350)
+
+[resource]
+script = ExtResource("1_seq")
+sequence_id = "tutorial_welcome"
+lines = Array[ExtResource("2_line")]([SubResource("line_0"), SubResource("line_1"), SubResource("line_2"), SubResource("line_3")])

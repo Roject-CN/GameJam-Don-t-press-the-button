@@ -1,0 +1,74 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/dialogue_box.gd" id="1_dbox"]
+
+[node name="DialogueBox" type="CanvasLayer"]
+layer = 128
+script = ExtResource("1_dbox")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(620, 160)
+offset_left = 40.0
+offset_top = 520.0
+offset_right = 660.0
+offset_bottom = 680.0
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="TopBar" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LeftSpacer" type="Control" parent="Panel/VBoxContainer/TopBar"]
+layout_mode = 2
+custom_minimum_size = Vector2(12, 0)
+
+[node name="SpeakerLabel" type="Label" parent="Panel/VBoxContainer/TopBar"]
+layout_mode = 2
+text = "说话人"
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 18
+
+[node name="Spacer" type="Control" parent="Panel/VBoxContainer/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HSeparator" type="HSeparator" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginSpacer" type="MarginContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="TextLabel" type="RichTextLabel" parent="Panel/VBoxContainer/MarginSpacer"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = ""
+theme_override_font_sizes/normal_font_size = 16
+scroll_active = false
+fit_content = true
+
+[node name="NextIndicator" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 592.0
+offset_top = 132.0
+offset_right = 612.0
+offset_bottom = 152.0
+text = "▼"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(1, 0.76, 0.03, 1)

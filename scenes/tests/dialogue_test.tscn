@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://clh2mkhbhkbg"]
+
+[ext_resource type="Script" uid="uid://c2kxd6wa8trx4" path="res://scripts/dialogues/dialogue_manager.gd" id="1_dmgr"]
+[ext_resource type="Script" uid="uid://dg1jlhw6ptwcl" path="res://scripts/dialogues/dialogue_trigger.gd" id="2_dtrg"]
+[ext_resource type="PackedScene" uid="uid://ci75y87ldaojo" path="res://scenes/ui/dialogue_box.tscn" id="3_dbox"]
+[ext_resource type="Resource" path="res://resources/dialogues/tutorial_welcome.tres" id="4_seq"]
+
+[node name="DialogueTest" type="Node2D" unique_id=690406836]
+
+[node name="DialogueManager" type="Node" parent="." unique_id=825011591]
+script = ExtResource("1_dmgr")
+dialogue_box_scene = ExtResource("3_dbox")
+
+[node name="DialogueTrigger" type="Node" parent="." unique_id=1819130989 node_paths=PackedStringArray("dialogue_manager")]
+script = ExtResource("2_dtrg")
+dialogue_manager = NodePath("../DialogueManager")
+dialogue_sequence = ExtResource("4_seq")
