@@ -26,8 +26,8 @@ Godot 4.7 2D 塔防，"桌面隐喻"风格。敌人是鼠标光标，从生成�
 
 ### 运行时节点
 - `BaseEnemy` — `scripts/enemies/base_enemy.gd`，敌人基类（位置驱动寻路 + setup + EnemyConfig）
-- `EnemyContainer` — `scripts/enemies/enemy_container.gd`，敌人管理器（组合 BuffContainer + 存活计数 + battle_over）
-- `PlayerContainer` — `scripts/players/player_container.gd`，玩家容器（组合 BuffContainer + lives_changed/life_lost/lives_depleted）
+- `EnemyManager` — `scripts/enemies/enemy_manager.gd`，敌人管理器（组合 BuffContainer + 存活计数 + battle_over）
+- `PlayerManager` — `scripts/players/player_manager.gd`，玩家容器（组合 BuffContainer + lives_changed/life_lost/lives_depleted）
 - `DefenceManager` — `scripts/defenses/defence_manager.gd`，防御管理器（组合 BuffContainer + ghost 孵化 + 放置）
 - `GlobalManager` — `scripts/global_manager.gd`，全局信号 hub（无阶段枚举，波次参数从 WaveController 获取）
 - `WaveController` — `scripts/systems/wave_controller.gd`，波次控制器（时序生成 + 传递 config/target）
@@ -60,12 +60,12 @@ Godot 4.7 2D 塔防，"桌面隐喻"风格。敌人是鼠标光标，从生成�
 scripts/
 ├── buttons/base_button.gd
 ├── enemies/
-│   ├── base_enemy.gd / enemy_config.gd / enemy_container.gd
+│   ├── base_enemy.gd / enemy_config.gd / enemy_manager.gd
 │   ├── enemy_catalog.gd / enemy_type_mapping.gd
 ├── buffs/
 │   ├── buff_effect.gd / buff_container.gd / buff_emitter.gd
 ├── global_manager.gd
-├── players/player_container.gd
+├── players/player_manager.gd
 ├── defenses/
 │   ├── base_defense.gd / defence_manager.gd
 │   ├── turret_defense.gd / window_defense.gd / projectile.gd
@@ -94,11 +94,11 @@ resources/
 - BaseEnemy 敌人类（配置驱动寻路）
 - EnemyConfig 敌人配置 Resource
 - BuffEffect / BuffContainer / BuffEmitter（组合模式 Buff 路由）
-- EnemyContainer（存活计数 + battle_over）
+- EnemyManager（存活计数 + battle_over）
 - WaveEntry / WaveData / EnemyTypeMapping / EnemyCatalog（波次配置系统）
 - WaveController（时间戳驱动生成 + 传递 config/target）
 - SpawnMarker（关卡标记点）
-- PlayerContainer（life_lost）
+- PlayerManager（life_lost）
 - GlobalManager（信号 hub，无阶段枚举，波次参数从 WaveController 获取）
 - DefenceManager + BaseDefense + TurretDefense + PhishingWindowDefense + Projectile
 - HUD（Ready + 命数 + 结算 + 卡牌拖拽放置）

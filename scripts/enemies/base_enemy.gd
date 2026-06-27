@@ -72,7 +72,6 @@ func _navigate_to(pos: Vector2) -> void:
 func redirect_to(pos : Vector2, repeated := false) -> void:
 	if lured:
 		_lure_queue.append(pos)
-		print(_lure_queue)
 		return
 	lured = true
 	repeatedly_lured = repeated

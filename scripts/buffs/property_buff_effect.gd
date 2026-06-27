@@ -18,9 +18,9 @@ enum Operation {
 	"TurretDefense_fire_rate:fire_rate",
 	"TurretDefense_damage:damage",
 	"WindowDefense_lure_count:lure_count",
-	"PlayerContainer_current_lives:current_lives",
-	"PlayerContainer_max_lives:max_lives",
-	"PlayerContainer_fragments:fragments",
+	"PlayerManager_current_lives:current_lives",
+	"PlayerManager_max_lives:max_lives",
+	"PlayerManager_fragments:fragments",
 )
 var property_name: String = ""
 

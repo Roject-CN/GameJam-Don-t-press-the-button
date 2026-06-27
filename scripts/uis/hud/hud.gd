@@ -1,13 +1,13 @@
 extends Control
 class_name HUD
 
-## HUD 主控 — 连接 PlayerContainer / GlobalManager 信号驱动 UI
+## HUD 主控 — 连接 PlayerManager / GlobalManager 信号驱动 UI
 
 @export var level_controller: LevelController
 @export var defense_manager: DefenceManager
 @export var logic_grid: TileMapLayer
 @export var global_manager: GlobalManager
-@export var player_container: PlayerContainer
+@export var player_manager: PlayerManager
 
 @onready var ready_button: Button = $Ready
 @onready var game_over_label: Label = $GameOverLabel
@@ -23,11 +23,11 @@ func _ready() -> void:
 		global_manager.ready_button = ready_button
 		global_manager._connect_ready()
 
-	if player_container:
-		player_container.lives_changed.connect(_on_lives_changed)
-		player_container.fragments_changed.connect(_on_fragments_changed)
-		_on_lives_changed(player_container.current_lives)
-		_on_fragments_changed(player_container.fragments)
+	if player_manager:
+		player_manager.lives_changed.connect(_on_lives_changed)
+		player_manager.fragments_changed.connect(_on_fragments_changed)
+		_on_lives_changed(player_manager.current_lives)
+		_on_fragments_changed(player_manager.fragments)
 
 
 func _on_wave_started(_wave: int) -> void:

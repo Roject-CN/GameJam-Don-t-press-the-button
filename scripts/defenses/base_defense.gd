@@ -32,6 +32,9 @@ func place() -> void:
 	modulate.a = 1.0
 	_on_placed()
 
+#用于更新自身的UI，比如说钓鱼窗口加buff之后需要第一时间更新自己的点击数
+func fresh() -> void:
+	pass
 
 ## 子类覆写点 — 放置后初始化（连接信号等）
 func _on_placed() -> void:

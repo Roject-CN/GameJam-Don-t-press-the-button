@@ -1,7 +1,7 @@
 extends Node2D
 class_name EnemyManager
 
-## 敌人容器 — 纯计数：追踪总数 / 击杀，不关心波次
+## 敌人管理器 — 纯计数：追踪总数 / 击杀，不关心波次
 
 const base_enemy := preload("res://scenes/enemies/base_enemy.tscn")
 

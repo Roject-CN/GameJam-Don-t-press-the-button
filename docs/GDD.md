@@ -19,9 +19,9 @@ GlobalManager (信号 hub)
   ├── WaveController (波次时序)
   │   ├── WaveData (全部 WaveEntry)
   │   ├── EnemyCatalog (类型名 → PackedScene + EnemyConfig)
-  │   └── 按 time_offset 生成敌人 → EnemyContainer
-  ├── EnemyContainer (存活计数 → battle_over)
-  ├── PlayerContainer (life_lost → GlobalManager)
+  │   └── 按 time_offset 生成敌人 → EnemyManager
+  ├── EnemyManager (存活计数 → battle_over)
+  ├── PlayerManager (life_lost → GlobalManager)
   ├── DefenceManager (ghost 孵化 + 放置 + 列表)
   └── BuffEmitter (按钮 → 路由 buff 到各容器的 buff_container)
 ```
@@ -79,7 +79,7 @@ GlobalManager (信号 hub)
 | wave_data | WaveData 资源 |
 | wave_clear_fragments | 每波通关奖励碎片 |
 | enemy_catalog | EnemyCatalog 资源 |
-| enemy_container | EnemyContainer 引用 |
+| enemy_manager | EnemyManager 引用 |
 
 属性: `total_waves`（自动计算）`all_spawned()`
 方法: `start_wave(n)` `stop_wave()` `is_wave_active()`
@@ -121,9 +121,9 @@ GlobalManager (信号 hub)
 | taunt_resistance | 0.0 | 钓鱼抵抗概率 |
 | click_range | 50 | 搜索按钮范围 |
 
-#### EnemyContainer — 敌人管理器
+#### EnemyManager — 敌人管理器
 
-> `scripts/enemies/enemy_container.gd` | Node2D → class_name EnemyContainer
+> `scripts/enemies/enemy_manager.gd` | Node2D → class_name EnemyManager
 
 | 导出 | 说明 |
 |---|---|
@@ -181,9 +181,9 @@ GlobalManager (信号 hub)
 
 ### 玩家系统
 
-#### PlayerContainer — 玩家容器
+#### PlayerManager — 玩家容器
 
-> `scripts/players/player_container.gd` | Node2D → class_name PlayerContainer
+> `scripts/players/player_manager.gd` | Node2D → class_name PlayerManager
 
 内部持有 `buff_container`，连接 `buff_applied` / `buff_removed` 信号。`current_lives` 含 setter，自动发射 `life_lost` + `lives_changed` + `lives_depleted`。`_on_buff_applied` 策略化：`effect.apply(self)`。
 
@@ -243,7 +243,7 @@ ghost 半透明跟随鼠标，`place()` 恢复不透明并触发 `_on_placed()`�
 
 > `scripts/uis/hud/card_unit.gd` | Control → class_name BaseCard
 
-长按拖拽生成防御 ghost，松手放置。自动从 HUD 获取 DefenceManager 和吸附栅格。
+长按拖拽生成防御 ghost，松手放置，右键取消。自动从 HUD 获取 DefenceManager 和吸附栅格。
 
 #### CardContainer — 卡牌容器
 
