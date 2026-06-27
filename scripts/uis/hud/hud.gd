@@ -12,13 +12,13 @@ class_name HUD
 @onready var ready_button: Button = $Ready
 @onready var game_over_label: Label = $GameOverLabel
 @onready var lives_label: Label = $LivesLabel
+@onready var count_label: ConutLabel = $CountLabel
 
 
 func _ready() -> void:
 	game_over_label.visible = false
 
 	if global_manager:
-		global_manager.wave_started.connect(_on_wave_started)
 		global_manager.game_over.connect(_on_game_over)
 		global_manager.ready_button = ready_button
 		global_manager._connect_ready()
@@ -29,6 +29,12 @@ func _ready() -> void:
 		_on_lives_changed(player_manager.current_lives)
 		_on_fragments_changed(player_manager.fragments)
 
+	if count_label and enemy_controller:
+		enemy_controller.enemies_killed_count_changed.connect(count_label.on_killed_count_changed)
+		enemy_controller.wave_changed.connect(count_label.on_wave_changed)
+		count_label.set_total(enemy_controller.total_enemy)
+		count_label.set_total_wave(enemy_controller.total_waves)
+
 
 func _on_wave_started(_wave: int) -> void:
 	ready_button.visible = false
@@ -38,7 +44,7 @@ func _on_lives_changed(current: int) -> void:
 	lives_label.text = "命: %d" % current
 
 
-func _on_fragments_changed(new_amount: int) -> void:
+func _on_fragments_changed(_new_amount: int) -> void:
 	pass  # TODO: 碎片 UI 显示
 
 

@@ -1,24 +1,16 @@
 extends Node2D
 class_name EnemyManager
 
-## 敌人容器 — 纯计数：追踪总数 / 击杀，不关心波次
+## 敌人引用容器 — 仅存储当前场上存活的敌人引用，无计数、无信号
 
-const base_enemy := preload("res://scenes/enemies/base_enemy.tscn")
 
-@export var button_container: Node2D
+## 场上存活的敌人列表
+var enemies: Array[BaseEnemy] = []
 
-## 内部 Buff 容器（组合代替继承）
-var buff_container: BuffContainer
 
-## 累计生成总数
-var total_spawned: int = 0
+func add(enemy: BaseEnemy) -> void:
+	enemies.append(enemy)
 
-## 累计击杀数
-var enemies_killed: int = 0:
-	set(v):
-		enemies_killed = v
-		if total_spawned > 0 and enemies_killed >= total_spawned:
-			all_enemies_defeated.emit()
 
 ## 当前存活数（仅用于展示/调试）
 var enemies_alive: int = 0

@@ -1,34 +1,55 @@
 [gd_scene format=3 uid="uid://bl13qg3d5hfr8"]
 
+[ext_resource type="Script" uid="uid://dt2s0abm4w0ij" path="res://scripts/uis/hud/count_label.gd" id="1_tr516"]
+
 [sub_resource type="LabelSettings" id="LabelSettings_tr516"]
-font_size = 100
+font_size = 60
 
 [sub_resource type="LabelSettings" id="LabelSettings_ej7l4"]
-font_size = 100
+font_size = 60
+
+[sub_resource type="LabelSettings" id="LabelSettings_6vd2c"]
+font_size = 60
+
+[sub_resource type="LabelSettings" id="LabelSettings_xet74"]
+font_size = 60
 
 [node name="CountLabel" type="Control" unique_id=2100933324]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 284.0
 offset_bottom = 107.0
+script = ExtResource("1_tr516")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1615845087]
+[node name="GridContainer" type="GridContainer" parent="." unique_id=1023359321]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+columns = 2
 
-[node name="CurrentCount" type="Label" parent="HBoxContainer" unique_id=967953223]
+[node name="CurrentCount" type="Label" parent="GridContainer" unique_id=967953223]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0"
 label_settings = SubResource("LabelSettings_tr516")
 
-[node name="SumCount" type="Label" parent="HBoxContainer" unique_id=205353685]
+[node name="SumCount" type="Label" parent="GridContainer" unique_id=205353685]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "25"
+text = "0"
 label_settings = SubResource("LabelSettings_ej7l4")
+horizontal_alignment = 2
+
+[node name="CurrentWave" type="Label" parent="GridContainer" unique_id=265257074]
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LabelSettings_6vd2c")
+
+[node name="SumWave" type="Label" parent="GridContainer" unique_id=151814457]
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LabelSettings_xet74")
 horizontal_alignment = 2
