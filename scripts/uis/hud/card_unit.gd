@@ -1,7 +1,8 @@
 extends Control
 class_name BaseCard
 
-## 卡牌基类 — 长按拖拽生成防御 ghost，松手放置，右键取消
+## 卡牌基类 — 长按拖拽生成防御 ghost，松手放置
+## 自动从 HUD 获取 DefenceManager 和吸附栅格
 
 @export var anim_player: AnimationPlayer
 
@@ -44,10 +45,6 @@ func _process(delta: float) -> void:
 	# 拖拽中松开鼠标（含鼠标移出卡片）
 	if _is_dragging and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		_end_drag()
-
-	# 拖拽中右键取消
-	if _is_dragging and Input.is_action_just_pressed("cancel_action"):
-		_cancel_drag()
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -133,16 +130,6 @@ func _end_drag() -> void:
 	if _defence_manager:
 		_defence_manager.confirm_placement(_defence)
 	_defence = null
-
-
-## 右键取消：释放 ghost，卡片复位
-func _cancel_drag() -> void:
-	_is_dragging = false
-	_is_pressed = false
-	_press_timer = 0.0
-	if _defence:
-		_defence.queue_free()
-		_defence = null
 
 
 ## ——— 栅格吸附 ———
