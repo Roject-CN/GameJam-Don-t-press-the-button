@@ -5,7 +5,7 @@ class_name BuffEmitter
 ## 容器按需连接：某路缺失时仅跳过，不报错
 
 @export var enemy_controller: EnemyController
-@export var defense_manager: DefenceManager
+@export var defense_container: DefenceContainer
 @export var player_container: PlayerContainer
 @export var button_container: Node2D
 
@@ -48,8 +48,19 @@ func _resolve(target: BuffEffect.Target) -> BuffContainer:
 		BuffEffect.Target.ENEMY:
 			return enemy_controller.buff_container if enemy_controller else null
 		BuffEffect.Target.DEFENSE:
-			return defense_manager.buff_container if defense_manager else null
+			return defense_container.buff_container if defense_container else null
 		BuffEffect.Target.PLAYER:
 			return player_container.buff_container if player_container else null
 		_:
 			return null
+
+
+## 所有容器执行波次 tick — 过期 buff 自动移除
+## 由 GlobalManager 在每波结束时调用
+func tick_all_waves() -> void:
+	if enemy_controller and enemy_controller.buff_container:
+		enemy_controller.buff_container.tick_wave()
+	if defense_container and defense_container.buff_container:
+		defense_container.buff_container.tick_wave()
+	if player_container and player_container.buff_container:
+		player_container.buff_container.tick_wave()

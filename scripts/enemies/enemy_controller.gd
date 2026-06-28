@@ -59,6 +59,8 @@ func _ready() -> void:
 	buff_container = BuffContainer.new()
 	buff_container.target_type = BuffEffect.Target.ENEMY
 	buff_container.name = "EnemyBuffContainer"
+	buff_container.buff_applied.connect(_on_buff_applied)
+	buff_container.buff_removed.connect(_on_buff_removed)
 	add_child(buff_container)
 
 
@@ -67,6 +69,25 @@ func _process(delta: float) -> void:
 		return
 	_wave_timer += delta
 	_check_spawns()
+
+
+# ── Buff 逻辑 ──
+
+func _on_buff_applied(effect: BuffEffect) -> void:
+	for enemy in enemies:
+		if is_instance_valid(enemy):
+			effect.apply(enemy)
+
+
+func _on_buff_removed(effect: BuffEffect) -> void:
+	for enemy in enemies:
+		if is_instance_valid(enemy):
+			effect.remove(enemy)
+
+
+func _apply_active_buffs_to_enemy(enemy: BaseEnemy) -> void:
+	for buff in buff_container.get_active_buffs():
+		buff.apply(enemy)
 
 
 # ── 波次控制 ──
@@ -134,18 +155,22 @@ func _spawn(entry: WaveEntry) -> void:
 		econfig = EnemyConfig.new()
 	enemy.setup(econfig, target_pos)
 
-	enemy.enemy_died.connect(_on_enemy_died)
+	enemy.enemy_died.connect(_on_enemy_died.bind(enemy))
 
 	var parent := mount_node if mount_node else self
 	parent.add_child(enemy)
+
+	# 新敌人自动 apply 所有活跃 buff（必须在 add_child 之后，避免 _ready 中的 _apply_config 覆盖）
+	_apply_active_buffs_to_enemy(enemy)
 	enemies.append(enemy)
 	total_spawned += 1
 	enemies_alive += 1
 
 
-func _on_enemy_died() -> void:
+func _on_enemy_died(which: BaseEnemy) -> void:
 	enemies_killed += 1
 	enemies_alive -= 1
+	enemies.erase(which)
 
 
 @warning_ignore("shadowed_variable_base_class")

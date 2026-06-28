@@ -1,7 +1,7 @@
 extends Node2D
-class_name DefenceManager
+class_name DefenceContainer
 
-## 防御设施统一管理器 — defence 孵化 / 正式放置 / 移除
+## 防御设施容器 — defence 孵化 / 正式放置 / 移除 / DEFENSE Buff 路由
 ##
 ## 采用组合而非继承 BuffContainer，详见 explains/composition-over-inheritance.md
 
@@ -18,11 +18,12 @@ var placed_defenses: Array[BaseDefense] = []
 
 
 func _ready() -> void:
-	# 创建内部 BuffContainer
 	buff_container = BuffContainer.new()
 	buff_container.target_type = BuffEffect.Target.DEFENSE
 	buff_container.name = "DefenseBuffContainer"
 	add_child(buff_container)
+	buff_container.buff_applied.connect(_on_buff_applied)
+	buff_container.buff_removed.connect(_on_buff_removed)
 
 
 ## 拖拽开始时调用，将半透明 defence 加入关卡场景
@@ -38,10 +39,26 @@ func spawn_defence(defence: BaseDefense) -> void:
 func confirm_placement(defence: BaseDefense) -> void:
 	defence.place()
 	placed_defenses.append(defence)
+	for buff in buff_container.get_active_buffs():
+		buff.apply(defence)
 
 
 ## 移除防御设施
 func remove_defence(defence: BaseDefense) -> void:
 	placed_defenses.erase(defence)
 	if is_instance_valid(defence):
+		for buff in buff_container.get_active_buffs():
+			buff.remove(defence)
 		defence.queue_free()
+
+
+func _on_buff_applied(effect: BuffEffect) -> void:
+	for defense in placed_defenses:
+		if is_instance_valid(defense):
+			effect.apply(defense)
+
+
+func _on_buff_removed(effect: BuffEffect) -> void:
+	for defense in placed_defenses:
+		if is_instance_valid(defense):
+			effect.remove(defense)

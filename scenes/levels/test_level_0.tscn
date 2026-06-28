@@ -1,21 +1,31 @@
 [gd_scene format=4 uid="uid://dgyb5lw3n28p7"]
 
-[ext_resource type="Script" uid="uid://4lqjf8vfj00" path="res://scripts/level_control/level.gd" id="1_67rw1"]
+[ext_resource type="Script" uid="uid://bp5b3pew866sj" path="res://scripts/level_control/level.gd" id="1_67rw1"]
 [ext_resource type="Texture2D" uid="uid://bvugwx4xsj2ds" path="res://assets/debug_res/placeholder.png" id="2_veify"]
-[ext_resource type="Script" uid="uid://digiawkctxn0k" path="res://scripts/defenses/defence_manager.gd" id="3_ldb5k"]
-[ext_resource type="Script" uid="uid://c8t8pga0p36jt" path="res://scripts/global_manager.gd" id="4_47a1b"]
-[ext_resource type="Script" uid="uid://obig7agb5r1l" path="res://scripts/buffs/buff_emitter.gd" id="5_57bs3"]
+[ext_resource type="Script" uid="uid://digiawkctxn0k" path="res://scripts/defenses/defence_container.gd" id="3_ldb5k"]
+[ext_resource type="Script" uid="uid://civ0md0g1lfxs" path="res://scripts/global_manager.gd" id="4_47a1b"]
+[ext_resource type="Script" uid="uid://2vgttshvm8nr" path="res://scripts/buffs/buff_emitter.gd" id="5_57bs3"]
 [ext_resource type="Script" uid="uid://dfiyq0gqv42y2" path="res://scripts/systems/wave_control/wave_entry.gd" id="6_57bs3"]
 [ext_resource type="PackedScene" uid="uid://gfcjptk77qr7" path="res://scenes/buttons/base_button.tscn" id="6_dambs"]
 [ext_resource type="Script" uid="uid://bc27wyjj6a7ex" path="res://scripts/systems/wave_control/wave_data.gd" id="7_dambs"]
-[ext_resource type="Script" uid="uid://tawsagnmapoi" path="res://scripts/buffs/buff_effect.gd" id="7_dsfq4"]
-[ext_resource type="Resource" uid="uid://j5et20fj6woj" path="res://resources/buff_effect/test.tres" id="8_wah2a"]
-[ext_resource type="Resource" path="res://resources/buff_effect/failure_effect.tres" id="9_jjdy8"]
-[ext_resource type="Script" uid="uid://byp141knontup" path="res://scripts/players/player_container.gd" id="10_833sg"]
+[ext_resource type="Script" uid="uid://djr3furmdwn7t" path="res://scripts/buffs/buff_effect.gd" id="7_dsfq4"]
+[ext_resource type="Resource" uid="uid://cuav8g6x3d6vi" path="res://resources/buff_effect/failure_effect.tres" id="9_jjdy8"]
+[ext_resource type="Script" uid="uid://ecg0l5occhlg" path="res://scripts/players/player_container.gd" id="10_833sg"]
 [ext_resource type="PackedScene" uid="uid://bi4uder0xrmn3" path="res://scenes/ui/hud.tscn" id="13_20cmf"]
-[ext_resource type="Script" uid="uid://b8i6wt3cm6s4i" path="res://scripts/enemies/enemy_controller.gd" id="14_ctrl"]
+[ext_resource type="Script" uid="uid://bjsvqqasir2e8" path="res://scripts/enemies/enemy_controller.gd" id="14_ctrl"]
 [ext_resource type="Script" uid="uid://dqgiqiaesvcnp" path="res://scripts/systems/path_control/spawn_marker.gd" id="15_marker"]
 [ext_resource type="Resource" uid="uid://dxh4qk5jm8t3e" path="res://resources/enemies/enemy_catalog.tres" id="16_cat"]
+[ext_resource type="Resource" path="res://resources/buff_effect/enemy_speed_up.tres" id="19_buf1"]
+[ext_resource type="Resource" path="res://resources/buff_effect/enemy_slow_down.tres" id="20_buf2"]
+[ext_resource type="Resource" path="res://resources/buff_effect/enemy_health_up.tres" id="21_buf3"]
+[ext_resource type="Resource" path="res://resources/buff_effect/enemy_more_clicks.tres" id="22_buf4"]
+[ext_resource type="Resource" path="res://resources/buff_effect/enemy_taunt_resist.tres" id="23_buf5"]
+[ext_resource type="Resource" path="res://resources/buff_effect/defense_fire_rate_up.tres" id="24_buf6"]
+[ext_resource type="Resource" uid="uid://n6wrhoi8lwrp" path="res://resources/buff_effect/defense_damage_up.tres" id="25_buf7"]
+[ext_resource type="Resource" path="res://resources/buff_effect/defense_lure_up.tres" id="26_buf8"]
+[ext_resource type="Resource" path="res://resources/buff_effect/player_gain_life.tres" id="27_buf9"]
+[ext_resource type="Resource" path="res://resources/buff_effect/player_lose_fragments.tres" id="28_buf10"]
+[ext_resource type="Script" uid="uid://bq2rp3ntjcjt7" path="res://scripts/debug/debug_buff_panel.gd" id="29_debug"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bblh5"]
 texture = ExtResource("2_veify")
@@ -45,10 +55,6 @@ scale = Vector2(4, 4)
 tile_map_data = PackedByteArray("AAABAAQAAAAAAAEAAAABAAUAAAAAAAEAAAACAAQAAAAAAAEAAAACAAUAAAAAAAEAAAADAAUAAAAAAAAAAAAEAAUAAAAAAAAAAAAFAAUAAAAAAAAAAAAGAAUAAAAAAAAAAAAHAAUAAAAAAAAAAAAIAAUAAAAAAAAAAAARAAEAAAABAAEAAAAQAAEAAAABAAEAAAAPAAIAAAAAAAAAAAAOAAIAAAAAAAAAAAANAAMAAAABAAAAAAALAAQAAAABAAAAAAAKAAQAAAAAAAAAAAAKAAYAAAAAAAAAAAALAAYAAAABAAAAAAANAAcAAAABAAAAAAAOAAgAAAAAAAAAAAAPAAgAAAAAAAAAAAARAAkAAAABAAEAAAAJAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAADAAQAAAAAAAAAAAAJAAYAAAAAAAAAAAAMAAQAAAABAAAAAAAMAAYAAAABAAAAAAALAAcAAAABAAAAAAAMAAcAAAABAAAAAAANAAUAAAABAAAAAAANAAQAAAABAAAAAAAOAAQAAAABAAAAAAAOAAMAAAABAAAAAAAPAAMAAAABAAAAAAAPAAQAAAABAAAAAAAPAAUAAAABAAAAAAAOAAUAAAABAAAAAAAOAAYAAAABAAAAAAANAAYAAAABAAAAAAAOAAcAAAABAAAAAAAPAAcAAAABAAAAAAAPAAYAAAABAAAAAAAQAAYAAAABAAAAAAAQAAUAAAABAAAAAAAQAAQAAAABAAAAAAAQAAMAAAABAAAAAAAQAAIAAAABAAEAAAARAAIAAAABAAEAAAARAAMAAAABAAAAAAARAAQAAAABAAAAAAARAAUAAAABAAAAAAARAAYAAAABAAAAAAARAAcAAAABAAAAAAAQAAcAAAABAAAAAAAQAAgAAAABAAEAAAARAAgAAAABAAEAAAAMAAUAAAABAAAAAAALAAUAAAABAAAAAAAKAAUAAAAAAAAAAAAJAAUAAAAAAAAAAAAHAAQAAAAAAAAAAAAHAAMAAAABAAAAAAAHAAIAAAABAAAAAAAHAAEAAAABAAAAAAAGAAEAAAABAAAAAAAFAAEAAAABAAAAAAAEAAEAAAABAAAAAAADAAEAAAABAAAAAAACAAEAAAABAAAAAAABAAEAAAABAAAAAAAAAAEAAAABAAAAAAAAAAIAAAABAAAAAAABAAMAAAABAAAAAAABAAIAAAABAAAAAAACAAIAAAABAAAAAAACAAMAAAABAAAAAAADAAMAAAABAAAAAAADAAIAAAABAAAAAAAEAAIAAAABAAAAAAAEAAMAAAABAAAAAAAEAAQAAAAAAAAAAAAFAAQAAAAAAAAAAAAFAAMAAAABAAAAAAAFAAIAAAABAAAAAAAGAAIAAAABAAAAAAAGAAMAAAABAAAAAAAGAAQAAAAAAAAAAAAIAAEAAAABAAAAAAAIAAIAAAABAAAAAAAIAAMAAAABAAAAAAAJAAIAAAAAAAAAAAAJAAEAAAAAAAAAAAAKAAEAAAAAAAAAAAAKAAIAAAAAAAAAAAALAAIAAAAAAAAAAAALAAEAAAAAAAAAAAAMAAEAAAAAAAAAAAAMAAIAAAAAAAAAAAANAAIAAAAAAAAAAAANAAEAAAAAAAAAAAAOAAEAAAAAAAAAAAAPAAEAAAAAAAAAAAAHAAgAAAABAAAAAAAHAAcAAAABAAAAAAAEAAcAAAABAAAAAAADAAcAAAABAAAAAAACAAcAAAABAAAAAAABAAcAAAABAAAAAAAAAAcAAAABAAAAAAAAAAgAAAABAAAAAAAAAAkAAAABAAAAAAABAAkAAAABAAAAAAABAAgAAAABAAAAAAACAAgAAAABAAAAAAACAAkAAAABAAAAAAADAAkAAAABAAAAAAADAAgAAAABAAAAAAAEAAgAAAABAAAAAAAEAAkAAAABAAAAAAAFAAkAAAABAAAAAAAFAAgAAAABAAAAAAAFAAcAAAABAAAAAAAGAAcAAAABAAAAAAAGAAgAAAABAAAAAAAGAAkAAAABAAAAAAAHAAkAAAABAAAAAAAIAAkAAAABAAAAAAAIAAgAAAABAAAAAAAIAAcAAAABAAAAAAAJAAcAAAAAAAAAAAAJAAgAAAAAAAAAAAAJAAkAAAAAAAAAAAAKAAkAAAAAAAAAAAAKAAgAAAAAAAAAAAAKAAcAAAAAAAAAAAALAAgAAAAAAAAAAAALAAkAAAAAAAAAAAAMAAkAAAAAAAAAAAAMAAgAAAAAAAAAAAANAAgAAAAAAAAAAAANAAkAAAAAAAAAAAAOAAkAAAAAAAAAAAAPAAkAAAAAAAAAAAARAAAAAAABAAAAAAASAAAAAAABAAAAAAASAAEAAAABAAAAAAASAAIAAAABAAAAAAATAAAAAAABAAAAAAATAAEAAAABAAAAAAATAAIAAAABAAAAAAASAAkAAAABAAAAAAASAAgAAAABAAAAAAASAAMAAAABAAAAAAASAAQAAAABAAAAAAASAAUAAAABAAAAAAASAAYAAAABAAAAAAASAAcAAAABAAAAAAATAAYAAAABAAAAAAATAAUAAAABAAAAAAATAAQAAAABAAAAAAATAAMAAAABAAAAAAATAAcAAAABAAAAAAAQAAoAAAABAAAAAAAPAAoAAAABAAAAAAAOAAoAAAABAAAAAAANAAoAAAABAAAAAAAMAAoAAAABAAAAAAALAAoAAAABAAAAAAAKAAoAAAABAAAAAAAJAAoAAAABAAAAAAAIAAoAAAABAAAAAAAHAAoAAAABAAAAAAAGAAoAAAABAAAAAAAFAAoAAAABAAAAAAAEAAoAAAABAAAAAAADAAoAAAABAAAAAAACAAoAAAABAAAAAAABAAoAAAABAAAAAAAAAAoAAAABAAAAAAAQAAAAAAABAAAAAAAPAAAAAAABAAAAAAAOAAAAAAABAAAAAAANAAAAAAABAAAAAAAMAAAAAAABAAAAAAALAAAAAAABAAAAAAAKAAAAAAABAAAAAAAJAAAAAAABAAAAAAAIAAAAAAABAAAAAAAHAAAAAAABAAAAAAAGAAAAAAABAAAAAAAFAAAAAAABAAAAAAAEAAAAAAABAAAAAAADAAAAAAABAAAAAAACAAAAAAABAAAAAAABAAAAAAABAAAAAAAAAAAAAAABAAAAAAARAAoAAAABAAAAAAASAAoAAAABAAAAAAATAAoAAAABAAAAAAATAAkAAAABAAAAAAATAAgAAAABAAAAAAAAAAMAAAABAAAAAAAAAAQAAAABAAAAAAAAAAUAAAABAAAAAAAAAAYAAAABAAAAAAABAAYAAAABAAAAAAACAAYAAAABAAAAAAADAAYAAAABAAAAAAAEAAYAAAABAAAAAAAFAAYAAAABAAAAAAAGAAYAAAABAAAAAAAHAAYAAAABAAAAAAAIAAYAAAABAAAAAAAJAAMAAAAAAAAAAAAKAAMAAAAAAAAAAAALAAMAAAABAAAAAAAMAAMAAAABAAAAAAAQAAkAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_ukdvg")
 
-[node name="DefenceManager" type="Node2D" parent="." unique_id=351116108 node_paths=PackedStringArray("level_scene")]
-script = ExtResource("3_ldb5k")
-level_scene = NodePath("..")
-
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=98350041]
 navigation_polygon = SubResource("NavigationPolygon_rlayw")
 
@@ -69,30 +75,80 @@ script = ExtResource("10_833sg")
 
 [node name="ButtonContainer" type="Node2D" parent="GlobalManager" unique_id=573457783]
 
-[node name="BaseButton" parent="GlobalManager/ButtonContainer" unique_id=115424014 instance=ExtResource("6_dambs")]
-position = Vector2(149, 56)
-text = "测速1"
-buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("8_wah2a")])
+[node name="Btn_speed_up" parent="GlobalManager/ButtonContainer" unique_id=2059174619 instance=ExtResource("6_dambs")]
+position = Vector2(200, 40)
+text = "⚡加速"
+buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("19_buf1")])
 
-[node name="BaseButton2" parent="GlobalManager/ButtonContainer" unique_id=222218216 instance=ExtResource("6_dambs")]
-position = Vector2(336, 56)
-text = "测速2"
-buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("8_wah2a")])
+[node name="Btn_slow_down" parent="GlobalManager/ButtonContainer" unique_id=868699060 instance=ExtResource("6_dambs")]
+position = Vector2(380, 40)
+text = "🐌减速"
+buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("20_buf2")])
 
-[node name="BaseButton3" parent="GlobalManager/ButtonContainer" unique_id=863942862 instance=ExtResource("6_dambs")]
-position = Vector2(127, 315)
-text = "别碰！"
+[node name="Btn_health_up" parent="GlobalManager/ButtonContainer" unique_id=1561141099 instance=ExtResource("6_dambs")]
+position = Vector2(560, 40)
+text = "❤️加血"
+buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("21_buf3")])
+
+[node name="Btn_more_clicks" parent="GlobalManager/ButtonContainer" unique_id=535240689 instance=ExtResource("6_dambs")]
+position = Vector2(740, 40)
+text = "🖱️多点"
+buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("22_buf4")])
+
+[node name="Btn_taunt_resist" parent="GlobalManager/ButtonContainer" unique_id=183819273 instance=ExtResource("6_dambs")]
+position = Vector2(920, 40)
+text = "🛡️抵抗"
+buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("23_buf5")])
+
+[node name="Btn_fire_rate" parent="GlobalManager/ButtonContainer" unique_id=2009035975 instance=ExtResource("6_dambs")]
+position = Vector2(1100, 40)
+text = "🔫射速"
+buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("24_buf6")])
+
+[node name="Btn_damage" parent="GlobalManager/ButtonContainer" unique_id=1946084231 instance=ExtResource("6_dambs")]
+position = Vector2(200, 95)
+text = "💥伤害"
+buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("25_buf7")])
+
+[node name="Btn_lure" parent="GlobalManager/ButtonContainer" unique_id=1064696967 instance=ExtResource("6_dambs")]
+position = Vector2(380, 95)
+text = "🎣引诱"
+buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("26_buf8")])
+
+[node name="Btn_gain_life" parent="GlobalManager/ButtonContainer" unique_id=1555091996 instance=ExtResource("6_dambs")]
+position = Vector2(560, 95)
+text = "💚回血"
+buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("27_buf9")])
+
+[node name="Btn_lose_frags" parent="GlobalManager/ButtonContainer" unique_id=1272712637 instance=ExtResource("6_dambs")]
+position = Vector2(740, 95)
+text = "💰扣费"
+buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("28_buf10")])
+
+[node name="Btn_lose_life2" parent="GlobalManager/ButtonContainer" unique_id=115424014 instance=ExtResource("6_dambs")]
+position = Vector2(134, 316)
+text = "💀别碰！"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("9_jjdy8")])
 
-[node name="BuffEmitter" type="Node2D" parent="GlobalManager" unique_id=609066498 node_paths=PackedStringArray("enemy_controller", "defense_manager", "player_container", "button_container")]
+[node name="DebugBuffPanel" type="Node2D" parent="GlobalManager" unique_id=2030137515 node_paths=PackedStringArray("enemy_controller", "player_container", "defense_container")]
+script = ExtResource("29_debug")
+enemy_controller = NodePath("../EnemyController")
+player_container = NodePath("../PlayerContainer")
+defense_container = NodePath("../DefenceContainer")
+
+[node name="BuffEmitter" type="Node2D" parent="GlobalManager" unique_id=609066498 node_paths=PackedStringArray("enemy_controller", "defense_container", "player_container", "button_container")]
 script = ExtResource("5_57bs3")
 enemy_controller = NodePath("../EnemyController")
-defense_manager = NodePath("../../DefenceManager")
+defense_container = NodePath("../DefenceContainer")
 player_container = NodePath("../PlayerContainer")
 button_container = NodePath("../ButtonContainer")
 
-[node name="HUD" parent="GlobalManager" unique_id=701478321 node_paths=PackedStringArray("defense_manager", "logic_grid", "global_manager", "player_container", "enemy_controller") instance=ExtResource("13_20cmf")]
-defense_manager = NodePath("../../DefenceManager")
+[node name="DefenceContainer" type="Node2D" parent="GlobalManager" unique_id=351116108 node_paths=PackedStringArray("level_scene")]
+script = ExtResource("3_ldb5k")
+level_scene = NodePath("../..")
+
+[node name="HUD" parent="GlobalManager" unique_id=701478321 node_paths=PackedStringArray("defense_container", "logic_grid", "global_manager", "player_container", "enemy_controller") instance=ExtResource("13_20cmf")]
+defense_container = NodePath("../DefenceContainer")
 logic_grid = NodePath("../../BaseMapLayer")
 global_manager = NodePath("..")
 player_container = NodePath("../PlayerContainer")

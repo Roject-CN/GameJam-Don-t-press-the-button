@@ -18,7 +18,6 @@ signal game_over(is_win: bool)
 func _ready() -> void:
 	enemy_controller.all_enemies_defeated.connect(_on_all_enemies_defeated)
 	player_container.lives_depleted.connect(_on_lives_depleted)
-	
 
 
 func _connect_ready() -> void:
@@ -42,6 +41,10 @@ func _on_all_enemies_defeated() -> void:
 		return
 
 	player_container.add_fragments(enemy_controller.wave_clear_fragments)
+
+	# Buff 波次过期
+	if buff_emitter:
+		buff_emitter.tick_all_waves()
 
 	if enemy_controller.total_waves == 0:
 		_settle(true)

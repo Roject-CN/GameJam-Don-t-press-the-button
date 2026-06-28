@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bi4uder0xrmn3"]
 
-[ext_resource type="Script" uid="uid://crlcynar0qg6o" path="res://scripts/uis/hud/hud.gd" id="1_546lt"]
-[ext_resource type="Script" uid="uid://6cejqk2ul5fg" path="res://scripts/uis/hud/cards.gd" id="4_8qguk"]
+[ext_resource type="Script" uid="uid://bvb8mtltj3fdu" path="res://scripts/uis/hud/hud.gd" id="1_546lt"]
+[ext_resource type="Script" uid="uid://b2jgxjfse24to" path="res://scripts/uis/hud/cards.gd" id="4_8qguk"]
 [ext_resource type="PackedScene" uid="uid://bl13qg3d5hfr8" path="res://scenes/ui/count_label.tscn" id="4_136eg"]
 [ext_resource type="Resource" uid="uid://bafytq6aoqtwj" path="res://resources/cards/default_deck.tres" id="6_deck"]
 
@@ -50,10 +50,10 @@ deck = ExtResource("6_deck")
 
 [node name="CountLabel" parent="." unique_id=837785293 instance=ExtResource("4_136eg")]
 layout_mode = 0
-offset_left = 503.0
-offset_top = 30.0
-offset_right = 787.0
-offset_bottom = 137.0
+offset_left = 864.0
+offset_top = 305.0
+offset_right = 1148.0
+offset_bottom = 412.0
 
 [node name="Ready" type="Button" parent="." unique_id=2063125810]
 layout_mode = 0

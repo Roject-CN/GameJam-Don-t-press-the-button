@@ -1,5 +1,12 @@
 # 更新日志 — "别按那个键"
 
+## 2026-06-27 — merge_buff_into_teammate_refactor
+- 合并队友 EnemyController 架构，注入 buff 策略模式
+- DefenceManager → DefenceContainer 全项目 rename
+- 修复 freed 节点 buff apply 报错、新生成敌人 buff 被覆盖的时序 bug
+- 场景恢复 11 测试按钮 + DebugBuffPanel
+- 同步更新各类文档
+
 ## 2026-06-25 — feature_re_window ->main ->rebuild_64f
 
 - 新增 ReWindowDefense：继承窗口防御，持续引诱模式（redirect repeated=true）
@@ -16,7 +23,7 @@
 - 波次系统：WaveEntry + WaveData + EnemyCatalog + WaveController，时间戳驱动生成
 - 敌人改造：位置驱动寻路（spawn_point → target_point），EnemyConfig 配置驱动
 - Buff 精简：移除 active_buffs 死代码，BuffContainer 11 行纯路由
-- 容器解耦：全部 BuffContainer 改为组合模式（EnemyContainer / PlayerContainer / DefenceManager）
+- 容器解耦：全部 BuffContainer 改为组合模式（EnemyController / PlayerContainer / DefenceContainer）
 - 移除冗余：删除 TerrainContainer / PlacementManager / DefenseContainer
 - 卡组系统：CardDeck / CardEntry 资源配置，替代单卡种硬编码
 - HUD 重构：前后端分离，HUD 监听 GlobalManager 信号自主更新
@@ -27,9 +34,9 @@
 ## 2026-06-24
 
 - 防御工事系统 Phase 1：BaseDefense + TurretDefense + PhishingWindowDefense + Projectile
-- DefenceManager（组合 BuffContainer）
+- DefenceContainer（组合 BuffContainer）
 - 初始 Buff 系统：BuffEffect / BuffContainer / BuffEmitter
-- EnemyContainer + PlayerContainer
+- EnemyController + PlayerContainer
 - StageManager FSM（BUILD/BATTLE/SETTLE）
 - BaseEnemy 基类（NavigationAgent2D 寻路）
 - BaseClickedButton 按钮基类

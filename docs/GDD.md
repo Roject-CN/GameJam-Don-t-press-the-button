@@ -22,7 +22,7 @@ GlobalManager (信号 hub)
   │   └── 按 time_offset 生成敌人 → EnemyContainer
   ├── EnemyContainer (存活计数 → battle_over)
   ├── PlayerContainer (life_lost → GlobalManager)
-  ├── DefenceManager (ghost 孵化 + 放置 + 列表)
+  ├── DefenceContainer (ghost 孵化 + 放置 + 列表)
   └── BuffEmitter (按钮 → 路由 buff 到各容器的 buff_container)
 ```
 
@@ -216,9 +216,9 @@ ghost 半透明跟随鼠标，`place()` 恢复不透明并触发 `_on_placed()`�
 
 飞向目标敌人，命中后造成伤害并自毁。
 
-#### DefenceManager — 防御管理器
+#### DefenceContainer — 防御管理器
 
-> `scripts/defenses/defence_manager.gd` | Node2D → class_name DefenceManager
+> `scripts/defenses/defence_container.gd` | Node2D → class_name DefenceContainer
 
 统一管理防御设施生命周期：`spawn_defence()` 孵化 ghost，`confirm_placement()` 正式放置，`remove_defence()` 移除。内部持有 `buff_container` 接收 DEFENSE 目标的 Buff。
 
@@ -236,7 +236,7 @@ ghost 半透明跟随鼠标，`place()` 恢复不透明并触发 `_on_placed()`�
 
 > `scripts/uis/hud/card_unit.gd` | Control → class_name BaseCard
 
-长按拖拽生成防御 ghost，松手放置。自动从 HUD 获取 DefenceManager 和吸附栅格。
+长按拖拽生成防御 ghost，松手放置。自动从 HUD 获取 DefenceContainer 和吸附栅格。
 
 #### CardContainer — 卡牌容器
 
