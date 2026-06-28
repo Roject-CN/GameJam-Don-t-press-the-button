@@ -1,26 +1,23 @@
 extends Node2D
 class_name GlobalManager
 
-## 全局信号路由 — 连接各模块信号，不持有业务状态
+## 全局信号路由 — 连接 EnemyController / PlayerContainer 信号，驱动游戏流程
 
-@export var enemy_manager: EnemyManager
-@export var wave_controller: WaveController
+@export var enemy_controller: EnemyController
 @export var buff_emitter: BuffEmitter
-@export var player_manager: PlayerManager
+@export var player_container: PlayerContainer
 
 var ready_button: Button
 
-var current_wave: int = 0
 var _started: bool = false
 var _settled: bool = false
 
-signal wave_started(wave: int)
 signal game_over(is_win: bool)
 
 
 func _ready() -> void:
-	enemy_manager.all_enemies_defeated.connect(_on_all_enemies_defeated)
-	player_manager.lives_depleted.connect(_on_lives_depleted)
+	enemy_controller.all_enemies_defeated.connect(_on_all_enemies_defeated)
+	player_container.lives_depleted.connect(_on_lives_depleted)
 
 
 func _connect_ready() -> void:
@@ -32,38 +29,31 @@ func _on_ready_pressed() -> void:
 	if _started:
 		return
 	_started = true
-	current_wave = 0 if wave_controller.total_waves == 0 else 1
-	_start_wave()
-
-
-func _start_wave() -> void:
-	wave_started.emit(current_wave)
-	if wave_controller:
-		wave_controller.start_wave(current_wave)
+	var wave := 0 if enemy_controller.total_waves == 0 else 1
+	enemy_controller.start_wave(wave)
 
 
 ## 全部已生成敌人被击杀
 func _on_all_enemies_defeated() -> void:
-	if _settled or not wave_controller:
+	if _settled:
 		return
-	if not wave_controller.all_spawned():
-		return  # 波次未生成完，等后续生成
+	if not enemy_controller.all_spawned():
+		return
 
-	player_manager.add_fragments(wave_controller.wave_clear_fragments)
+	player_container.add_fragments(enemy_controller.wave_clear_fragments)
 
-	# Buff 波次过期 — 每波结束时 tick 所有容器的 buff
+	# Buff 波次过期
 	if buff_emitter:
 		buff_emitter.tick_all_waves()
 
-	if wave_controller.total_waves == 0:
+	if enemy_controller.total_waves == 0:
 		_settle(true)
 		return
 
-	if current_wave >= wave_controller.total_waves:
+	if enemy_controller.current_wave >= enemy_controller.total_waves:
 		_settle(true)
 	else:
-		current_wave += 1
-		_start_wave()
+		enemy_controller.start_wave(enemy_controller.current_wave + 1)
 
 
 ## 血量归零
@@ -77,6 +67,5 @@ func _settle(is_win: bool) -> void:
 	_settled = true
 	if buff_emitter:
 		buff_emitter.disconnect_all()
-	if wave_controller:
-		wave_controller.stop_wave()
+	enemy_controller.stop_wave()
 	game_over.emit(is_win)

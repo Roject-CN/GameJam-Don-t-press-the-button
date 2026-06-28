@@ -1,5 +1,5 @@
 extends Node2D
-class_name PlayerManager
+class_name PlayerContainer
 
 ## 玩家容器 — 血量 + 费用 + PLAYER Buff 路由
 

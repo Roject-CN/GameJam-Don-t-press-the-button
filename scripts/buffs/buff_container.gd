@@ -21,9 +21,6 @@ func apply_buff(effect: BuffEffect) -> void:
 	_active_buffs.append(effect)
 	buff_applied.emit(effect)
 
-func remove_buff(effect: BuffEffect) -> void:
-	_active_buffs.erase(effect)
-	buff_removed.emit(effect)
 
 ## 波次结束时调用 — 过期 buff 自动移除并发射 buff_removed
 func tick_wave() -> void:

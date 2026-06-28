@@ -26,13 +26,12 @@ Godot 4.7 2D 塔防，"桌面隐喻"风格。敌人是鼠标光标，从生成�
 
 ### 运行时节点
 - `BaseEnemy` — `scripts/enemies/base_enemy.gd`，敌人基类（位置驱动寻路 + setup + EnemyConfig）
-- `EnemyManager` — `scripts/enemies/enemy_manager.gd`，敌人管理器（组合 BuffContainer + 存活计数 + battle_over）
-- `PlayerManager` — `scripts/players/player_manager.gd`，玩家容器（组合 BuffContainer + lives_changed/life_lost/lives_depleted）
-- `DefenceManager` — `scripts/defenses/defence_manager.gd`，防御管理器（组合 BuffContainer + ghost 孵化 + 放置）
-- `GlobalManager` — `scripts/global_manager.gd`，全局信号 hub（无阶段枚举，波次参数从 WaveController 获取）
-- `WaveController` — `scripts/systems/wave_controller.gd`，波次控制器（时序生成 + 传递 config/target）
-- `BuffEmitter` — `scripts/buffs/buff_emitter.gd`，Buff 路由（按钮信号 → 各容器 .buff_container，含 `tick_all_waves()`）
-- `BuffContainer` — `scripts/buffs/buff_container.gd`，Buff 存储+路由节点（组合模式，含 `tick_wave()` 波次过期）
+- `EnemyController` — `scripts/enemies/enemy_controller.gd`，敌人总控（波次+生成+计数+ENEMY Buff）
+- `PlayerContainer` — `scripts/players/player_container.gd`，玩家容器（组合 BuffContainer + lives_changed/life_lost）
+- `DefenceContainer` — `scripts/defenses/defence_container.gd`，防御容器（组合 BuffContainer + ghost 孵化 + 放置）
+- `GlobalManager` — `scripts/global_manager.gd`，全局信号 hub（连接 EnemyController/PlayerContainer）
+- `BuffEmitter` — `scripts/buffs/buff_emitter.gd`，Buff 路由（按钮信号 → 各容器 .buff_container，含 tick_all_waves）
+- `BuffContainer` — `scripts/buffs/buff_container.gd`，Buff 存储+路由节点（组合模式，含 tick_wave 波次过期）
 - `SpawnMarker` — `scripts/systems/spawn_marker.gd`，关卡标记点
 - `BaseClickedButton` — `scripts/buttons/base_button.gd`，桌面按钮
 - `BaseDefense` — `scripts/defenses/base_defense.gd`，防御基类（ghost + place）
@@ -42,6 +41,7 @@ Godot 4.7 2D 塔防，"桌面隐喻"风格。敌人是鼠标光标，从生成�
 - `BaseCard` — `scripts/uis/hud/card_unit.gd`，卡牌基类（长按拖拽放置）
 - `CardContainer` — `scripts/uis/hud/cards.gd`，卡牌容器（从 CardDeck 初始化）
 - `HUD` — `scripts/uis/hud/hud.gd`，UI 主控
+- `ConutLabel` — `scripts/uis/hud/count_label.gd`，波次/击杀计数 UI
 - `DebugBuffPanel` — `scripts/debug/debug_buff_panel.gd`，调试面板（实时属性 + buff 状态）
 
 ### Resource
@@ -60,17 +60,17 @@ Godot 4.7 2D 塔防，"桌面隐喻"风格。敌人是鼠标光标，从生成�
 scripts/
 ├── buttons/base_button.gd
 ├── enemies/
-│   ├── base_enemy.gd / enemy_config.gd / enemy_manager.gd
+│   ├── base_enemy.gd / enemy_config.gd / enemy_controller.gd
 │   ├── enemy_catalog.gd / enemy_type_mapping.gd
 ├── buffs/
-│   ├── buff_effect.gd / buff_container.gd / buff_emitter.gd
+│   ├── buff_effect.gd / property_buff_effect.gd / buff_container.gd / buff_emitter.gd
 ├── global_manager.gd
-├── players/player_manager.gd
+├── players/player_container.gd
 ├── defenses/
-│   ├── base_defense.gd / defence_manager.gd
+│   ├── base_defense.gd / defence_container.gd
 │   ├── turret_defense.gd / window_defense.gd / projectile.gd
 ├── systems/
-│   ├── wave_entry.gd / wave_data.gd / wave_controller.gd
+│   ├── wave_entry.gd / wave_data.gd
 │   └── spawn_marker.gd
 ├── level_control/level.gd / level_controller.gd
 └── uis/hud/
@@ -94,13 +94,12 @@ resources/
 - BaseEnemy 敌人类（配置驱动寻路）
 - EnemyConfig 敌人配置 Resource
 - BuffEffect / BuffContainer / BuffEmitter（组合模式 Buff 路由）
-- EnemyManager（存活计数 + battle_over）
 - WaveEntry / WaveData / EnemyTypeMapping / EnemyCatalog（波次配置系统）
-- WaveController（时间戳驱动生成 + 传递 config/target）
+- EnemyController（波次时序 + 敌人生成 + 存活计数 + ENEMY Buff）
 - SpawnMarker（关卡标记点）
-- PlayerManager（life_lost）
-- GlobalManager（信号 hub，无阶段枚举，波次参数从 WaveController 获取）
-- DefenceManager + BaseDefense + TurretDefense + PhishingWindowDefense + Projectile
+- PlayerContainer（life_lost）
+- GlobalManager（信号 hub，连接 EnemyController/PlayerContainer 驱动游戏流程）
+- DefenceContainer + BaseDefense + TurretDefense + PhishingWindowDefense + Projectile
 - HUD（Ready + 命数 + 结算 + 卡牌拖拽放置）
 - CardContainer / BaseCard / CardDeck / CardEntry（卡组系统）
 - LevelController（关卡切换）

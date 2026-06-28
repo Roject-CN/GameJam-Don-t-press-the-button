@@ -14,7 +14,7 @@ class_name BaseEnemy
 @export var click_times: int = 2:
 	set(v):
 		click_times = v
-		if click_times <= 0:
+		if not _dying and click_times <= 0:
 			free_self()
 
 @export var taunt_resistance: float = 0.0
@@ -30,8 +30,11 @@ var _target_pos: Vector2
 var _setup_done: bool = false
 
 var _lure_queue: Array[Vector2] = []
-var lured := false #被引诱状态
-var repeatedly_lured := false #被持续引诱状态
+var lured := false
+var repeatedly_lured := false
+
+## 死亡流程守卫 — 防止 free_self() 重入
+var _dying: bool = false
 
 signal enemy_died()
 
@@ -67,9 +70,9 @@ func _navigate_to(pos: Vector2) -> void:
 
 
 ## 钓鱼窗口引诱
-#Roject将引诱的寻路逻辑写在 window defense 里面了
-#仅保留一个接口
-func redirect_to(pos : Vector2, repeated := false) -> void:
+func redirect_to(pos: Vector2, repeated := false) -> void:
+	if _dying:
+		return
 	if lured:
 		_lure_queue.append(pos)
 		return
@@ -79,13 +82,17 @@ func redirect_to(pos : Vector2, repeated := false) -> void:
 
 
 func take_damage(amount: int) -> void:
+	if _dying:
+		return
 	health -= amount
 	if health <= 0:
 		free_self()
 
 
-## 到达目标后查找附近按钮并点击（taunt 目标优先）
+## 到达目标后查找附近按钮并点击
 func _try_click() -> void:
+	if _dying:
+		return
 	var btn: BaseClickedButton = null
 
 	btn = _find_nearest_button(global_position)
@@ -97,18 +104,20 @@ func _try_click() -> void:
 
 
 func _click_button(btn: BaseClickedButton) -> void:
+	if _dying:
+		return
 	animation_player.play("clicked")
 	btn.press()
 	await animation_player.animation_finished
+	if _dying:
+		return
 	btn.release()
 	click_times -= 1
 	if click_times > 0:
 		if repeatedly_lured:
 			_click_button(btn)
 			return
-		# 非持续引诱：重置引诱状态，消费队列中下一个引诱
 		_reset_lure()
-		
 
 
 ## 重置引诱状态，若队列中有待处理的引诱则立即消费
@@ -122,11 +131,10 @@ func _reset_lure() -> void:
 
 
 func _find_nearest_button(pos: Vector2) -> BaseClickedButton:
-	#利用get_nodes_in_group "CLickedButtons"
 	var best: BaseClickedButton = null
 	var best_dist := INF
 	for btn in get_tree().get_nodes_in_group("ClickedButtons"):
-		var d : float = btn.global_position.distance_squared_to(pos)
+		var d: float = btn.global_position.distance_squared_to(pos)
 		if d < best_dist:
 			best_dist = d
 			best = btn
@@ -134,6 +142,9 @@ func _find_nearest_button(pos: Vector2) -> BaseClickedButton:
 
 
 func free_self() -> void:
+	if _dying:
+		return
+	_dying = true
 	animation_player.play("free")
 	await animation_player.animation_finished
 	enemy_died.emit()
@@ -141,7 +152,7 @@ func free_self() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if not _setup_done:
+	if _dying or not _setup_done:
 		return
 	if navigation_agent_2d.is_navigation_finished():
 		return

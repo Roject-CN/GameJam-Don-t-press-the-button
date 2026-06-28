@@ -3,9 +3,9 @@ class_name DebugBuffPanel
 
 ## 调试面板 — 实时显示敌人/玩家/防御状态
 
-@export var enemy_manager: EnemyManager
-@export var player_manager: PlayerManager
-@export var defense_manager: DefenceManager
+@export var enemy_controller: EnemyController
+@export var player_container: PlayerContainer
+@export var defense_container: DefenceContainer
 
 var _debug_label: RichTextLabel
 
@@ -66,21 +66,21 @@ func _process(_delta: float) -> void:
 	var lines: Array[String] = []
 
 	# ── 玩家 ──
-	if player_manager:
-		lines.append("[b]玩家[/b]  命=%d  碎片=%d" % [player_manager.current_lives, player_manager.fragments])
-		var pbuffs: Array = _format_buffs(player_manager.buff_container.get_active_buffs())
+	if player_container:
+		lines.append("[b]玩家[/b]  命=%d  碎片=%d" % [player_container.current_lives, player_container.fragments])
+		var pbuffs: Array = _format_buffs(player_container.buff_container.get_active_buffs())
 		if pbuffs.size() > 0:
 			lines.append("  ↳ 活跃Buff:")
 			lines.append_array(pbuffs)
 
 	# ── 敌人 ──
-	if enemy_manager:
-		lines.append("[b]存活敌人: %d[/b]" % enemy_manager.enemies_alive)
-		var ebuffs: Array = _format_buffs(enemy_manager.buff_container.get_active_buffs())
+	if enemy_controller:
+		lines.append("[b]存活敌人: %d[/b]" % enemy_controller.enemies_alive)
+		var ebuffs: Array = _format_buffs(enemy_controller.buff_container.get_active_buffs())
 		if ebuffs.size() > 0:
 			lines.append("  [color=orange]活跃Buff:[/color]")
 			lines.append_array(ebuffs)
-		for child in enemy_manager.get_children():
+		for child in enemy_controller.get_children():
 			if not is_instance_valid(child):
 				continue
 			if child is BaseEnemy:
@@ -94,13 +94,13 @@ func _process(_delta: float) -> void:
 				])
 
 	# ── 防御 ──
-	if defense_manager:
-		var dbuffs: Array = _format_buffs(defense_manager.buff_container.get_active_buffs())
+	if defense_container:
+		var dbuffs: Array = _format_buffs(defense_container.buff_container.get_active_buffs())
 		if dbuffs.size() > 0:
-			lines.append("[b]防御设施: %d[/b]" % defense_manager.placed_defenses.size())
+			lines.append("[b]防御设施: %d[/b]" % defense_container.placed_defenses.size())
 			lines.append("  [color=cyan]活跃Buff:[/color]")
 			lines.append_array(dbuffs)
-		for d: BaseDefense in defense_manager.placed_defenses:
+		for d: BaseDefense in defense_container.placed_defenses:
 			if not is_instance_valid(d):
 				continue
 			if d is TurretDefense:

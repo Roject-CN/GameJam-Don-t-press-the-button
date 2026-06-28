@@ -1,7 +1,7 @@
 extends Node2D
-class_name DefenceManager
+class_name DefenceContainer
 
-## 防御设施统一管理器 — defence 孵化 / 正式放置 / 移除
+## 防御设施容器 — defence 孵化 / 正式放置 / 移除 / DEFENSE Buff 路由
 ##
 ## 采用组合而非继承 BuffContainer，详见 explains/composition-over-inheritance.md
 
@@ -18,12 +18,10 @@ var placed_defenses: Array[BaseDefense] = []
 
 
 func _ready() -> void:
-	# 创建内部 BuffContainer
 	buff_container = BuffContainer.new()
 	buff_container.target_type = BuffEffect.Target.DEFENSE
 	buff_container.name = "DefenseBuffContainer"
 	add_child(buff_container)
-
 	buff_container.buff_applied.connect(_on_buff_applied)
 	buff_container.buff_removed.connect(_on_buff_removed)
 
@@ -56,9 +54,11 @@ func remove_defence(defence: BaseDefense) -> void:
 
 func _on_buff_applied(effect: BuffEffect) -> void:
 	for defense in placed_defenses:
-		effect.apply(defense)
+		if is_instance_valid(defense):
+			effect.apply(defense)
 
 
 func _on_buff_removed(effect: BuffEffect) -> void:
 	for defense in placed_defenses:
-		effect.remove(defense)
+		if is_instance_valid(defense):
+			effect.remove(defense)
