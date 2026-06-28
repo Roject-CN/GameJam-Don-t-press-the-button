@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="DialogueSequence" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/dialogues/dialogue_sequence.gd" id="1_seq"]
+[ext_resource type="Script" path="res://scripts/dialogues/dialogue_line.gd" id="2_line"]
+
+[sub_resource type="Resource" id="line_0"]
+script = ExtResource("2_line")
+speaker_name = "指挥官"
+text = "第一波敌人即将来袭！准备好你的防御设施。"
+text_speed = 0.05
+box_position = Vector2(40, 520)
+auto_advance = 0.0
+
+[sub_resource type="Resource" id="line_1"]
+script = ExtResource("2_line")
+speaker_name = "指挥官"
+text = "注意：[color=red]失败按钮[/color]在地图中央。它只能承受[b]3次[/b]点击。保护好它！"
+text_speed = 0.05
+box_position = Vector2(40, 520)
+auto_advance = 0.0
+
+[sub_resource type="Resource" id="line_2"]
+script = ExtResource("2_line")
+speaker_name = ""
+text = "......战斗开始！"
+text_speed = 0.08
+box_position = Vector2(500, 320)
+auto_advance = 2.0
+
+[resource]
+script = ExtResource("1_seq")
+sequence_id = "tutorial_before_wave1"
+can_skip = true
+lines = Array[ExtResource("2_line")]([SubResource("line_0"), SubResource("line_1"), SubResource("line_2")])

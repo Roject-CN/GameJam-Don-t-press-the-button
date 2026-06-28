@@ -1,0 +1,58 @@
+[gd_resource type="Resource" script_class="DialogueSequence" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/dialogues/dialogue_sequence.gd" id="1_seq"]
+[ext_resource type="Script" path="res://scripts/dialogues/dialogue_line.gd" id="2_line"]
+
+[sub_resource type="Resource" id="line_0"]
+script = ExtResource("2_line")
+speaker_name = "???"
+text = "......这里是？"
+text_speed = 0.06
+box_position = Vector2(400, 500)
+auto_advance = 0.0
+
+[sub_resource type="Resource" id="line_1"]
+script = ExtResource("2_line")
+speaker_name = "指挥官"
+text = "你终于醒了。欢迎来到[color=#4af]桌面防线[/color]。"
+text_speed = 0.05
+box_position = Vector2(40, 520)
+auto_advance = 0.0
+
+[sub_resource type="Resource" id="line_2"]
+script = ExtResource("2_line")
+speaker_name = "指挥官"
+text = "如你所见，我们的桌面正遭受[b][color=#f44]鼠标光标军团[/color][/b]的攻击。\n它们会点击任何能摧毁我们系统的按钮。"
+text_speed = 0.04
+box_position = Vector2(40, 520)
+auto_advance = 0.0
+
+[sub_resource type="Resource" id="line_3"]
+script = ExtResource("2_line")
+speaker_name = "???"
+text = "我该怎么做？"
+text_speed = 0.06
+box_position = Vector2(400, 500)
+auto_advance = 0.0
+
+[sub_resource type="Resource" id="line_4"]
+script = ExtResource("2_line")
+speaker_name = "指挥官"
+text = "部署[color=#ff0]炮塔[/color]和[color=#0ff]钓鱼窗口[/color]。炮塔会自动射击，钓鱼窗口能引诱敌人。\n记住——[b][color=#f44]别让它们按到那个键[/color][/b]。"
+text_speed = 0.04
+box_position = Vector2(40, 520)
+auto_advance = 0.0
+
+[sub_resource type="Resource" id="line_5"]
+script = ExtResource("2_line")
+speaker_name = ""
+text = "[i]—— 战斗即将开始 ——[/i]"
+text_speed = 0.08
+box_position = Vector2(460, 340)
+auto_advance = 2.5
+
+[resource]
+script = ExtResource("1_seq")
+sequence_id = "cinematic_intro"
+can_skip = true
+lines = Array[ExtResource("2_line")]([SubResource("line_0"), SubResource("line_1"), SubResource("line_2"), SubResource("line_3"), SubResource("line_4"), SubResource("line_5")])

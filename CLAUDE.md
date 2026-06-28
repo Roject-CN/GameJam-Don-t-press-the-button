@@ -43,6 +43,8 @@ Godot 4.7 2D 塔防，"桌面隐喻"风格。敌人是鼠标光标，从生成�
 - `HUD` — `scripts/uis/hud/hud.gd`，UI 主控
 - `ConutLabel` — `scripts/uis/hud/count_label.gd`，波次/击杀计数 UI
 - `DebugBuffPanel` — `scripts/debug/debug_buff_panel.gd`，调试面板（实时属性 + buff 状态）
+- `DialogueManager` — `scripts/dialogues/dialogue_manager.gd`，对话生命周期管理
+- `DialogueBox` — `scripts/ui/dialogue_box.gd`，CanvasLayer 对话框 UI
 
 ### Resource
 - `BuffEffect` — `scripts/buffs/buff_effect.gd`，Buff 效果抽象基类（策略模式，Target: ENEMY/DEFENSE/PLAYER）
@@ -54,6 +56,8 @@ Godot 4.7 2D 塔防，"桌面隐喻"风格。敌人是鼠标光标，从生成�
 - `EnemyCatalog` — `scripts/enemies/enemy_catalog.gd`，敌人目录
 - `CardDeck` — `scripts/uis/hud/card_deck.gd`，卡组配置
 - `CardEntry` — `scripts/uis/hud/card_entry.gd`，卡牌配置条目
+- `DialogueLine` — `scripts/dialogues/dialogue_line.gd`，单条对话数据 Resource
+- `DialogueSequence` — `scripts/dialogues/dialogue_sequence.gd`，对话序列 Resource
 
 ## 目录结构
 ```
