@@ -71,3 +71,8 @@ theme_override_font_sizes/font_size = 14
 text = "▼"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="TooltipIndicator" type="ColorRect" parent="."]
+visible = false
+mouse_filter = 1
+color = Color(1, 0, 0, 0.5)

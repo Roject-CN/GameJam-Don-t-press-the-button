@@ -4,14 +4,28 @@
 [ext_resource type="Script" uid="uid://dlny8k33wlc2x" path="res://scripts/dialogues/dialogue_trigger.gd" id="2_dtrg"]
 [ext_resource type="PackedScene" uid="uid://b3kl7t2pndghk" path="res://scenes/ui/dialogue/dialogue_box.tscn" id="2_y7b4o"]
 [ext_resource type="Resource" uid="uid://cmi48ys8pgc3o" path="res://resources/dialogues/tutorial_welcome.tres" id="4_seq"]
+[ext_resource type="Resource" path="res://resources/dialogues/tooltip_test.tres" id="5_ttseq"]
+[ext_resource type="Script" path="res://scripts/tests/test_world_bg.gd" id="6_bg"]
 
 [node name="DialogueTest" type="Node2D" unique_id=690406836]
+
+[node name="WorldBG" type="Node2D" parent="."]
+script = ExtResource("6_bg")
 
 [node name="DialogueManager" type="Node" parent="." unique_id=825011591]
 script = ExtResource("1_dmgr")
 dialogue_box_scene = ExtResource("2_y7b4o")
 
-[node name="DialogueTrigger" type="Node" parent="." unique_id=1819130989 node_paths=PackedStringArray("dialogue_manager")]
+[node name="TooltipDialogueTrigger" type="Node" parent="." node_paths=PackedStringArray("dialogue_manager")]
+script = ExtResource("2_dtrg")
+dialogue_manager = NodePath("../DialogueManager")
+dialogue_sequence = ExtResource("5_ttseq")
+trigger_mode = 0
+auto_delay = 0.5
+
+[node name="WelcomeDialogueTrigger" type="Node" parent="." node_paths=PackedStringArray("dialogue_manager")]
 script = ExtResource("2_dtrg")
 dialogue_manager = NodePath("../DialogueManager")
 dialogue_sequence = ExtResource("4_seq")
+trigger_mode = 0
+auto_delay = 12.0

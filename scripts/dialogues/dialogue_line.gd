@@ -1,7 +1,7 @@
 extends Resource
 class_name DialogueLine
 
-## 单条对话数据 — 包含说话人、文本、对话框位置及镜头目标字段
+## 单条对话数据 — 包含说话人、文本、对话框位置、指示框及镜头目标字段
 ## 作为 SubResource 内联在 DialogueSequence 中使用
 
 ## 说话人名称（空字符串 = 旁白，UI 隐藏名字栏）
@@ -19,7 +19,18 @@ class_name DialogueLine
 ## 自动推进时间（秒），0 = 等待玩家点击推进
 @export var auto_advance: float = 0.0
 
-# ── 镜头预留字段（当前不消费，供未来镜头系统读取）──
+# ── 指示框字段 ──
+
+## 指示框屏幕位置（CanvasLayer 坐标）
+@export var tooltip_position: Vector2 = Vector2(560, 280)
+
+## 指示框尺寸（非零即触发提示框，零 = 无提示框）
+@export var tooltip_size: Vector2 = Vector2.ZERO
+
+## 指示框终点位置（留空 = 静态；非零 = 从 tooltip_position 滑动到此的动态指示框）
+@export var tooltip_end_position: Vector2 = Vector2.ZERO
+
+# ── 镜头预留字段 ──
 
 ## 镜头聚焦目标节点路径（相对于触发对话的关卡根节点）
 @export var camera_target: NodePath
