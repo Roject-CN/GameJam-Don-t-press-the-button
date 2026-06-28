@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://b3kl7t2pndghk"]
+
+[ext_resource type="Script" uid="uid://qh857ur4h8wu" path="res://scripts/ui/dialogue_box.gd" id="1_aurbl"]
+
+[node name="DialogueBox" type="CanvasLayer" unique_id=715446835]
+layer = 128
+script = ExtResource("1_aurbl")
+
+[node name="Panel" type="Panel" parent="." unique_id=1956577774]
+custom_minimum_size = Vector2(620, 160)
+offset_left = 40.0
+offset_top = 520.0
+offset_right = 660.0
+offset_bottom = 680.0
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=1407291890]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="TopBar" type="HBoxContainer" parent="Panel/VBoxContainer" unique_id=1965232644]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LeftSpacer" type="Control" parent="Panel/VBoxContainer/TopBar" unique_id=329193550]
+custom_minimum_size = Vector2(12, 0)
+layout_mode = 2
+
+[node name="SpeakerLabel" type="Label" parent="Panel/VBoxContainer/TopBar" unique_id=1306197063]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "说话人"
+vertical_alignment = 1
+
+[node name="Spacer" type="Control" parent="Panel/VBoxContainer/TopBar" unique_id=1914506491]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HSeparator" type="HSeparator" parent="Panel/VBoxContainer" unique_id=1642255003]
+layout_mode = 2
+
+[node name="MarginSpacer" type="MarginContainer" parent="Panel/VBoxContainer" unique_id=1252894951]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="TextLabel" type="RichTextLabel" parent="Panel/VBoxContainer/MarginSpacer" unique_id=30396364]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 16
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+
+[node name="NextIndicator" type="Label" parent="Panel" unique_id=47666607]
+layout_mode = 0
+offset_left = 592.0
+offset_top = 132.0
+offset_right = 612.0
+offset_bottom = 152.0
+theme_override_colors/font_color = Color(1, 0.76, 0.03, 1)
+theme_override_font_sizes/font_size = 14
+text = "▼"
+horizontal_alignment = 1
+vertical_alignment = 1

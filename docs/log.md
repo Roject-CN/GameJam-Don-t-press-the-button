@@ -1,5 +1,12 @@
 # 更新日志 — "别按那个键"
 
+## 2026-06-27 — merge_dialogue_system
+- 合并队友对话系统（feat/dialogue-system）
+- 新增 DialogueManager/DialogueTrigger/DialogueSequence/DialogueLine
+- 新增 DialogueBox CanvasLayer 对话框 UI
+- 示例对话：tutorial_welcome / tutorial_before_wave1 / cinematic_intro
+- 清理孤立 .uid 文件
+
 ## 2026-06-27 — merge_buff_into_teammate_refactor
 - 合并队友 EnemyController 架构，注入 buff 策略模式
 - DefenceManager → DefenceContainer 全项目 rename

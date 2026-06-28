@@ -24,8 +24,12 @@
 [ext_resource type="Resource" uid="uid://n6wrhoi8lwrp" path="res://resources/buff_effect/defense_damage_up.tres" id="25_buf7"]
 [ext_resource type="Resource" path="res://resources/buff_effect/defense_lure_up.tres" id="26_buf8"]
 [ext_resource type="Resource" path="res://resources/buff_effect/player_gain_life.tres" id="27_buf9"]
+[ext_resource type="Script" uid="uid://c5nh2o7l5cuaa" path="res://scripts/dialogues/dialogue_manager.gd" id="27_svtx6"]
+[ext_resource type="PackedScene" uid="uid://b3kl7t2pndghk" path="res://scenes/ui/dialogue/dialogue_box.tscn" id="28_8hr0l"]
 [ext_resource type="Resource" path="res://resources/buff_effect/player_lose_fragments.tres" id="28_buf10"]
+[ext_resource type="Script" uid="uid://dlny8k33wlc2x" path="res://scripts/dialogues/dialogue_trigger.gd" id="29_4vfcw"]
 [ext_resource type="Script" uid="uid://bq2rp3ntjcjt7" path="res://scripts/debug/debug_buff_panel.gd" id="29_debug"]
+[ext_resource type="Resource" uid="uid://cmi48ys8pgc3o" path="res://resources/dialogues/tutorial_welcome.tres" id="30_2bhw8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bblh5"]
 texture = ExtResource("2_veify")
@@ -167,3 +171,12 @@ script = ExtResource("15_marker")
 position = Vector2(122, 325)
 script = ExtResource("15_marker")
 marker_color = Color(9.62615e-08, 0.6395904, 0.34871265, 1)
+
+[node name="DialogueManager" type="Node" parent="." unique_id=470755549]
+script = ExtResource("27_svtx6")
+dialogue_box_scene = ExtResource("28_8hr0l")
+
+[node name="DialogueTrigger" type="Node" parent="." unique_id=2035986574 node_paths=PackedStringArray("dialogue_manager")]
+script = ExtResource("29_4vfcw")
+dialogue_manager = NodePath("../DialogueManager")
+dialogue_sequence = ExtResource("30_2bhw8")
