@@ -8,14 +8,7 @@ var buff_container: BuffContainer
 
 # ── 血量 ──
 @export var max_lives: int = 8
-var current_lives: int:
-	set(v):
-		if v < current_lives:
-			life_lost.emit(current_lives - v)
-		current_lives = v
-		lives_changed.emit(current_lives)
-		if current_lives <= 0:
-			lives_depleted.emit()
+var current_lives: int
 
 # ── 费用 ──
 @export var start_fragments: int = 100
@@ -23,9 +16,6 @@ var fragments: int
 
 ## 单次扣命（供 HUD/动画）
 signal life_lost(amount: int)
-
-## 血量变化（每次 set 都发射，供 HUD 同步）
-signal lives_changed(current: int)
 
 ## 血量归零 = 游戏失败
 signal lives_depleted
@@ -44,15 +34,16 @@ func _ready() -> void:
 	add_child(buff_container)
 
 	buff_container.buff_applied.connect(_on_buff_applied)
-	buff_container.buff_removed.connect(_on_buff_removed)
 
 
 func _on_buff_applied(effect: BuffEffect) -> void:
-	effect.apply(self)
-
-
-func _on_buff_removed(effect: BuffEffect) -> void:
-	effect.remove(self)
+	var loss := int(effect.prop)
+	if loss <= 0:
+		return
+	current_lives -= loss
+	life_lost.emit(loss)
+	if current_lives <= 0:
+		lives_depleted.emit()
 
 
 func add_fragments(amount: int) -> void:

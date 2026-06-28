@@ -11,15 +11,17 @@ class_name WindowDefense
 @onready var base_button: BaseClickedButton = $BaseButton
 @onready var counter_label: Label = $CounterLabel
 
-var _used: int = 0
+var _remaining: int
 var _active: bool = true
 
 func _ready() -> void:
-	counter_label.text = "%d" % lure_count
+	_remaining = lure_count
+	counter_label.text = "%d" % _remaining
 
 func _on_placed() -> void:
 	area_node.area_entered.connect(_on_lure)
 	base_button.button_clicked.connect(_on_clicked)
+	# 延迟一帧等待物理服务器完成 AABB 更新，再手动收集已重叠的敌人
 	await get_tree().physics_frame
 	for area in area_node.get_overlapping_areas():
 		_on_lure(area)
@@ -32,9 +34,6 @@ func _on_lure(area: Area2D) -> void:
 	var enemy := area.get_parent() as BaseEnemy
 	if not enemy:
 		return
-	# 挑衅抵抗判定：randf() < taunt_resistance 则抵抗成功，不引诱
-	if randf() < enemy.taunt_resistance:
-		return
 	redirect(enemy)
 
 func redirect(enemy : BaseEnemy) -> void:
@@ -46,11 +45,10 @@ func _on_clicked() -> void:
 	if not _active:
 		return
 
-	_used += 1
-	var remaining := lure_count - _used
-	counter_label.text = "%d" % remaining
+	_remaining -= 1
+	counter_label.text = "%d" % _remaining
 
-	if remaining <= 0:
+	if _remaining <= 0:
 		_active = false
 		modulate = Color.GRAY
 		var tween := create_tween()
