@@ -24,7 +24,7 @@ var total_enemy:int:
 
 @export var wave_clear_fragments: int = 50
 @export var enemy_catalog: EnemyCatalog
-@export var enemy_manager: EnemyManager
+@export var enemy_container: EnemyContainer
 
 
 var _current_wave: int = 0
@@ -82,8 +82,8 @@ func _check_spawns() -> void:
 
 
 func _spawn(entry: WaveEntry) -> void:
-	if not enemy_manager:
-		push_error("WaveController: enemy_manager is null")
+	if not enemy_container:
+		push_error("WaveController: enemy_container is null")
 		return
 
 	var scene := enemy_catalog.get_scene(entry.enemy_type) if enemy_catalog else null
@@ -113,7 +113,7 @@ func _spawn(entry: WaveEntry) -> void:
 		econfig = EnemyConfig.new()
 	enemy.setup(econfig, target_pos)
 
-	enemy_manager.register_enemy(enemy)
+	enemy_container.register_enemy(enemy)
 
 
 @warning_ignore("shadowed_variable_base_class")

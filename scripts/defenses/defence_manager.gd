@@ -24,9 +24,6 @@ func _ready() -> void:
 	buff_container.name = "DefenseBuffContainer"
 	add_child(buff_container)
 
-	buff_container.buff_applied.connect(_on_buff_applied)
-	buff_container.buff_removed.connect(_on_buff_removed)
-
 
 ## 拖拽开始时调用，将半透明 defence 加入关卡场景
 func spawn_defence(defence: BaseDefense) -> void:
@@ -41,24 +38,10 @@ func spawn_defence(defence: BaseDefense) -> void:
 func confirm_placement(defence: BaseDefense) -> void:
 	defence.place()
 	placed_defenses.append(defence)
-	for buff in buff_container.get_active_buffs():
-		buff.apply(defence)
 
 
 ## 移除防御设施
 func remove_defence(defence: BaseDefense) -> void:
 	placed_defenses.erase(defence)
 	if is_instance_valid(defence):
-		for buff in buff_container.get_active_buffs():
-			buff.remove(defence)
 		defence.queue_free()
-
-
-func _on_buff_applied(effect: BuffEffect) -> void:
-	for defense in placed_defenses:
-		effect.apply(defense)
-
-
-func _on_buff_removed(effect: BuffEffect) -> void:
-	for defense in placed_defenses:
-		effect.remove(defense)

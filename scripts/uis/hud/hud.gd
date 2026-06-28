@@ -1,13 +1,14 @@
 extends Control
 class_name HUD
 
-## HUD 主控 — 连接 PlayerManager / GlobalManager 信号驱动 UI
+## HUD 主控 — 连接 EnemyController / PlayerContainer / GlobalManager 信号驱动 UI
 
 @export var level_controller: LevelController
 @export var defense_manager: DefenceManager
 @export var logic_grid: TileMapLayer
 @export var global_manager: GlobalManager
-@export var player_manager: PlayerManager
+@export var player_container: PlayerContainer
+@export var enemy_controller: EnemyController
 
 @onready var ready_button: Button = $Ready
 @onready var game_over_label: Label = $GameOverLabel
@@ -23,11 +24,14 @@ func _ready() -> void:
 		global_manager.ready_button = ready_button
 		global_manager._connect_ready()
 
-	if player_manager:
-		player_manager.lives_changed.connect(_on_lives_changed)
-		player_manager.fragments_changed.connect(_on_fragments_changed)
-		_on_lives_changed(player_manager.current_lives)
-		_on_fragments_changed(player_manager.fragments)
+	if enemy_controller:
+		enemy_controller.wave_changed.connect(_on_wave_changed)
+
+	if player_container:
+		player_container.life_lost.connect(_on_life_lost)
+		player_container.fragments_changed.connect(_on_fragments_changed)
+		_on_life_lost(0)
+		_on_fragments_changed(player_container.fragments)
 
 	if count_label and enemy_controller:
 		enemy_controller.enemies_killed_count_changed.connect(count_label.on_killed_count_changed)
@@ -36,12 +40,14 @@ func _ready() -> void:
 		count_label.set_total_wave(enemy_controller.total_waves)
 
 
-func _on_wave_started(_wave: int) -> void:
+## 波次切换
+func _on_wave_changed(_wave: int) -> void:
 	ready_button.visible = false
 
 
-func _on_lives_changed(current: int) -> void:
-	lives_label.text = "命: %d" % current
+func _on_life_lost(_amount: int) -> void:
+	if player_container:
+		lives_label.text = "命: %d" % player_container.current_lives
 
 
 func _on_fragments_changed(_new_amount: int) -> void:
