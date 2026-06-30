@@ -28,7 +28,7 @@ func _ready() -> void:
 		enemy_controller.wave_changed.connect(_on_wave_changed)
 
 	if player_container:
-		player_container.lives_changed.connect(_on_lives_changed)
+		player_container.lives_depleted.connect(_on_lives_changed)
 		player_container.fragments_changed.connect(_on_fragments_changed)
 		_on_lives_changed(player_container.current_lives)
 		_on_fragments_changed(player_container.fragments)

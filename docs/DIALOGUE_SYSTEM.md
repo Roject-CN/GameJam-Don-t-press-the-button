@@ -1,100 +1,86 @@
-# 对话系统使用文档
+# 对话系统
 
-## 快速开始
+## 接入
 
-### 1. 在关卡中接入
+关卡场景加两个节点：
 
-在关卡 `.tscn` 场景中添加两个节点：
+- `DialogueManager`（Node）+ `dialogue_manager.gd`，`dialogue_box_scene` 指向 `dialogue_box.tscn`
+- `DialogueTrigger`（Node）+ `dialogue_trigger.gd`，AUTO 模式，指向 Manager 和 `.tres` 序列
 
-- **DialogueManager** — `Node` 节点，挂 `dialogue_manager.gd`，`dialogue_box_scene` 指向 `dialogue_box.tscn`
-- **DialogueTrigger** — `Node` 节点，挂 `dialogue_trigger.gd`，设为 `AUTO` 模式，指向上面的 DialogueManager 和你的对话 `.tres`
-
-运行即自动弹出对话。
-
-### 2. 编写对话内容
-
-新建 `DialogueSequence` 资源（`.tres`），在编辑器中逐行填写：
+## DialogueLine 字段
 
 | 字段 | 说明 | 默认值 |
 |---|---|---|
-| `speaker_name` | 说话人，留空 = 旁白（隐藏名字栏） | `""` |
-| `text` | 对话正文，支持 BBCode | `""` |
-| `text_speed` | 打字速度（秒/字），0 = 瞬间显示 | `0.05` |
+| `speaker_name` | 说话人，留空 = 旁白 | `""` |
+| `text` | 正文，支持 BBCode | `""` |
+| `text_speed` | 打字速度（秒/字），0 = 瞬间 | `0.05` |
 | `box_position` | 对话框屏幕坐标 | `(40, 520)` |
-| `auto_advance` | 0 = 点击推进，>0 = 显示完 N 秒自动下一条 | `0` |
+| `auto_advance` | 0 = 点击推进，>0 = 自动推进 | `0` |
+| `tooltip_position` | 指示框起始坐标 | `(560, 280)` |
+| `tooltip_size` | **非零即触发指示框** | `(0, 0)` |
+| `tooltip_end_position` | 留空 = 静态；非零 = 动态滑动 | `(0, 0)` |
 
-BBCode 示例：`"小心那个[color=red]红色按钮[/color]！"`
+## 指示框
 
-### 3. 三种触发方式
-
-| 模式 | 行为 |
-|---|---|
-| `AUTO` | 场景加载后 `auto_delay` 秒自动播放 |
-| `SIGNAL` | 连接外部信号，收到信号时播放 |
-| `MANUAL` | 其他脚本调用 `$DialogueTrigger.trigger()` |
-
-代码触发：
-```gdscript
-$DialogueManager.trigger_sequence(preload("res://resources/dialogues/xxx.tres"))
-```
-
-## 运行时交互
+### 静态（`tooltip_end_position` 留空）
 
 | 操作 | 效果 |
 |---|---|
-| 左键点击（打字中） | 立即显示全文 |
-| 左键点击（打完） | 推进到下一条 |
-| 最后一条 + 点击 | 对话框消失 |
+| 点击框内 | 关闭 + **推进对话** |
+| 点击框外 | 封锁，无反应 |
 
-## 节点结构
+### 动态（`tooltip_end_position` 非零）
 
-```
-DialogueBox (CanvasLayer, layer=128)
-  └── Panel
-        ├── VBoxContainer
-        │     ├── TopBar (HBoxContainer)
-        │     │     ├── LeftSpacer (12px)
-        │     │     ├── SpeakerLabel
-        │     │     └── Spacer
-        │     ├── HSeparator
-        │     └── MarginSpacer → TextLabel (RichTextLabel)
-        └── NextIndicator ("▼")
-```
+循环：起点停顿 → 滑动到终点 → 终点停顿 → 消失回起点。
 
-旁白模式（`speaker_name=""`）时 TopBar + 分隔线自动隐藏。
-
-## 自定义外观
-
-`DialogueBox` 脚本导出属性，可在编辑器中调整：
-
-| 属性 | 说明 |
+| 操作 | 效果 |
 |---|---|
-| `panel_bg_color` | 对话框背景色 |
-| `speaker_color` | 说话人名字颜色 |
-| `text_color` | 正文颜色 |
-| `next_indicator_blink_interval` | 继续箭头闪烁间隔 |
+| 起点按下 → 终点松手 | 关闭 |
+| 点击其他 | 封锁，无反应 |
 
-## 镜头联动（预留）
+### 配置（DialogueBox 导出）
 
-每条 `DialogueLine` 携带 `camera_target` / `camera_offset` / `camera_zoom` 字段（当前不消费）。`DialogueBox` 每行显示时发射 `line_displayed(index)` 信号，未来镜头系统监听即可驱动。
+| 属性 | 说明 | 默认值 |
+|---|---|---|
+| `indicator_color` | 颜色 | `(1, 0, 0, 0.5)` |
+| `indicator_move_duration` | 滑动时长 | `1.5` |
+| `indicator_pause_duration` | 起止停顿时长 | `0.3` |
+| `enable_camera_focus` | 相机聚焦 | `true` |
+| `camera_target_zoom` | 缩放倍数 | `(2, 2)` |
 
-## 文件清单
+## 示例 .tres
+
+```gdscript
+[sub_resource type="Resource" id="line_0"]
+script = ExtResource("2_line")
+speaker_name = "NPC"
+text = "看那个红色方块。"
+
+[sub_resource type="Resource" id="line_1"]
+script = ExtResource("2_line")
+text = ""                              # 旁白
+tooltip_position = Vector2(300, 200)   # 静态指示框
+tooltip_size = Vector2(80, 80)
+
+[sub_resource type="Resource" id="line_2"]
+script = ExtResource("2_line")
+speaker_name = "NPC"
+text = "它滑过去了。"
+tooltip_position = Vector2(200, 400)   # 动态指示框
+tooltip_size = Vector2(80, 80)
+tooltip_end_position = Vector2(900, 400)
+
+[resource]
+script = ExtResource("1_seq")
+sequence_id = "demo"
+lines = Array[...]([...])
+```
+
+## 文件
 
 ```
-scripts/dialogues/
-├── dialogue_line.gd        单条对话 Resource
-├── dialogue_sequence.gd    对话序列 Resource
-├── dialogue_manager.gd     生命周期管理
-└── dialogue_trigger.gd     触发桥接
-
-scripts/ui/
-└── dialogue_box.gd         对话框 CanvasLayer
-
-scenes/ui/
-└── dialogue_box.tscn        对话框场景
-
-resources/dialogues/
-├── tutorial_welcome.tres    示例：教程开场
-├── tutorial_before_wave1.tres  示例：波次提示
-└── cinematic_intro.tres     示例：多角色小剧场
+scripts/dialogues/   dialogue_line.gd  dialogue_sequence.gd  dialogue_manager.gd  dialogue_trigger.gd
+scripts/ui/          dialogue_box.gd
+scenes/ui/dialogue/  dialogue_box.tscn
+resources/dialogues/ *.tres
 ```
