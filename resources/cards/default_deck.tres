@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://d0a5ii5g3q7ww" path="res://scripts/uis/hud/card_deck.gd" id="1_deck"]
 [ext_resource type="Script" uid="uid://di4v5ywxoc6pm" path="res://scripts/uis/hud/card_entry.gd" id="2_entry"]
-[ext_resource type="PackedScene" uid="uid://dmtgh6idi6gom" path="res://scenes/ui/cards/card_window.tscn" id="3_kuiqe"]
+[ext_resource type="PackedScene" uid="uid://dmtgh6idi6gom" path="res://scenes/ui/cards/card_window_weak_defense.tscn" id="3_kuiqe"]
 [ext_resource type="PackedScene" uid="uid://cbn84ph6ndhqd" path="res://scenes/ui/cards/card_turret_defense.tscn" id="3_turret"]
-[ext_resource type="PackedScene" uid="uid://ci1c4hs5osasx" path="res://scenes/ui/cards/card_re_window_defense.tscn" id="4_vqi02"]
+[ext_resource type="PackedScene" uid="uid://ci1c4hs5osasx" path="res://scenes/ui/cards/card_window_strong_defense.tscn" id="4_vqi02"]
 
 [sub_resource type="Resource" id="turret"]
 script = ExtResource("2_entry")

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c8goie1f18fsy"]
 
 [ext_resource type="Texture2D" uid="uid://dhnxeonufjm0j" path="res://icon.svg" id="1_8ic8v"]
-[ext_resource type="Script" uid="uid://tjohia4hqq0d" path="res://scripts/defenses/base_defense.gd" id="1_base"]
+[ext_resource type="Script" uid="uid://d37dxb6vkj1iq" path="res://scripts/defenses/base_defense.gd" id="1_base"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8ic8v"]
 radius = 219.00912

@@ -90,7 +90,7 @@ func _process(_delta: float) -> void:
 					child.health,
 					child.click_times,
 					child.taunt_resistance,
-					"是" if child.lured else "否",
+					"是" if child.is_lured() else "否",
 				])
 
 	# ── 防御 ──

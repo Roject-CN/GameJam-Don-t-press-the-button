@@ -28,9 +28,9 @@ func _ready() -> void:
 		enemy_controller.wave_changed.connect(_on_wave_changed)
 
 	if player_container:
-		player_container.lives_depleted.connect(_on_lives_changed)
+		player_container.life_lost.connect(_on_life_lost)
 		player_container.fragments_changed.connect(_on_fragments_changed)
-		_on_lives_changed(player_container.current_lives)
+		_on_life_lost(0)
 		_on_fragments_changed(player_container.fragments)
 
 	if count_label and enemy_controller:
@@ -44,8 +44,9 @@ func _on_wave_changed(_wave: int) -> void:
 	ready_button.visible = false
 
 
-func _on_lives_changed(current: int) -> void:
-	lives_label.text = "命: %d" % current
+func _on_life_lost(_amount: int) -> void:
+	if player_container:
+		lives_label.text = "命: %d" % player_container.current_lives
 
 
 func _on_fragments_changed(_new_amount: int) -> void:

@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://cwbhya1y6p1aq"]
+
+[ext_resource type="PackedScene" uid="uid://c8goie1f18fsy" path="res://scenes/defenses/base_defense.tscn" id="1_uqge0"]
+[ext_resource type="Script" uid="uid://breucl1336rdw" path="res://scripts/defenses/window_strong_defense.gd" id="2_00320"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_w0yly"]
+radius = 60.99
+
+[node name="BaseDefense" unique_id=544454214 instance=ExtResource("1_uqge0")]
+script = ExtResource("2_00320")
+lure_count = 5
+strike_range = 48.0
+
+[node name="Area2" type="Area2D" parent="." index="2" unique_id=377225023]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2" index="0" unique_id=1065970793]
+shape = SubResource("CircleShape2D_w0yly")
+
+[node name="CounterLabel" type="Label" parent="." index="3" unique_id=920183102]
+offset_left = -22.0
+offset_top = -58.0
+offset_right = 18.0
+offset_bottom = -35.0
