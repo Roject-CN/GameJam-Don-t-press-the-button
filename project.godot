@@ -52,6 +52,10 @@ right_mouse={
 ]
 }
 
+[layer_names]
+
+2d_navigation/layer_1="paths"
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0

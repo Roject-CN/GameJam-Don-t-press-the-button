@@ -38,7 +38,7 @@ func _parse_csv(path: String) -> void:
 		line_num += 1
 
 		# 跳过空行、注释、表头
-		if line.size() < 5:
+		if line.size() < 4:
 			continue
 		if line[0].is_empty() or line[0].begins_with("#"):
 			continue
@@ -49,8 +49,7 @@ func _parse_csv(path: String) -> void:
 		entry.time_offset = float(line[0])
 		entry.wave_index = int(line[1])
 		entry.enemy_type = line[2].strip_edges()
-		entry.spawn_point = line[3].strip_edges()
-		entry.target_point = line[4].strip_edges() if line.size() > 4 else ""
+		entry.path_line = line[3].strip_edges() if line.size() > 3 else ""
 
 		entries.append(entry)
 

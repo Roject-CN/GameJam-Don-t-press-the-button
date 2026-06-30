@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bi4uder0xrmn3"]
 
-[ext_resource type="Script" uid="uid://bvb8mtltj3fdu" path="res://scripts/uis/hud/hud.gd" id="1_546lt"]
-[ext_resource type="Script" uid="uid://b2jgxjfse24to" path="res://scripts/uis/hud/cards.gd" id="4_8qguk"]
+[ext_resource type="Script" uid="uid://ctihtnr7xr8q2" path="res://scripts/uis/hud/hud.gd" id="1_546lt"]
+[ext_resource type="Script" uid="uid://cxheiopc44vt7" path="res://scripts/uis/hud/cards.gd" id="4_8qguk"]
 [ext_resource type="PackedScene" uid="uid://bl13qg3d5hfr8" path="res://scenes/ui/count_label.tscn" id="4_136eg"]
 [ext_resource type="Resource" uid="uid://bafytq6aoqtwj" path="res://resources/cards/default_deck.tres" id="6_deck"]
 
