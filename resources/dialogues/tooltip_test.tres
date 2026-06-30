@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="DialogueSequence" format=3]
+
+[ext_resource type="Script" uid="uid://eurs7k5y77aj" path="res://scripts/dialogues/dialogue_sequence.gd" id="1_seq"]
+[ext_resource type="Script" uid="uid://b1r2v83rhmmd8" path="res://scripts/dialogues/dialogue_line.gd" id="2_line"]
+
+[sub_resource type="Resource" id="line_0"]
+script = ExtResource("2_line")
+speaker_name = "系统提示"
+text = "这是对话与指示框的同步测试。"
+
+[sub_resource type="Resource" id="line_1"]
+script = ExtResource("2_line")
+speaker_name = "系统提示"
+text = "这条附带一个静态指示框 — 点击红色小方块关闭它，点击别处没有反应。"
+tooltip_position = Vector2(300, 200)
+tooltip_size = Vector2(80, 80)
+
+[sub_resource type="Resource" id="line_2"]
+script = ExtResource("2_line")
+speaker_name = "系统提示"
+text = "这条附带一个动态指示框 — 红色方块循环滑动。在起点拖到终点来关闭它。"
+tooltip_position = Vector2(300, 400)
+tooltip_size = Vector2(80, 80)
+tooltip_end_position = Vector2(900, 400)
+
+[sub_resource type="Resource" id="line_3"]
+script = ExtResource("2_line")
+text = "测试完成！"
+
+[resource]
+script = ExtResource("1_seq")
+sequence_id = "tooltip_test"
+lines = Array[ExtResource("2_line")]([SubResource("line_0"), SubResource("line_1"), SubResource("line_2"), SubResource("line_3")])
