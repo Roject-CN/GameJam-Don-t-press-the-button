@@ -6,10 +6,10 @@ uid="uid://direplyjnd64q"
 
 [deps]
 
-files=["res://resources/level_config_src/level_001/test_waves.wave.translation", "res://resources/level_config_src/level_001/test_waves.enemy.translation", "res://resources/level_config_src/level_001/test_waves.spawn.translation", "res://resources/level_config_src/level_001/test_waves.target.translation"]
+files=["res://resources/level_config_src/level_001/test_waves.wave.translation", "res://resources/level_config_src/level_001/test_waves.enemy.translation", "res://resources/level_config_src/level_001/test_waves.path.translation"]
 
 source_file="res://resources/level_config_src/level_001/test_waves.csv"
-dest_files=["res://resources/level_config_src/level_001/test_waves.wave.translation", "res://resources/level_config_src/level_001/test_waves.enemy.translation", "res://resources/level_config_src/level_001/test_waves.spawn.translation", "res://resources/level_config_src/level_001/test_waves.target.translation"]
+dest_files=["res://resources/level_config_src/level_001/test_waves.wave.translation", "res://resources/level_config_src/level_001/test_waves.enemy.translation", "res://resources/level_config_src/level_001/test_waves.path.translation"]
 
 [params]
 

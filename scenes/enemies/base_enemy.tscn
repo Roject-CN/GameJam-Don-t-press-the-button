@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dp7qcvgcmvebd"]
 
-[ext_resource type="Script" uid="uid://b4u6imqd3v5r1" path="res://scripts/enemies/base_enemy.gd" id="1_r5xb8"]
+[ext_resource type="Script" uid="uid://egx2gyublpfy" path="res://scripts/enemies/base_enemy.gd" id="1_r5xb8"]
 [ext_resource type="Texture2D" uid="uid://dbhsmxlbt03rt" path="res://assets/mouse.png" id="2_qf3h2"]
 
 [sub_resource type="Animation" id="Animation_qf3h2"]
@@ -66,7 +66,3 @@ libraries/ = SubResource("AnimationLibrary_n763p")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=2073683460]
 shape = SubResource("CircleShape2D_ufgfk")
-
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=555172436]
-
-[connection signal="navigation_finished" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_navigation_finished"]

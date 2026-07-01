@@ -1,19 +1,18 @@
 [gd_scene format=4 uid="uid://dgyb5lw3n28p7"]
 
-[ext_resource type="Script" uid="uid://bp5b3pew866sj" path="res://scripts/level_control/level.gd" id="1_67rw1"]
+[ext_resource type="Script" uid="uid://dt8ute3kkl4vj" path="res://scripts/level_control/level.gd" id="1_67rw1"]
 [ext_resource type="Texture2D" uid="uid://bvugwx4xsj2ds" path="res://assets/debug_res/placeholder.png" id="2_veify"]
-[ext_resource type="Script" uid="uid://digiawkctxn0k" path="res://scripts/defenses/defence_container.gd" id="3_ldb5k"]
-[ext_resource type="Script" uid="uid://civ0md0g1lfxs" path="res://scripts/global_manager.gd" id="4_47a1b"]
-[ext_resource type="Script" uid="uid://2vgttshvm8nr" path="res://scripts/buffs/buff_emitter.gd" id="5_57bs3"]
+[ext_resource type="Script" uid="uid://idd8y2or3c2k" path="res://scripts/defenses/defence_container.gd" id="3_ldb5k"]
+[ext_resource type="Script" uid="uid://d1c1pdn420m4v" path="res://scripts/global_manager.gd" id="4_47a1b"]
+[ext_resource type="Script" uid="uid://vk2v3ct58qt2" path="res://scripts/buffs/buff_emitter.gd" id="5_57bs3"]
 [ext_resource type="Script" uid="uid://dfiyq0gqv42y2" path="res://scripts/systems/wave_control/wave_entry.gd" id="6_57bs3"]
 [ext_resource type="PackedScene" uid="uid://gfcjptk77qr7" path="res://scenes/buttons/base_button.tscn" id="6_dambs"]
-[ext_resource type="Script" uid="uid://bc27wyjj6a7ex" path="res://scripts/systems/wave_control/wave_data.gd" id="7_dambs"]
-[ext_resource type="Script" uid="uid://djr3furmdwn7t" path="res://scripts/buffs/buff_effect.gd" id="7_dsfq4"]
-[ext_resource type="Resource" uid="uid://cuav8g6x3d6vi" path="res://resources/buff_effect/failure_effect.tres" id="9_jjdy8"]
-[ext_resource type="Script" uid="uid://ecg0l5occhlg" path="res://scripts/players/player_container.gd" id="10_833sg"]
+[ext_resource type="Script" uid="uid://c61o5w86dqju" path="res://scripts/systems/wave_control/wave_data.gd" id="7_dambs"]
+[ext_resource type="Script" uid="uid://b53llpmsyj0h1" path="res://scripts/buffs/buff_effect.gd" id="7_dsfq4"]
+[ext_resource type="Resource" path="res://resources/buff_effect/failure_effect.tres" id="9_jjdy8"]
+[ext_resource type="Script" uid="uid://bpaorqcjyxtjh" path="res://scripts/players/player_container.gd" id="10_833sg"]
 [ext_resource type="PackedScene" uid="uid://bi4uder0xrmn3" path="res://scenes/ui/hud.tscn" id="13_20cmf"]
-[ext_resource type="Script" uid="uid://bjsvqqasir2e8" path="res://scripts/enemies/enemy_controller.gd" id="14_ctrl"]
-[ext_resource type="Script" uid="uid://dqgiqiaesvcnp" path="res://scripts/systems/path_control/spawn_marker.gd" id="15_marker"]
+[ext_resource type="Script" uid="uid://be6lobyq2768" path="res://scripts/enemies/enemy_controller.gd" id="14_ctrl"]
 [ext_resource type="Resource" uid="uid://dxh4qk5jm8t3e" path="res://resources/enemies/enemy_catalog.tres" id="16_cat"]
 [ext_resource type="Resource" path="res://resources/buff_effect/enemy_speed_up.tres" id="19_buf1"]
 [ext_resource type="Resource" path="res://resources/buff_effect/enemy_slow_down.tres" id="20_buf2"]
@@ -28,7 +27,7 @@
 [ext_resource type="PackedScene" uid="uid://b3kl7t2pndghk" path="res://scenes/ui/dialogue/dialogue_box.tscn" id="28_8hr0l"]
 [ext_resource type="Resource" path="res://resources/buff_effect/player_lose_fragments.tres" id="28_buf10"]
 [ext_resource type="Script" uid="uid://dlny8k33wlc2x" path="res://scripts/dialogues/dialogue_trigger.gd" id="29_4vfcw"]
-[ext_resource type="Script" uid="uid://bq2rp3ntjcjt7" path="res://scripts/debug/debug_buff_panel.gd" id="29_debug"]
+[ext_resource type="Script" uid="uid://dk8jr8kj5g12n" path="res://scripts/debug/debug_buff_panel.gd" id="29_debug"]
 [ext_resource type="Resource" uid="uid://cmi48ys8pgc3o" path="res://resources/dialogues/tutorial_welcome.tres" id="30_2bhw8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bblh5"]
@@ -41,26 +40,17 @@ texture = ExtResource("2_veify")
 [sub_resource type="TileSet" id="TileSet_ukdvg"]
 sources/0 = SubResource("TileSetAtlasSource_bblh5")
 
-[sub_resource type="NavigationPolygon" id="NavigationPolygon_rlayw"]
-vertices = PackedVector2Array(1137.3203, 521.7578, 1140.6563, 629.3672, 616.96094, 598.5703, 662.84375, 557.7969, 615.96094, 339.4922, 667, 283, 1151.1563, 77.42969, 1152.8203, 182.28125, 667, 149.29688, 611.2031, 100.57031, 615.21875, 291.32813, 73.17969, 366.46875, 74.82031, 274.3125)
-polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(3, 2, 4, 5), PackedInt32Array(6, 7, 8, 9), PackedInt32Array(10, 9, 8, 5), PackedInt32Array(10, 5, 4), PackedInt32Array(4, 11, 12, 10)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(65, 264, 63, 377, 606, 350, 607, 608, 1151, 640, 1147, 511, 673, 547, 677, 283, 677, 160, 1163, 193, 1161, 67, 601, 91, 605, 281)])
-
 [sub_resource type="Resource" id="Resource_ldb5k"]
 script = ExtResource("7_dambs")
 csv_path = "uid://direplyjnd64q"
-metadata/_custom_type_script = "uid://bc27wyjj6a7ex"
 
 [node name="TestLevel0" type="Node2D" unique_id=998247491]
 script = ExtResource("1_67rw1")
 
 [node name="BaseMapLayer" type="TileMapLayer" parent="." unique_id=333896876]
 scale = Vector2(4, 4)
-tile_map_data = PackedByteArray("AAABAAQAAAAAAAEAAAABAAUAAAAAAAEAAAACAAQAAAAAAAEAAAACAAUAAAAAAAEAAAADAAUAAAAAAAAAAAAEAAUAAAAAAAAAAAAFAAUAAAAAAAAAAAAGAAUAAAAAAAAAAAAHAAUAAAAAAAAAAAAIAAUAAAAAAAAAAAARAAEAAAABAAEAAAAQAAEAAAABAAEAAAAPAAIAAAAAAAAAAAAOAAIAAAAAAAAAAAANAAMAAAABAAAAAAALAAQAAAABAAAAAAAKAAQAAAAAAAAAAAAKAAYAAAAAAAAAAAALAAYAAAABAAAAAAANAAcAAAABAAAAAAAOAAgAAAAAAAAAAAAPAAgAAAAAAAAAAAARAAkAAAABAAEAAAAJAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAADAAQAAAAAAAAAAAAJAAYAAAAAAAAAAAAMAAQAAAABAAAAAAAMAAYAAAABAAAAAAALAAcAAAABAAAAAAAMAAcAAAABAAAAAAANAAUAAAABAAAAAAANAAQAAAABAAAAAAAOAAQAAAABAAAAAAAOAAMAAAABAAAAAAAPAAMAAAABAAAAAAAPAAQAAAABAAAAAAAPAAUAAAABAAAAAAAOAAUAAAABAAAAAAAOAAYAAAABAAAAAAANAAYAAAABAAAAAAAOAAcAAAABAAAAAAAPAAcAAAABAAAAAAAPAAYAAAABAAAAAAAQAAYAAAABAAAAAAAQAAUAAAABAAAAAAAQAAQAAAABAAAAAAAQAAMAAAABAAAAAAAQAAIAAAABAAEAAAARAAIAAAABAAEAAAARAAMAAAABAAAAAAARAAQAAAABAAAAAAARAAUAAAABAAAAAAARAAYAAAABAAAAAAARAAcAAAABAAAAAAAQAAcAAAABAAAAAAAQAAgAAAABAAEAAAARAAgAAAABAAEAAAAMAAUAAAABAAAAAAALAAUAAAABAAAAAAAKAAUAAAAAAAAAAAAJAAUAAAAAAAAAAAAHAAQAAAAAAAAAAAAHAAMAAAABAAAAAAAHAAIAAAABAAAAAAAHAAEAAAABAAAAAAAGAAEAAAABAAAAAAAFAAEAAAABAAAAAAAEAAEAAAABAAAAAAADAAEAAAABAAAAAAACAAEAAAABAAAAAAABAAEAAAABAAAAAAAAAAEAAAABAAAAAAAAAAIAAAABAAAAAAABAAMAAAABAAAAAAABAAIAAAABAAAAAAACAAIAAAABAAAAAAACAAMAAAABAAAAAAADAAMAAAABAAAAAAADAAIAAAABAAAAAAAEAAIAAAABAAAAAAAEAAMAAAABAAAAAAAEAAQAAAAAAAAAAAAFAAQAAAAAAAAAAAAFAAMAAAABAAAAAAAFAAIAAAABAAAAAAAGAAIAAAABAAAAAAAGAAMAAAABAAAAAAAGAAQAAAAAAAAAAAAIAAEAAAABAAAAAAAIAAIAAAABAAAAAAAIAAMAAAABAAAAAAAJAAIAAAAAAAAAAAAJAAEAAAAAAAAAAAAKAAEAAAAAAAAAAAAKAAIAAAAAAAAAAAALAAIAAAAAAAAAAAALAAEAAAAAAAAAAAAMAAEAAAAAAAAAAAAMAAIAAAAAAAAAAAANAAIAAAAAAAAAAAANAAEAAAAAAAAAAAAOAAEAAAAAAAAAAAAPAAEAAAAAAAAAAAAHAAgAAAABAAAAAAAHAAcAAAABAAAAAAAEAAcAAAABAAAAAAADAAcAAAABAAAAAAACAAcAAAABAAAAAAABAAcAAAABAAAAAAAAAAcAAAABAAAAAAAAAAgAAAABAAAAAAAAAAkAAAABAAAAAAABAAkAAAABAAAAAAABAAgAAAABAAAAAAACAAgAAAABAAAAAAACAAkAAAABAAAAAAADAAkAAAABAAAAAAADAAgAAAABAAAAAAAEAAgAAAABAAAAAAAEAAkAAAABAAAAAAAFAAkAAAABAAAAAAAFAAgAAAABAAAAAAAFAAcAAAABAAAAAAAGAAcAAAABAAAAAAAGAAgAAAABAAAAAAAGAAkAAAABAAAAAAAHAAkAAAABAAAAAAAIAAkAAAABAAAAAAAIAAgAAAABAAAAAAAIAAcAAAABAAAAAAAJAAcAAAAAAAAAAAAJAAgAAAAAAAAAAAAJAAkAAAAAAAAAAAAKAAkAAAAAAAAAAAAKAAgAAAAAAAAAAAAKAAcAAAAAAAAAAAALAAgAAAAAAAAAAAALAAkAAAAAAAAAAAAMAAkAAAAAAAAAAAAMAAgAAAAAAAAAAAANAAgAAAAAAAAAAAANAAkAAAAAAAAAAAAOAAkAAAAAAAAAAAAPAAkAAAAAAAAAAAARAAAAAAABAAAAAAASAAAAAAABAAAAAAASAAEAAAABAAAAAAASAAIAAAABAAAAAAATAAAAAAABAAAAAAATAAEAAAABAAAAAAATAAIAAAABAAAAAAASAAkAAAABAAAAAAASAAgAAAABAAAAAAASAAMAAAABAAAAAAASAAQAAAABAAAAAAASAAUAAAABAAAAAAASAAYAAAABAAAAAAASAAcAAAABAAAAAAATAAYAAAABAAAAAAATAAUAAAABAAAAAAATAAQAAAABAAAAAAATAAMAAAABAAAAAAATAAcAAAABAAAAAAAQAAoAAAABAAAAAAAPAAoAAAABAAAAAAAOAAoAAAABAAAAAAANAAoAAAABAAAAAAAMAAoAAAABAAAAAAALAAoAAAABAAAAAAAKAAoAAAABAAAAAAAJAAoAAAABAAAAAAAIAAoAAAABAAAAAAAHAAoAAAABAAAAAAAGAAoAAAABAAAAAAAFAAoAAAABAAAAAAAEAAoAAAABAAAAAAADAAoAAAABAAAAAAACAAoAAAABAAAAAAABAAoAAAABAAAAAAAAAAoAAAABAAAAAAAQAAAAAAABAAAAAAAPAAAAAAABAAAAAAAOAAAAAAABAAAAAAANAAAAAAABAAAAAAAMAAAAAAABAAAAAAALAAAAAAABAAAAAAAKAAAAAAABAAAAAAAJAAAAAAABAAAAAAAIAAAAAAABAAAAAAAHAAAAAAABAAAAAAAGAAAAAAABAAAAAAAFAAAAAAABAAAAAAAEAAAAAAABAAAAAAADAAAAAAABAAAAAAACAAAAAAABAAAAAAABAAAAAAABAAAAAAAAAAAAAAABAAAAAAARAAoAAAABAAAAAAASAAoAAAABAAAAAAATAAoAAAABAAAAAAATAAkAAAABAAAAAAATAAgAAAABAAAAAAAAAAMAAAABAAAAAAAAAAQAAAABAAAAAAAAAAUAAAABAAAAAAAAAAYAAAABAAAAAAABAAYAAAABAAAAAAACAAYAAAABAAAAAAADAAYAAAABAAAAAAAEAAYAAAABAAAAAAAFAAYAAAABAAAAAAAGAAYAAAABAAAAAAAHAAYAAAABAAAAAAAIAAYAAAABAAAAAAAJAAMAAAAAAAAAAAAKAAMAAAAAAAAAAAALAAMAAAABAAAAAAAMAAMAAAABAAAAAAAQAAkAAAABAAEAAAA=")
+tile_map_data = PackedByteArray("AAABAAQAAAAAAAEAAAABAAUAAAAAAAEAAAACAAQAAAAAAAEAAAACAAUAAAAAAAEAAAADAAUAAAAAAAAAAAAEAAUAAAAAAAAAAAAFAAUAAAAAAAAAAAAGAAUAAAAAAAAAAAAHAAUAAAAAAAAAAAAIAAUAAAAAAAAAAAARAAEAAAABAAEAAAAQAAEAAAABAAEAAAAPAAIAAAAAAAAAAAAOAAIAAAAAAAAAAAAKAAQAAAAAAAAAAAAKAAYAAAAAAAAAAAAOAAgAAAAAAAAAAAAPAAgAAAAAAAAAAAARAAkAAAABAAEAAAAJAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAADAAQAAAAAAAAAAAAJAAYAAAAAAAAAAAAQAAIAAAABAAEAAAARAAIAAAABAAEAAAAQAAgAAAABAAEAAAARAAgAAAABAAEAAAAKAAUAAAAAAAAAAAAJAAUAAAAAAAAAAAAHAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAFAAQAAAAAAAAAAAAGAAQAAAAAAAAAAAAJAAIAAAAAAAAAAAAJAAEAAAAAAAAAAAAKAAEAAAAAAAAAAAAKAAIAAAAAAAAAAAALAAIAAAAAAAAAAAALAAEAAAAAAAAAAAAMAAEAAAAAAAAAAAAMAAIAAAAAAAAAAAANAAIAAAAAAAAAAAANAAEAAAAAAAAAAAAOAAEAAAAAAAAAAAAPAAEAAAAAAAAAAAAJAAcAAAAAAAAAAAAJAAgAAAAAAAAAAAAJAAkAAAAAAAAAAAAKAAkAAAAAAAAAAAAKAAgAAAAAAAAAAAAKAAcAAAAAAAAAAAALAAgAAAAAAAAAAAALAAkAAAAAAAAAAAAMAAkAAAAAAAAAAAAMAAgAAAAAAAAAAAANAAgAAAAAAAAAAAANAAkAAAAAAAAAAAAOAAkAAAAAAAAAAAAPAAkAAAAAAAAAAAAJAAMAAAAAAAAAAAAKAAMAAAAAAAAAAAAQAAkAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_ukdvg")
-
-[node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=98350041]
-navigation_polygon = SubResource("NavigationPolygon_rlayw")
 
 [node name="GlobalManager" type="Node2D" parent="." unique_id=256218982 node_paths=PackedStringArray("enemy_controller", "buff_emitter", "player_container")]
 script = ExtResource("4_47a1b")
@@ -68,11 +58,15 @@ enemy_controller = NodePath("EnemyController")
 buff_emitter = NodePath("BuffEmitter")
 player_container = NodePath("PlayerContainer")
 
-[node name="EnemyController" type="Node2D" parent="GlobalManager" unique_id=274618293 node_paths=PackedStringArray("mount_node")]
+[node name="EnemyController" type="Node2D" parent="GlobalManager" unique_id=274618293 node_paths=PackedStringArray("mount_node", "nav_tile_map")]
 script = ExtResource("14_ctrl")
 wave_data = SubResource("Resource_ldb5k")
 enemy_catalog = ExtResource("16_cat")
 mount_node = NodePath("../..")
+nav_tile_map = NodePath("../../BaseMapLayer")
+
+[node name="PathLine" type="Line2D" parent="GlobalManager/EnemyController" unique_id=511748652]
+points = PackedVector2Array(1031, 130, 647, 128, 642, 316, 133, 321)
 
 [node name="PlayerContainer" type="Node2D" parent="GlobalManager" unique_id=1379033782]
 script = ExtResource("10_833sg")
@@ -157,20 +151,6 @@ logic_grid = NodePath("../../BaseMapLayer")
 global_manager = NodePath("..")
 player_container = NodePath("../PlayerContainer")
 enemy_controller = NodePath("../EnemyController")
-
-[node name="SpawnA" type="Node2D" parent="." unique_id=2084419812]
-position = Vector2(1085, 135)
-script = ExtResource("15_marker")
-marker_color = Color(0.88, 0, 0, 1)
-
-[node name="SpawnB" type="Node2D" parent="." unique_id=1998726934]
-position = Vector2(1089, 576)
-script = ExtResource("15_marker")
-
-[node name="TargetA" type="Node2D" parent="." unique_id=521128377]
-position = Vector2(122, 325)
-script = ExtResource("15_marker")
-marker_color = Color(9.62615e-08, 0.6395904, 0.34871265, 1)
 
 [node name="DialogueManager" type="Node" parent="." unique_id=470755549]
 script = ExtResource("27_svtx6")

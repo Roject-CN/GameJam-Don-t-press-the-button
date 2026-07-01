@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://ci1c4hs5osasx"]
+
+[ext_resource type="PackedScene" uid="uid://b01a4qfs75kyy" path="res://scenes/ui/cards/card_base.tscn" id="1_hl7b1"]
+[ext_resource type="PackedScene" uid="uid://cwbhya1y6p1aq" path="res://scenes/defenses/window_strong_defense.tscn" id="2_xjouh"]
+
+[node name="Card" unique_id=783367650 instance=ExtResource("1_hl7b1")]
+defense_unit_scene = ExtResource("2_xjouh")
+
+[node name="Label" parent="." index="2" unique_id=734087057]
+text = "强壮的窗口"

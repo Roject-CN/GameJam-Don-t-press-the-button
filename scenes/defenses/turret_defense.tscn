@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://drrc14qtrfcv0"]
 
 [ext_resource type="PackedScene" uid="uid://c8goie1f18fsy" path="res://scenes/defenses/base_defense.tscn" id="1_base"]
-[ext_resource type="Script" uid="uid://hja8a8lp1pvb" path="res://scripts/defenses/turret_defense.gd" id="1_xxx"]
+[ext_resource type="Script" uid="uid://cydsi2kmnw56n" path="res://scripts/defenses/turret_defense.gd" id="1_xxx"]
 
 [node name="TurretDefense" unique_id=544454214 instance=ExtResource("1_base")]
 script = ExtResource("1_xxx")

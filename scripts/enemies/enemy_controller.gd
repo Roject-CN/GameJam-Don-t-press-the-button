@@ -11,6 +11,9 @@ class_name EnemyController
 ## 敌人挂载节点 — 生成的敌人作为此节点的子节点添加
 @export var mount_node: Node2D
 
+## 导航网格 TileMapLayer — 定义可行走区域
+@export var nav_tile_map: TileMapLayer
+
 # ── Buff ──
 var buff_container: BuffContainer
 
@@ -141,30 +144,33 @@ func _spawn(entry: WaveEntry) -> void:
 	if not enemy:
 		return
 
-	var spawn_node := _find_marker(entry.spawn_point)
-	enemy.global_position = spawn_node.global_position if spawn_node else Vector2.ZERO
+	var path_line_node: Line2D = null
+	if not entry.path_line.is_empty():
+		path_line_node = _find_marker(entry.path_line) as Line2D
 
-	var target_pos := enemy.global_position
-	if not entry.target_point.is_empty():
-		var target_node := _find_marker(entry.target_point)
-		if target_node:
-			target_pos = target_node.global_position
+	if path_line_node and path_line_node.points.size() > 0:
+		enemy.global_position = path_line_node.points[0]
+	else:
+		enemy.global_position = Vector2.ZERO
 
-	var econfig := enemy_catalog.get_config(entry.enemy_type) if enemy_catalog else null
-	if not econfig:
-		econfig = EnemyConfig.new()
-	enemy.setup(econfig, target_pos)
-
-	enemy.enemy_died.connect(_on_enemy_died.bind(enemy))
-
+	# 先挂载到场景树 + 注册信号 + 登记计数（在 setup 之前，防止 setup 触发死亡时信号丢失）
 	var parent := mount_node if mount_node else self
 	parent.add_child(enemy)
-
-	# 新敌人自动 apply 所有活跃 buff（必须在 add_child 之后，避免 _ready 中的 _apply_config 覆盖）
-	_apply_active_buffs_to_enemy(enemy)
+	enemy.enemy_died.connect(_on_enemy_died.bind(enemy))
 	enemies.append(enemy)
 	total_spawned += 1
 	enemies_alive += 1
+
+	# setup 可能触发 free_self（如 click_times=0）
+	var econfig := enemy_catalog.get_config(entry.enemy_type) if enemy_catalog else null
+	if not econfig:
+		econfig = EnemyConfig.new()
+	enemy.setup(econfig, path_line_node)
+	if nav_tile_map:
+		enemy.set_nav_grid(nav_tile_map)
+
+	# setup 后注入活跃 buff；若 setup 中已死亡，enemies 列表中已移除，buff 会跳过
+	_apply_active_buffs_to_enemy(enemy)
 
 
 func _on_enemy_died(which: BaseEnemy) -> void:
