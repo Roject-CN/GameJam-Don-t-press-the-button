@@ -1,7 +1,8 @@
 time_offset,wave_index,enemy_type,path_line
-0.0,1,basic,PathLine
-2.0,1,basic,PathLine
-4.0,1,basic,PathLine
+0.0,1,hijacker,PathLine
+1.0,1,basic,PathLine
+2.5,1,basic,PathLine
+4.0,1,splitter,PathLine
 0.0,2,basic,PathLine
 2.0,2,basic,PathLine
 4.0,2,basic,PathLine

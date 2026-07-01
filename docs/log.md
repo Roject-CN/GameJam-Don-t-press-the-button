@@ -1,5 +1,13 @@
 # 更新日志 — "别按那个键"
 
+## 2026-07-01 — enemy_subclasses
+- 新增 RouteHijackerEnemy（路由劫持者）：移动光环塔，复用基类 LURED + A* 寻路在失败按钮间漫游，AuraArea 实时修改 300px 内友方敌人 speed/health
+- 新增 SplitterEnemy（分裂者）：死亡时隐藏本体生成 2 个 mini_splitter（50% 血量/70% 速度/1 次点击），子体死完后才 queue_free
+- failure_effect.tres 转 PropertyBuffEffect（ADD -1, property_name="current_lives"）
+- PlayerContainer 修复：支持 PropertyBuffEffect.apply() 使回血按钮正确 +1 生命，delta!=0 保证 HUD 标签同步刷新
+- EnemyCatalog 注册 hijacker / splitter / mini_splitter 类型 + 对应 EnemyConfig
+- test_waves.csv Wave1 加入 hijacker + splitter 测试条目
+
 ## 2026-06-27 — merge_dialogue_system
 - 合并队友对话系统（feat/dialogue-system）
 - 新增 DialogueManager/DialogueTrigger/DialogueSequence/DialogueLine

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://5iauwwvsffsc"]
 
 [ext_resource type="PackedScene" uid="uid://c8goie1f18fsy" path="res://scenes/defenses/base_defense.tscn" id="1_yfpo7"]
-[ext_resource type="Script" uid="uid://b7w7y6e5068ea" path="res://scripts/defenses/window_weak_defense.gd" id="2_saqal"]
+[ext_resource type="Script" uid="uid://csqpitvmtdtsl" path="res://scripts/defenses/window_weak_defense.gd" id="2_saqal"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yfpo7"]
 radius = 29.38

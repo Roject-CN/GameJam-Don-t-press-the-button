@@ -19,21 +19,12 @@
 - [X] LevelController（关卡切换）
 - [X] 基于表格编辑的关卡设计范式(波次)
 - [X] DebugBuffPanel 实时调试面板
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-## 待做
-
-=======
 - [X] 对话系统（DialogueManager/DialogueBox，打字机效果，资源驱动）
+- [X] RouteHijackerEnemy 路由劫持者（光环塔 + 只点失败按钮）
+- [X] SplitterEnemy 分裂者（死亡分裂为 2 个子体，子体死完后才 queue_free）
+- [X] PlayerContainer 修复 PropertyBuffEffect 回血/扣血 + HUD 同步
 
 ## 待做
->>>>>>> feature
-=======
-- [X] 对话系统（DialogueManager/DialogueBox，打字机效果，资源驱动）
-
-## 待做
->>>>>>> aa3be1b069422b6c7d69fa7a41d5e29213550344
 - [ ] 关卡设计其余内容的范式设计(路径，关键点，按钮以及对应效果)
 - [ ] 音效/美术素材
 - [ ] 防御设施升级系统

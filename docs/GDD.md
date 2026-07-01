@@ -121,6 +121,18 @@ GlobalManager (信号 hub)
 信号: `enemy_died()`
 方法: `setup(config, target_pos)` `_navigate_to(pos)` `redirect_to(btn)` `clear_taunt_target()` `free_self()`
 
+#### RouteHijackerEnemy — 路由劫持者
+
+> `scripts/enemies/route_hijacker_enemy.gd` | extends BaseEnemy
+
+移动光环塔。在失败按钮之间漫游（复用基类 LURED + A* 寻路），范围内增强友方敌人（speed ×1.3, health ×1.5），只点击扣命失败按钮，taunt_resistance=100%。
+
+#### SplitterEnemy — 分裂者
+
+> `scripts/enemies/splitter_enemy.gd` | extends BaseEnemy
+
+死亡时隐藏本体，在当前位置生成 2 个 mini_splitter 子体（health 50%, speed 70%, click_times=1），等所有子体死后才 emit `enemy_died` + queue_free。子体为纯 BaseEnemy，不会再次分裂。
+
 #### EnemyConfig — 敌人配置
 
 > `scripts/enemies/enemy_config.gd` | Resource → class_name EnemyConfig
