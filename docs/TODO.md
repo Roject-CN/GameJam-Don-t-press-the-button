@@ -20,6 +20,9 @@
 - [X] 基于表格编辑的关卡设计范式(波次)
 - [X] DebugBuffPanel 实时调试面板
 - [X] 对话系统（DialogueManager/DialogueBox，打字机效果，资源驱动）
+- [X] RouteHijackerEnemy 路由劫持者（光环塔 + 只点失败按钮）
+- [X] SplitterEnemy 分裂者（死亡分裂为 2 个子体，子体死完后才 queue_free）
+- [X] PlayerContainer 修复 PropertyBuffEffect 回血/扣血 + HUD 同步
 
 ## 待做
 - [ ] 关卡设计其余内容的范式设计(路径，关键点，按钮以及对应效果)

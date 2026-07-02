@@ -37,6 +37,18 @@ func _ready() -> void:
 
 
 func _on_buff_applied(effect: BuffEffect) -> void:
+	# PropertyBuffEffect → 走 apply() 策略模式（加法/乘法/覆盖）
+	if effect is PropertyBuffEffect and not effect.property_name.is_empty():
+		var old_lives := current_lives
+		effect.apply(self)
+		var delta := old_lives - current_lives
+		if delta != 0:
+			life_lost.emit(delta)
+		if current_lives <= 0:
+			lives_depleted.emit()
+		return
+
+	# 基类 BuffEffect → prop 视为扣血量（兼容旧逻辑）
 	var loss := int(effect.prop)
 	if loss <= 0:
 		return

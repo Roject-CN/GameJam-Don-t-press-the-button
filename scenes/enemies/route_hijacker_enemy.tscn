@@ -1,0 +1,77 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/route_hijacker_enemy.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dbhsmxlbt03rt" path="res://assets/mouse.png" id="2_tex"]
+
+[sub_resource type="Animation" id="anim_reset"]
+length = 0.2
+
+[sub_resource type="Animation" id="anim_clicked"]
+resource_name = "clicked"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:skew")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 0.7278023, 0.0]
+}
+
+[sub_resource type="Animation" id="anim_free"]
+resource_name = "free"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:self_modulate")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="anim_lib"]
+_data = {
+&"RESET": SubResource("anim_reset"),
+&"clicked": SubResource("anim_clicked"),
+&"free": SubResource("anim_free")
+}
+
+[sub_resource type="CircleShape2D" id="collision_shape"]
+radius = 44.0
+
+[sub_resource type="CircleShape2D" id="aura_shape"]
+radius = 300.0
+
+[node name="RouteHijackerEnemy" type="Node2D"]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 99
+rotation = 0.49741885
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_tex")
+offset = Vector2(100, 0)
+modulate = Color(0.3, 1.0, 0.3, 1.0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries/ = SubResource("anim_lib")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("collision_shape")
+
+[node name="AuraArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AuraArea"]
+shape = SubResource("aura_shape")
