@@ -167,6 +167,7 @@ func _spawn(entry: WaveEntry) -> void:
 		econfig = EnemyConfig.new()
 	enemy.setup(econfig, path_line_node)
 	if nav_tile_map:
+		print("EMYCONTROLLER:nav loaded")
 		enemy.set_nav_grid(nav_tile_map)
 
 	# setup 后注入活跃 buff；若 setup 中已死亡，enemies 列表中已移除，buff 会跳过

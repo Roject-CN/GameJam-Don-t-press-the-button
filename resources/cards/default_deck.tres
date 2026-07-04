@@ -2,26 +2,25 @@
 
 [ext_resource type="Script" uid="uid://d0a5ii5g3q7ww" path="res://scripts/uis/hud/card_deck.gd" id="1_deck"]
 [ext_resource type="Script" uid="uid://di4v5ywxoc6pm" path="res://scripts/uis/hud/card_entry.gd" id="2_entry"]
-[ext_resource type="PackedScene" uid="uid://dmtgh6idi6gom" path="res://scenes/ui/cards/card_window_weak_defense.tscn" id="3_kuiqe"]
 [ext_resource type="PackedScene" uid="uid://cbn84ph6ndhqd" path="res://scenes/ui/cards/card_turret_defense.tscn" id="3_turret"]
-[ext_resource type="PackedScene" uid="uid://ci1c4hs5osasx" path="res://scenes/ui/cards/card_window_strong_defense.tscn" id="4_vqi02"]
+[ext_resource type="PackedScene" uid="uid://bfqvc2tsfc7kw" path="res://scenes/ui/cards/card_window_weak_defense.tscn" id="4_weak"]
+[ext_resource type="PackedScene" uid="uid://ccu8gfd77shyi" path="res://scenes/ui/cards/card_window_strong_defense.tscn" id="5_strong"]
 
 [sub_resource type="Resource" id="turret"]
 script = ExtResource("2_entry")
 card_scene = ExtResource("3_turret")
 count = 2
 
-[sub_resource type="Resource" id="Resource_ej7l4"]
+[sub_resource type="Resource" id="weak"]
 script = ExtResource("2_entry")
-card_scene = ExtResource("3_kuiqe")
+card_scene = ExtResource("4_weak")
 count = 2
 
-[sub_resource type="Resource" id="Resource_dambs"]
+[sub_resource type="Resource" id="strong"]
 script = ExtResource("2_entry")
-card_scene = ExtResource("4_vqi02")
+card_scene = ExtResource("5_strong")
 count = 2
-metadata/_custom_type_script = "uid://di4v5ywxoc6pm"
 
 [resource]
 script = ExtResource("1_deck")
-entries = Array[ExtResource("2_entry")]([SubResource("turret"), SubResource("Resource_ej7l4"), SubResource("Resource_dambs")])
+entries = Array[ExtResource("2_entry")]([SubResource("turret"), SubResource("weak"), SubResource("strong")])

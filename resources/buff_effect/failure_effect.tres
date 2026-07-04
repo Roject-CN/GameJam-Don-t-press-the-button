@@ -1,13 +1,10 @@
-[gd_resource type="Resource" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="PropertyBuffEffect" format=3 uid="uid://cjfh54wm3w8ds"]
 
-[ext_resource type="Script" uid="uid://23bagjt43s8q" path="res://scripts/buffs/property_buff_effect.gd" id="1_xxx"]
+[ext_resource type="Script" uid="uid://cf3ph785flvx1" path="res://scripts/buffs/property_buff_effect.gd" id="1_xxx"]
 
 [resource]
 script = ExtResource("1_xxx")
+property_name = "current_lives"
+value = -1.0
 buff_name = "扣命"
 target = 2
-prop = 1.0
-duration_waves = 0
-property_name = "current_lives"
-operation = 0
-value = -1.0

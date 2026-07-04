@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://dmtgh6idi6gom"]
+[gd_scene format=3 uid="uid://bfqvc2tsfc7kw"]
 
 [ext_resource type="PackedScene" uid="uid://cbn84ph6ndhqd" path="res://scenes/ui/cards/card_turret_defense.tscn" id="1_vfsb2"]
-[ext_resource type="PackedScene" uid="uid://5iauwwvsffsc" path="res://scenes/defenses/window_weak_defense.tscn" id="2_6tmhm"]
+[ext_resource type="PackedScene" uid="uid://cwdcd5q5idm8y" path="res://scenes/defenses/window_weak_defense.tscn" id="2_6tmhm"]
 
 [node name="Card" unique_id=1883003203 instance=ExtResource("1_vfsb2")]
 defense_unit_scene = ExtResource("2_6tmhm")

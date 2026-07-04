@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dmhf6rhxx86wk"]
 
-[ext_resource type="Script" uid="uid://dkh3kbipws8ey" path="res://scripts/enemies/splitter_enemy.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://yx5mi6o3qhel" path="res://scripts/enemies/splitter_enemy.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://dbhsmxlbt03rt" path="res://assets/mouse.png" id="2_tex"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/mini_splitter.tscn" id="3_mini"]
 
@@ -69,3 +69,5 @@ libraries/ = SubResource("anim_lib")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=2130582005]
 shape = SubResource("collision_shape")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=297549415]
