@@ -84,13 +84,12 @@ func _process(_delta: float) -> void:
 			if not is_instance_valid(child):
 				continue
 			if child is BaseEnemy:
-				lines.append("  [%s] speed=%.0f health=%d clicks=%d taunt=%.2f lured=%s" % [
+				lines.append("  [%s] speed=%.0f health=%d clicks=%d taunt=%.2f" % [
 					child.name,
 					child.speed,
 					child.health,
 					child.click_times,
 					child.taunt_resistance,
-					"是" if child.is_lured() else "否",
 				])
 
 	# ── 防御 ──
@@ -105,7 +104,5 @@ func _process(_delta: float) -> void:
 				continue
 			if d is TurretDefense:
 				lines.append("  [Turret] fire_rate=%.1f damage=%d" % [d.fire_rate, d.damage])
-			elif d is WindowDefense:
-				lines.append("  [Window] lure_count=%d" % d.lure_count)
 
 	_debug_label.text = "\n".join(lines)

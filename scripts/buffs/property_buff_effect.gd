@@ -17,7 +17,7 @@ enum Operation {
 	"BaseEnemy_taunt_resistance:taunt_resistance",
 	"TurretDefense_fire_rate:fire_rate",
 	"TurretDefense_damage:damage",
-	"WindowDefense_lure_count:lure_count",
+	
 	"PlayerContainer_current_lives:current_lives",
 	"PlayerContainer_max_lives:max_lives",
 	"PlayerContainer_fragments:fragments",

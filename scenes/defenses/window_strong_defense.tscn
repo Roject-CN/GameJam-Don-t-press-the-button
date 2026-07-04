@@ -1,13 +1,13 @@
-[gd_scene format=3 uid="uid://cwbhya1y6p1aq"]
+[gd_scene format=3 uid="uid://dxg1hbqi1fnn8"]
 
 [ext_resource type="PackedScene" uid="uid://c8goie1f18fsy" path="res://scenes/defenses/base_defense.tscn" id="1_uqge0"]
-[ext_resource type="Script" uid="uid://breucl1336rdw" path="res://scripts/defenses/window_strong_defense.gd" id="2_00320"]
+[ext_resource type="Script" uid="uid://cx6602kwbusbn" path="res://scripts/defenses/window_strong_defense.gd" id="2_strong"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_w0yly"]
 radius = 60.99
 
-[node name="BaseDefense" unique_id=544454214 instance=ExtResource("1_uqge0")]
-script = ExtResource("2_00320")
+[node name="WindowStrongDefense" unique_id=544454214 instance=ExtResource("1_uqge0")]
+script = ExtResource("2_strong")
 lure_count = 5
 strike_range = 48.0
 

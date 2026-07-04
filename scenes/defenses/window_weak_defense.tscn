@@ -1,15 +1,13 @@
-[gd_scene format=3 uid="uid://5iauwwvsffsc"]
+[gd_scene format=3 uid="uid://cwdcd5q5idm8y"]
 
 [ext_resource type="PackedScene" uid="uid://c8goie1f18fsy" path="res://scenes/defenses/base_defense.tscn" id="1_yfpo7"]
-[ext_resource type="Script" uid="uid://csqpitvmtdtsl" path="res://scripts/defenses/window_weak_defense.gd" id="2_saqal"]
+[ext_resource type="Script" uid="uid://t51ylfybfaov" path="res://scripts/defenses/window_weak_defense.gd" id="2_saqal"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yfpo7"]
 radius = 29.38
 
 [node name="WindowWeakDefense" unique_id=544454214 instance=ExtResource("1_yfpo7")]
 script = ExtResource("2_saqal")
-lure_count = 5
-strike_range = 48.0
 
 [node name="Sprite2D" parent="." index="0" unique_id=974198124]
 scale = Vector2(0.422, 0.422)

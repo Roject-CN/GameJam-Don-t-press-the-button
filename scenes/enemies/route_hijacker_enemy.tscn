@@ -1,6 +1,6 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cmmbc2vrfmtic"]
 
-[ext_resource type="Script" path="res://scripts/enemies/route_hijacker_enemy.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://hwyk3plaefaq" path="res://scripts/enemies/route_hijacker_enemy.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://dbhsmxlbt03rt" path="res://assets/mouse.png" id="2_tex"]
 
 [sub_resource type="Animation" id="anim_reset"]
@@ -51,27 +51,29 @@ radius = 44.0
 [sub_resource type="CircleShape2D" id="aura_shape"]
 radius = 300.0
 
-[node name="RouteHijackerEnemy" type="Node2D"]
+[node name="RouteHijackerEnemy" type="Node2D" unique_id=1598030644]
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_script")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=417804671]
+modulate = Color(0.3, 1, 0.3, 1)
 z_index = 99
 rotation = 0.49741885
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("2_tex")
 offset = Vector2(100, 0)
-modulate = Color(0.3, 1.0, 0.3, 1.0)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=60528346]
 libraries/ = SubResource("anim_lib")
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="." unique_id=620636550]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1440672308]
 shape = SubResource("collision_shape")
 
-[node name="AuraArea" type="Area2D" parent="."]
+[node name="AuraArea" type="Area2D" parent="." unique_id=1256593599]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AuraArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AuraArea" unique_id=364378926]
 shape = SubResource("aura_shape")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=105371045]

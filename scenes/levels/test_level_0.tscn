@@ -1,18 +1,18 @@
 [gd_scene format=4 uid="uid://dgyb5lw3n28p7"]
 
-[ext_resource type="Script" uid="uid://bp5b3pew866sj" path="res://scripts/level_control/level.gd" id="1_67rw1"]
+[ext_resource type="Script" uid="uid://dt8ute3kkl4vj" path="res://scripts/level_control/level.gd" id="1_67rw1"]
 [ext_resource type="Texture2D" uid="uid://bvugwx4xsj2ds" path="res://assets/debug_res/placeholder.png" id="2_veify"]
-[ext_resource type="Script" uid="uid://digiawkctxn0k" path="res://scripts/defenses/defence_container.gd" id="3_ldb5k"]
-[ext_resource type="Script" uid="uid://civ0md0g1lfxs" path="res://scripts/global_manager.gd" id="4_47a1b"]
-[ext_resource type="Script" uid="uid://2vgttshvm8nr" path="res://scripts/buffs/buff_emitter.gd" id="5_57bs3"]
+[ext_resource type="Script" uid="uid://idd8y2or3c2k" path="res://scripts/defenses/defence_container.gd" id="3_ldb5k"]
+[ext_resource type="Script" uid="uid://d1c1pdn420m4v" path="res://scripts/global_manager.gd" id="4_47a1b"]
+[ext_resource type="Script" uid="uid://vk2v3ct58qt2" path="res://scripts/buffs/buff_emitter.gd" id="5_57bs3"]
 [ext_resource type="Script" uid="uid://dfiyq0gqv42y2" path="res://scripts/systems/wave_control/wave_entry.gd" id="6_57bs3"]
 [ext_resource type="PackedScene" uid="uid://gfcjptk77qr7" path="res://scenes/buttons/base_button.tscn" id="6_dambs"]
-[ext_resource type="Script" uid="uid://bc27wyjj6a7ex" path="res://scripts/systems/wave_control/wave_data.gd" id="7_dambs"]
-[ext_resource type="Script" uid="uid://djr3furmdwn7t" path="res://scripts/buffs/buff_effect.gd" id="7_dsfq4"]
-[ext_resource type="Resource" path="res://resources/buff_effect/failure_effect.tres" id="9_jjdy8"]
-[ext_resource type="Script" uid="uid://ecg0l5occhlg" path="res://scripts/players/player_container.gd" id="10_833sg"]
+[ext_resource type="Script" uid="uid://c61o5w86dqju" path="res://scripts/systems/wave_control/wave_data.gd" id="7_dambs"]
+[ext_resource type="Script" uid="uid://b53llpmsyj0h1" path="res://scripts/buffs/buff_effect.gd" id="7_dsfq4"]
+[ext_resource type="Resource" uid="uid://cjfh54wm3w8ds" path="res://resources/buff_effect/failure_effect.tres" id="9_jjdy8"]
+[ext_resource type="Script" uid="uid://bpaorqcjyxtjh" path="res://scripts/players/player_container.gd" id="10_833sg"]
 [ext_resource type="PackedScene" uid="uid://bi4uder0xrmn3" path="res://scenes/ui/hud.tscn" id="13_20cmf"]
-[ext_resource type="Script" uid="uid://bjsvqqasir2e8" path="res://scripts/enemies/enemy_controller.gd" id="14_ctrl"]
+[ext_resource type="Script" uid="uid://be6lobyq2768" path="res://scripts/enemies/enemy_controller.gd" id="14_ctrl"]
 [ext_resource type="Resource" uid="uid://dxh4qk5jm8t3e" path="res://resources/enemies/enemy_catalog.tres" id="16_cat"]
 [ext_resource type="Resource" path="res://resources/buff_effect/enemy_speed_up.tres" id="19_buf1"]
 [ext_resource type="Resource" path="res://resources/buff_effect/enemy_slow_down.tres" id="20_buf2"]
@@ -27,7 +27,7 @@
 [ext_resource type="PackedScene" uid="uid://b3kl7t2pndghk" path="res://scenes/ui/dialogue/dialogue_box.tscn" id="28_8hr0l"]
 [ext_resource type="Resource" path="res://resources/buff_effect/player_lose_fragments.tres" id="28_buf10"]
 [ext_resource type="Script" uid="uid://dlny8k33wlc2x" path="res://scripts/dialogues/dialogue_trigger.gd" id="29_4vfcw"]
-[ext_resource type="Script" uid="uid://bq2rp3ntjcjt7" path="res://scripts/debug/debug_buff_panel.gd" id="29_debug"]
+[ext_resource type="Script" uid="uid://dk8jr8kj5g12n" path="res://scripts/debug/debug_buff_panel.gd" id="29_debug"]
 [ext_resource type="Resource" uid="uid://cmi48ys8pgc3o" path="res://resources/dialogues/tutorial_welcome.tres" id="30_2bhw8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bblh5"]
@@ -84,22 +84,22 @@ text = "🐌减速"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("20_buf2")])
 
 [node name="Btn_health_up" parent="GlobalManager/ButtonContainer" unique_id=1561141099 instance=ExtResource("6_dambs")]
-position = Vector2(560, 40)
+position = Vector2(185, 477)
 text = "❤️加血"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("21_buf3")])
 
 [node name="Btn_more_clicks" parent="GlobalManager/ButtonContainer" unique_id=535240689 instance=ExtResource("6_dambs")]
-position = Vector2(740, 40)
+position = Vector2(383, 482)
 text = "🖱️多点"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("22_buf4")])
 
 [node name="Btn_taunt_resist" parent="GlobalManager/ButtonContainer" unique_id=183819273 instance=ExtResource("6_dambs")]
-position = Vector2(920, 40)
+position = Vector2(191, 562)
 text = "🛡️抵抗"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("23_buf5")])
 
 [node name="Btn_fire_rate" parent="GlobalManager/ButtonContainer" unique_id=2009035975 instance=ExtResource("6_dambs")]
-position = Vector2(1100, 40)
+position = Vector2(376, 559)
 text = "🔫射速"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("24_buf6")])
 
@@ -114,12 +114,12 @@ text = "🎣引诱"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("26_buf8")])
 
 [node name="Btn_gain_life" parent="GlobalManager/ButtonContainer" unique_id=1555091996 instance=ExtResource("6_dambs")]
-position = Vector2(560, 95)
+position = Vector2(384, 163)
 text = "💚回血"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("27_buf9")])
 
 [node name="Btn_lose_frags" parent="GlobalManager/ButtonContainer" unique_id=1272712637 instance=ExtResource("6_dambs")]
-position = Vector2(740, 95)
+position = Vector2(202, 161)
 text = "💰扣费"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("28_buf10")])
 
