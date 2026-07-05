@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="LevelInfo" load_steps=2 format=3 uid="uid://blevel001000000"]
+[gd_resource type="Resource" script_class="LevelInfo" format=3 uid="uid://if3tl40sqj6f"]
 
-[ext_resource type="Script" path="res://scripts/main/level_info.gd" id="1_level_info"]
+[ext_resource type="Script" uid="uid://ckxnwy2xl6v7m" path="res://scripts/main/level_info.gd" id="1_level_info"]
 
 [resource]
 script = ExtResource("1_level_info")
 level_id = "level_001"
 level_name = "测试关"
 scene_path = "res://scenes/levels/test_level_0.tscn"
-description = "第一关测试关卡，熟悉基本操作。部署防御设施，保护按钮不被敌人点击！"
+description = "熟悉基本操作。部署防御设施，保护按钮不被敌人点击！"

@@ -7,7 +7,7 @@
 radius = 44.0
 
 [sub_resource type="CircleShape2D" id="aura_shape"]
-radius = 300.0
+radius = 490.64044
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oardj"]
 atlas = ExtResource("2_46vmt")
@@ -42,11 +42,13 @@ script = ExtResource("1_script")
 health_buff_mult = 1.0
 
 [node name="Area2D" type="Area2D" parent="." unique_id=620636550]
+position = Vector2(3.3600006, -42.64)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1440672308]
 shape = SubResource("collision_shape")
 
 [node name="AuraArea" type="Area2D" parent="." unique_id=1256593599]
+position = Vector2(3.3600006, -42.64)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AuraArea" unique_id=364378926]
 shape = SubResource("aura_shape")
@@ -54,7 +56,7 @@ shape = SubResource("aura_shape")
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=105371045]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=829495818]
-position = Vector2(9.536743e-07, -16)
+position = Vector2(3.360002, -58.640003)
 scale = Vector2(3.71, 3.71)
 sprite_frames = SubResource("SpriteFrames_6vd2c")
 animation = &"move"

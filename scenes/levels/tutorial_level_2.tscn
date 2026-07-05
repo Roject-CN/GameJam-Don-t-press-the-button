@@ -1,7 +1,21 @@
 [gd_scene format=4 uid="uid://bocd8m68op3yy"]
 
 [ext_resource type="Texture2D" uid="uid://bvugwx4xsj2ds" path="res://assets/debug_res/placeholder.png" id="1_27y0k"]
-[ext_resource type="Script" uid="uid://4lqjf8vfj00" path="res://scripts/level_control/level.gd" id="1_s3w7l"]
+[ext_resource type="Script" uid="uid://dt8ute3kkl4vj" path="res://scripts/level_control/level.gd" id="1_s3w7l"]
+[ext_resource type="TileSet" uid="uid://dqa6qg5xc6skb" path="res://resources/tiles/base_ground.tres" id="3_t12bd"]
+[ext_resource type="Script" uid="uid://d1c1pdn420m4v" path="res://scripts/global_manager.gd" id="4_0s5d3"]
+[ext_resource type="Script" uid="uid://be6lobyq2768" path="res://scripts/enemies/enemy_controller.gd" id="5_n16p7"]
+[ext_resource type="Script" uid="uid://dfiyq0gqv42y2" path="res://scripts/systems/wave_control/wave_entry.gd" id="6_6id05"]
+[ext_resource type="Script" uid="uid://c61o5w86dqju" path="res://scripts/systems/wave_control/wave_data.gd" id="7_usjwr"]
+[ext_resource type="Resource" uid="uid://dxh4qk5jm8t3e" path="res://resources/enemies/enemy_catalog.tres" id="8_elrok"]
+[ext_resource type="Script" uid="uid://bpaorqcjyxtjh" path="res://scripts/players/player_container.gd" id="9_mu1pd"]
+[ext_resource type="Script" uid="uid://b53llpmsyj0h1" path="res://scripts/buffs/buff_effect.gd" id="11_aqqro"]
+[ext_resource type="PackedScene" uid="uid://c4mcblcyou84k" path="res://scenes/buttons/button_lose_life.tscn" id="22_r3aha"]
+[ext_resource type="Resource" uid="uid://cjfh54wm3w8ds" path="res://resources/buff_effect/failure_effect.tres" id="23_2d1vy"]
+[ext_resource type="Script" uid="uid://dk8jr8kj5g12n" path="res://scripts/debug/debug_buff_panel.gd" id="24_o0o8x"]
+[ext_resource type="Script" uid="uid://vk2v3ct58qt2" path="res://scripts/buffs/buff_emitter.gd" id="25_71jqp"]
+[ext_resource type="Script" uid="uid://idd8y2or3c2k" path="res://scripts/defenses/defence_container.gd" id="26_jme2h"]
+[ext_resource type="PackedScene" uid="uid://bi4uder0xrmn3" path="res://scenes/ui/hud.tscn" id="27_ro6dw"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8nquy"]
 texture = ExtResource("1_27y0k")
@@ -13,12 +27,81 @@ texture = ExtResource("1_27y0k")
 [sub_resource type="TileSet" id="TileSet_6a0ot"]
 sources/0 = SubResource("TileSetAtlasSource_8nquy")
 
+[sub_resource type="Resource" id="Resource_o6cfy"]
+script = ExtResource("7_usjwr")
+csv_path = "uid://dk3kk03o53ch0"
+metadata/_custom_type_script = "uid://c61o5w86dqju"
+
 [node name="TutorialLevel2" type="Node2D" unique_id=1425717725]
 script = ExtResource("1_s3w7l")
 level_id = "level_003"
-next_level_id = ""
+next_level_id = "level_004"
 
 [node name="BaseMapLayer" type="TileMapLayer" parent="." unique_id=1006452640]
 scale = Vector2(4, 4)
-tile_map_data = PackedByteArray("AAABAAQAAAAAAAEAAAABAAUAAAAAAAEAAAACAAQAAAAAAAEAAAACAAUAAAAAAAEAAAADAAUAAAAAAAAAAAAEAAUAAAAAAAAAAAAFAAUAAAAAAAAAAAAGAAUAAAAAAAAAAAAHAAUAAAAAAAAAAAAIAAUAAAAAAAAAAAARAAEAAAABAAAAAAAQAAEAAAABAAAAAAAPAAIAAAABAAAAAAAOAAIAAAABAAAAAAANAAMAAAABAAAAAAALAAQAAAAAAAAAAAAKAAQAAAAAAAAAAAAKAAYAAAAAAAAAAAALAAYAAAAAAAAAAAANAAcAAAABAAAAAAAOAAgAAAABAAAAAAAPAAgAAAABAAAAAAARAAkAAAABAAAAAAAJAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAADAAQAAAAAAAAAAAAJAAYAAAABAAAAAAAMAAQAAAAAAAAAAAAMAAYAAAABAAAAAAALAAcAAAAAAAAAAAAMAAcAAAABAAAAAAANAAUAAAAAAAAAAAANAAQAAAAAAAAAAAAOAAQAAAAAAAAAAAAOAAMAAAABAAAAAAAPAAMAAAABAAAAAAAPAAQAAAAAAAAAAAAPAAUAAAAAAAAAAAAOAAUAAAAAAAAAAAAOAAYAAAABAAAAAAANAAYAAAABAAAAAAAOAAcAAAABAAAAAAAPAAcAAAABAAAAAAAPAAYAAAABAAAAAAAQAAYAAAABAAAAAAAQAAUAAAABAAEAAAAQAAQAAAABAAEAAAAQAAMAAAABAAAAAAAQAAIAAAABAAAAAAARAAIAAAABAAAAAAARAAMAAAABAAAAAAARAAQAAAABAAEAAAARAAUAAAABAAEAAAARAAYAAAABAAAAAAARAAcAAAABAAAAAAAQAAcAAAABAAAAAAAQAAgAAAABAAAAAAARAAgAAAABAAAAAAAMAAUAAAAAAAAAAAALAAUAAAAAAAAAAAAKAAUAAAAAAAAAAAAJAAUAAAAAAAAAAAAHAAQAAAAAAAAAAAAHAAMAAAABAAAAAAAHAAIAAAABAAAAAAAHAAEAAAABAAAAAAAGAAEAAAABAAAAAAAFAAEAAAABAAAAAAAEAAEAAAABAAAAAAADAAEAAAABAAAAAAACAAEAAAABAAAAAAABAAEAAAABAAAAAAAAAAEAAAABAAAAAAAAAAIAAAABAAAAAAABAAMAAAABAAAAAAABAAIAAAABAAAAAAACAAIAAAABAAAAAAACAAMAAAABAAAAAAADAAMAAAABAAAAAAADAAIAAAABAAAAAAAEAAIAAAABAAAAAAAEAAMAAAABAAAAAAAEAAQAAAAAAAAAAAAFAAQAAAAAAAAAAAAFAAMAAAABAAAAAAAFAAIAAAABAAAAAAAGAAIAAAABAAAAAAAGAAMAAAABAAAAAAAGAAQAAAAAAAAAAAAIAAEAAAABAAAAAAAIAAIAAAABAAAAAAAIAAMAAAABAAAAAAAJAAIAAAABAAAAAAAJAAEAAAABAAAAAAAKAAEAAAABAAAAAAAKAAIAAAAAAAAAAAALAAIAAAAAAAAAAAALAAEAAAABAAAAAAAMAAEAAAABAAAAAAAMAAIAAAABAAAAAAANAAIAAAABAAAAAAANAAEAAAABAAAAAAAOAAEAAAABAAAAAAAPAAEAAAABAAAAAAAHAAgAAAABAAAAAAAHAAcAAAABAAAAAAAEAAcAAAABAAAAAAADAAcAAAABAAAAAAACAAcAAAABAAAAAAABAAcAAAABAAAAAAAAAAcAAAABAAAAAAAAAAgAAAABAAAAAAAAAAkAAAABAAAAAAABAAkAAAABAAAAAAABAAgAAAABAAAAAAACAAgAAAABAAAAAAACAAkAAAABAAAAAAADAAkAAAABAAAAAAADAAgAAAABAAAAAAAEAAgAAAABAAAAAAAEAAkAAAABAAAAAAAFAAkAAAABAAAAAAAFAAgAAAABAAAAAAAFAAcAAAABAAAAAAAGAAcAAAABAAAAAAAGAAgAAAABAAAAAAAGAAkAAAABAAAAAAAHAAkAAAABAAAAAAAIAAkAAAABAAAAAAAIAAgAAAABAAAAAAAIAAcAAAABAAAAAAAJAAcAAAABAAAAAAAJAAgAAAABAAAAAAAJAAkAAAABAAAAAAAKAAkAAAABAAAAAAAKAAgAAAABAAAAAAAKAAcAAAAAAAAAAAALAAgAAAABAAAAAAALAAkAAAABAAAAAAAMAAkAAAABAAAAAAAMAAgAAAABAAAAAAANAAgAAAABAAAAAAANAAkAAAABAAAAAAAOAAkAAAABAAAAAAAPAAkAAAABAAAAAAARAAAAAAABAAAAAAASAAAAAAABAAAAAAASAAEAAAABAAAAAAASAAIAAAABAAAAAAATAAAAAAABAAAAAAATAAEAAAABAAAAAAATAAIAAAABAAAAAAASAAkAAAABAAAAAAASAAgAAAABAAAAAAASAAMAAAABAAAAAAASAAQAAAABAAAAAAASAAUAAAABAAAAAAASAAYAAAABAAAAAAASAAcAAAABAAAAAAATAAYAAAABAAAAAAATAAUAAAABAAAAAAATAAQAAAABAAAAAAATAAMAAAABAAAAAAATAAcAAAABAAAAAAAQAAoAAAABAAAAAAAPAAoAAAABAAAAAAAOAAoAAAABAAAAAAANAAoAAAABAAAAAAAMAAoAAAABAAAAAAALAAoAAAABAAAAAAAKAAoAAAABAAAAAAAJAAoAAAABAAAAAAAIAAoAAAABAAAAAAAHAAoAAAABAAAAAAAGAAoAAAABAAAAAAAFAAoAAAABAAAAAAAEAAoAAAABAAAAAAADAAoAAAABAAAAAAACAAoAAAABAAAAAAABAAoAAAABAAAAAAAAAAoAAAABAAAAAAAQAAAAAAABAAAAAAAPAAAAAAABAAAAAAAOAAAAAAABAAAAAAANAAAAAAABAAAAAAAMAAAAAAABAAAAAAALAAAAAAABAAAAAAAKAAAAAAABAAAAAAAJAAAAAAABAAAAAAAIAAAAAAABAAAAAAAHAAAAAAABAAAAAAAGAAAAAAABAAAAAAAFAAAAAAABAAAAAAAEAAAAAAABAAAAAAADAAAAAAABAAAAAAACAAAAAAABAAAAAAABAAAAAAABAAAAAAAAAAAAAAABAAAAAAARAAoAAAABAAAAAAASAAoAAAABAAAAAAATAAoAAAABAAAAAAATAAkAAAABAAAAAAATAAgAAAABAAAAAAAAAAMAAAABAAAAAAAAAAQAAAABAAAAAAAAAAUAAAABAAAAAAAAAAYAAAABAAAAAAABAAYAAAABAAAAAAACAAYAAAABAAAAAAADAAYAAAABAAAAAAAEAAYAAAABAAAAAAAFAAYAAAABAAAAAAAGAAYAAAABAAAAAAAHAAYAAAABAAAAAAAIAAYAAAABAAAAAAAJAAMAAAABAAAAAAAKAAMAAAAAAAAAAAALAAMAAAAAAAAAAAAMAAMAAAABAAAAAAAQAAkAAAABAAAAAAA=")
+tile_map_data = PackedByteArray("AAADAAUAAAAAAAAAAAAEAAUAAAAAAAAAAAAFAAUAAAAAAAAAAAAGAAUAAAAAAAAAAAAHAAUAAAAAAAAAAAAIAAUAAAAAAAAAAAAJAAUAAAAAAAAAAAAKAAUAAAAAAAAAAAALAAUAAAAAAAAAAAAMAAUAAAAAAAAAAAANAAUAAAAAAAAAAAAOAAUAAAAAAAAAAAAPAAUAAAAAAAAAAAAQAAUAAAAAAAAAAAARAAUAAAAAAAAAAAASAAUAAAABAAEAAAACAAUAAAAAAAEAAAAKAAYAAAAAAAAAAAAKAAcAAAAAAAAAAAAKAAgAAAAAAAAAAAAMAAYAAAAAAAAAAAAMAAcAAAAAAAAAAAAMAAgAAAAAAAAAAAAJAAMAAAAAAAAAAAAKAAMAAAAAAAAAAAALAAMAAAAAAAAAAAAMAAMAAAAAAAAAAAAOAAMAAAABAAEAAAANAAMAAAAAAAAAAAAJAAQAAAAAAAAAAAA=")
 tile_set = SubResource("TileSet_6a0ot")
+
+[node name="BaseGoundLayer" type="TileMapLayer" parent="." unique_id=242809181]
+scale = Vector2(2, 2)
+tile_map_data = PackedByteArray("AAACAAUAAAAEAAoAAAADAAUAAAAFAAoAAAAEAAUAAAAGAAoAAAAFAAUAAAAHAAoAAAAGAAUAAAAIAAoAAAAHAAUAAAAJAAoAAAAIAAUAAAAIAAoAAAAJAAUAAAAHAAoAAAAKAAUAAAAHAAEAAAAKAAYAAAAHAAIAAAAKAAgAAAABAAcAAAAKAAcAAAABAAUAAAAMAAgAAAABAAcAAAAMAAcAAAABAAYAAAAMAAYAAAABAAUAAAAMAAUAAAAHAAEAAAALAAUAAAAGAAEAAAANAAUAAAAIAAEAAAAOAAUAAAAGAAoAAAAPAAUAAAAHAAoAAAAQAAUAAAAGAAoAAAARAAUAAAAHAAoAAAAJAAMAAAAEAAEAAAAKAAMAAAAGAAoAAAALAAMAAAAFAAoAAAAMAAMAAAAIAAoAAAANAAMAAAAIAAoAAAAJAAQAAAAEAAIAAAA=")
+tile_set = ExtResource("3_t12bd")
+
+[node name="GlobalManager" type="Node2D" parent="." unique_id=942129710 node_paths=PackedStringArray("enemy_controller", "buff_emitter", "player_container")]
+script = ExtResource("4_0s5d3")
+enemy_controller = NodePath("EnemyController")
+buff_emitter = NodePath("BuffEmitter")
+player_container = NodePath("PlayerContainer")
+
+[node name="EnemyController" type="Node2D" parent="GlobalManager" unique_id=702157480 node_paths=PackedStringArray("mount_node", "nav_tile_map")]
+script = ExtResource("5_n16p7")
+wave_data = SubResource("Resource_o6cfy")
+enemy_catalog = ExtResource("8_elrok")
+mount_node = NodePath("../..")
+nav_tile_map = NodePath("../../BaseMapLayer")
+
+[node name="PathLine" type="Line2D" parent="GlobalManager/EnemyController" unique_id=1283999146]
+position = Vector2(43, 75)
+points = PackedVector2Array(883, 135, 561, 141, 878, 140, 563, 146, 878, 145, 560, 151, 878, 151, 560, 157, 556, 278, 148, 275)
+width = 1.17
+
+[node name="PathLine2" type="Line2D" parent="GlobalManager/EnemyController" unique_id=974568377]
+points = PackedVector2Array(1202, 353, 153, 351)
+
+[node name="PlayerContainer" type="Node2D" parent="GlobalManager" unique_id=124802047]
+script = ExtResource("9_mu1pd")
+
+[node name="ButtonContainer" type="Node2D" parent="GlobalManager" unique_id=449478029]
+
+[node name="Btn_lose_life" parent="GlobalManager/ButtonContainer" unique_id=761628640 instance=ExtResource("22_r3aha")]
+position = Vector2(163, 342)
+buff_effect = Array[ExtResource("11_aqqro")]([ExtResource("23_2d1vy")])
+
+[node name="DebugBuffPanel" type="Node2D" parent="GlobalManager" unique_id=1550675716 node_paths=PackedStringArray("enemy_controller", "player_container", "defense_container")]
+script = ExtResource("24_o0o8x")
+enemy_controller = NodePath("../EnemyController")
+player_container = NodePath("../PlayerContainer")
+defense_container = NodePath("../DefenceContainer")
+
+[node name="BuffEmitter" type="Node2D" parent="GlobalManager" unique_id=1715719878 node_paths=PackedStringArray("enemy_controller", "defense_container", "player_container", "button_container")]
+script = ExtResource("25_71jqp")
+enemy_controller = NodePath("../EnemyController")
+defense_container = NodePath("../DefenceContainer")
+player_container = NodePath("../PlayerContainer")
+button_container = NodePath("../ButtonContainer")
+
+[node name="DefenceContainer" type="Node2D" parent="GlobalManager" unique_id=971282534 node_paths=PackedStringArray("level_scene")]
+script = ExtResource("26_jme2h")
+level_scene = NodePath("../..")
+
+[node name="HUD" parent="GlobalManager" unique_id=701478321 node_paths=PackedStringArray("defense_container", "logic_grid", "global_manager", "player_container", "enemy_controller") instance=ExtResource("27_ro6dw")]
+offset_left = 2.0
+offset_top = 3.0
+offset_right = 2.0
+offset_bottom = 3.0
+defense_container = NodePath("../DefenceContainer")
+logic_grid = NodePath("../../BaseMapLayer")
+global_manager = NodePath("..")
+player_container = NodePath("../PlayerContainer")
+enemy_controller = NodePath("../EnemyController")
+metadata/_edit_use_anchors_ = true

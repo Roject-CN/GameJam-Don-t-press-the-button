@@ -81,9 +81,11 @@ mount_node = NodePath("../..")
 nav_tile_map = NodePath("../../BaseMapLayer")
 
 [node name="PathLine" type="Line2D" parent="GlobalManager/EnemyController" unique_id=511748652]
+visible = false
 points = PackedVector2Array(1031, 130, 647, 128, 642, 316, 133, 321)
 
 [node name="PathLine2" type="Line2D" parent="GlobalManager/EnemyController" unique_id=1411624808]
+visible = false
 points = PackedVector2Array(1091, 569, 651, 561, 637, 314, 162, 329)
 
 [node name="PlayerContainer" type="Node2D" parent="GlobalManager" unique_id=1379033782]
@@ -182,6 +184,7 @@ logic_grid = NodePath("../../BaseMapLayer")
 global_manager = NodePath("..")
 player_container = NodePath("../PlayerContainer")
 enemy_controller = NodePath("../EnemyController")
+metadata/_edit_use_anchors_ = true
 
 [node name="DialogueManager" type="Node" parent="." unique_id=470755549]
 script = ExtResource("27_svtx6")

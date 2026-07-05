@@ -139,9 +139,13 @@ func _build_segments(pts: PackedVector2Array) -> float:
 	var total: float = 0.0
 	if pts.size() < 2:
 		return 0.0
+	# Line2D.points 是本地坐标，需要加上 path_line 的全局位置偏移转为全局坐标
+	var offset: Vector2 = path_line.global_position if path_line else Vector2.ZERO
 	for i: int in range(pts.size() - 1):
-		var seg_len: float = pts[i].distance_to(pts[i + 1])
-		_segments.append({start = pts[i], end = pts[i + 1], length = seg_len, accum = total})
+		var p0: Vector2 = pts[i] + offset
+		var p1: Vector2 = pts[i + 1] + offset
+		var seg_len: float = p0.distance_to(p1)
+		_segments.append({start = p0, end = p1, length = seg_len, accum = total})
 		total += seg_len
 	return total
 
@@ -221,7 +225,7 @@ func release_lure(source: Node2D) -> void:
 		_returning_to_path = true
 
 
-## 通过导航网格移向目标点，导航失效时回退直线移动。到达时返回 true
+## 通过导航网格移向目标点。用 NavigationServer2D 同步查询路径，导航生效时严格约束在导航网格内。到达时返回 true
 func _nav_move_toward(delta: float, target: Vector2) -> bool:
 	var dist: float = global_position.distance_to(target)
 	if dist <= 5.0:
@@ -230,17 +234,26 @@ func _nav_move_toward(delta: float, target: Vector2) -> bool:
 
 	var next_pos: Vector2 = target
 	if _use_nav_grid and nav_agent:
-		nav_agent.target_position = target
-		var candidate: Vector2 = nav_agent.get_next_path_position()
-		if candidate != Vector2.ZERO and candidate.distance_squared_to(target) < dist * dist:
-			next_pos = candidate
+		var map_rid: RID = nav_agent.get_navigation_map()
+		if map_rid.is_valid():
+			var path: PackedVector2Array = NavigationServer2D.map_get_path(
+				map_rid, global_position, target, true
+			)
+			if path.size() >= 2:
+				# path[0] 是起点，path[1] 是导航路径上的下一步
+				next_pos = path[1]
+			elif path.size() == 1:
+				# 起点已在目标附近，直接走向目标
+				next_pos = target
+			else:
+				# 无有效路径，停在原地，不越出导航网格
+				return false
 
 	var to_next: Vector2 = next_pos - global_position
 	var step: float = min(speed * delta, to_next.length())
 	if step > 0.0:
 		global_position += to_next.normalized() * step
 	return false
-
 
 func _physics_process(delta: float) -> void:
 	if _dying or not _setup_done:

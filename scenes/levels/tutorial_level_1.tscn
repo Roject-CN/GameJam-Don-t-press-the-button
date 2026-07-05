@@ -2,8 +2,21 @@
 
 [ext_resource type="Script" uid="uid://dt8ute3kkl4vj" path="res://scripts/level_control/level.gd" id="1_5m6gs"]
 [ext_resource type="Texture2D" uid="uid://bvugwx4xsj2ds" path="res://assets/debug_res/placeholder.png" id="1_uupuh"]
+[ext_resource type="Texture2D" uid="uid://dsynpbyosvtci" path="res://assets/basic000.png" id="2_2q37v"]
 [ext_resource type="PackedScene" uid="uid://bi4uder0xrmn3" path="res://scenes/ui/hud.tscn" id="3_8j3t6"]
+[ext_resource type="TileSet" uid="uid://dqa6qg5xc6skb" path="res://resources/tiles/base_ground.tres" id="3_54ndd"]
 [ext_resource type="Script" uid="uid://idd8y2or3c2k" path="res://scripts/defenses/defence_container.gd" id="4_pf8af"]
+[ext_resource type="Script" uid="uid://d1c1pdn420m4v" path="res://scripts/global_manager.gd" id="5_oxtc6"]
+[ext_resource type="Script" uid="uid://be6lobyq2768" path="res://scripts/enemies/enemy_controller.gd" id="6_ahqy1"]
+[ext_resource type="Script" uid="uid://dfiyq0gqv42y2" path="res://scripts/systems/wave_control/wave_entry.gd" id="7_15ryw"]
+[ext_resource type="Script" uid="uid://c61o5w86dqju" path="res://scripts/systems/wave_control/wave_data.gd" id="8_ya475"]
+[ext_resource type="Resource" uid="uid://dxh4qk5jm8t3e" path="res://resources/enemies/enemy_catalog.tres" id="9_d0fy6"]
+[ext_resource type="Script" uid="uid://bpaorqcjyxtjh" path="res://scripts/players/player_container.gd" id="10_48m6x"]
+[ext_resource type="Script" uid="uid://b53llpmsyj0h1" path="res://scripts/buffs/buff_effect.gd" id="12_8g11h"]
+[ext_resource type="PackedScene" uid="uid://c4mcblcyou84k" path="res://scenes/buttons/button_lose_life.tscn" id="23_ljdc0"]
+[ext_resource type="Resource" uid="uid://cjfh54wm3w8ds" path="res://resources/buff_effect/failure_effect.tres" id="24_7yr8f"]
+[ext_resource type="Script" uid="uid://dk8jr8kj5g12n" path="res://scripts/debug/debug_buff_panel.gd" id="25_g8krs"]
+[ext_resource type="Script" uid="uid://vk2v3ct58qt2" path="res://scripts/buffs/buff_emitter.gd" id="26_7hy0q"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_pf8af"]
 texture = ExtResource("1_uupuh")
@@ -15,184 +28,87 @@ texture = ExtResource("1_uupuh")
 [sub_resource type="TileSet" id="TileSet_5fnxm"]
 sources/0 = SubResource("TileSetAtlasSource_pf8af")
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_pf8af"]
-load_path = "res://.godot/imported/basic01.png-565cd07a9f19072559a1c2e717dae92d.ctex"
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7juxn"]
-texture = SubResource("CompressedTexture2D_pf8af")
-texture_region_size = Vector2i(384, 384)
-22:0/0 = 0
-1:2/0 = 0
-1:3/0 = 0
-1:4/0 = 0
-1:5/0 = 0
-1:6/0 = 0
-1:7/0 = 0
-1:10/0 = 0
-4:1/0 = 0
-4:2/0 = 0
-4:3/0 = 0
-4:4/0 = 0
-4:5/0 = 0
-4:6/0 = 0
-4:7/0 = 0
-5:7/0 = 0
-6:7/0 = 0
-7:7/0 = 0
-8:7/0 = 0
-9:7/0 = 0
-10:7/0 = 0
-10:6/0 = 0
-10:5/0 = 0
-10:4/0 = 0
-10:3/0 = 0
-10:2/0 = 0
-10:1/0 = 0
-9:1/0 = 0
-8:1/0 = 0
-7:1/0 = 0
-6:1/0 = 0
-5:1/0 = 0
-7:2/0 = 0
-7:3/0 = 0
-7:4/0 = 0
-7:5/0 = 0
-7:6/0 = 0
-5:4/0 = 0
-6:4/0 = 0
-8:4/0 = 0
-9:4/0 = 0
-4:10/0 = 0
-5:10/0 = 0
-6:10/0 = 0
-7:10/0 = 0
-8:10/0 = 0
-9:10/0 = 0
-10:10/0 = 0
-22:1/0 = 0
-23:0/0 = 0
-23:1/0 = 0
-22:2/0 = 0
-22:3/0 = 0
-22:4/0 = 0
-22:5/0 = 0
-22:6/0 = 0
-22:7/0 = 0
-22:8/0 = 0
-22:9/0 = 0
-22:10/0 = 0
-22:11/0 = 0
-23:11/0 = 0
-23:10/0 = 0
-21:10/0 = 0
-20:10/0 = 0
-19:10/0 = 0
-18:10/0 = 0
-17:10/0 = 0
-16:10/0 = 0
-15:10/0 = 0
-14:10/0 = 0
-13:10/0 = 0
-13:11/0 = 0
-12:11/0 = 0
-12:10/0 = 0
-13:9/0 = 0
-13:8/0 = 0
-13:7/0 = 0
-13:6/0 = 0
-13:5/0 = 0
-13:4/0 = 0
-13:3/0 = 0
-13:2/0 = 0
-13:1/0 = 0
-13:0/0 = 0
-12:0/0 = 0
-12:1/0 = 0
-14:1/0 = 0
-15:1/0 = 0
-16:1/0 = 0
-17:1/0 = 0
-18:1/0 = 0
-19:1/0 = 0
-20:1/0 = 0
-21:1/0 = 0
-16:2/0 = 0
-16:3/0 = 0
-16:4/0 = 0
-15:4/0 = 0
-14:4/0 = 0
-14:5/0 = 0
-14:6/0 = 0
-14:7/0 = 0
-15:7/0 = 0
-16:7/0 = 0
-16:8/0 = 0
-16:9/0 = 0
-17:9/0 = 0
-18:9/0 = 0
-19:9/0 = 0
-19:8/0 = 0
-19:7/0 = 0
-20:7/0 = 0
-21:7/0 = 0
-21:6/0 = 0
-21:5/0 = 0
-21:4/0 = 0
-19:2/0 = 0
-19:3/0 = 0
-19:4/0 = 0
-18:5/0 = 0
-18:6/0 = 0
-17:4/0 = 0
-17:3/0 = 0
-17:2/0 = 0
-16:5/0 = 0
-17:5/0 = 0
-19:5/0 = 0
-18:3/0 = 0
-18:2/0 = 0
-18:4/0 = 0
-16:6/0 = 0
-15:6/0 = 0
-15:5/0 = 0
-17:6/0 = 0
-19:6/0 = 0
-17:7/0 = 0
-17:8/0 = 0
-18:7/0 = 0
-18:8/0 = 0
-20:6/0 = 0
-20:5/0 = 0
-20:4/0 = 0
-1:1/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_6vd2c"]
-tile_size = Vector2i(384, 384)
-sources/0 = SubResource("TileSetAtlasSource_7juxn")
+[sub_resource type="Resource" id="Resource_bq2j3"]
+script = ExtResource("8_ya475")
+csv_path = "uid://ctu536yd607cv"
 
 [node name="TutorialLevel" type="Node2D" unique_id=1308827530]
 script = ExtResource("1_5m6gs")
 level_id = "level_002"
 next_level_id = "level_003"
 
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=23333741]
+position = Vector2(684, 249)
+scale = Vector2(4, 4)
+texture = ExtResource("2_2q37v")
+
 [node name="BaseMapLayer" type="TileMapLayer" parent="." unique_id=932027402]
 scale = Vector2(4, 4)
-tile_map_data = PackedByteArray("AAABAAQAAAAAAAEAAAABAAUAAAAAAAEAAAACAAQAAAAAAAEAAAACAAUAAAAAAAEAAAADAAUAAAAAAAAAAAAEAAUAAAAAAAAAAAAFAAUAAAAAAAAAAAAGAAUAAAAAAAAAAAAHAAUAAAAAAAAAAAAIAAUAAAAAAAAAAAARAAEAAAABAAEAAAAQAAEAAAABAAEAAAAPAAIAAAAAAAAAAAAOAAIAAAAAAAAAAAAKAAQAAAAAAAAAAAAKAAYAAAAAAAAAAAAOAAgAAAAAAAAAAAAPAAgAAAAAAAAAAAARAAkAAAABAAEAAAAJAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAADAAQAAAAAAAAAAAAJAAYAAAAAAAAAAAAQAAIAAAABAAEAAAARAAIAAAABAAEAAAAQAAgAAAABAAEAAAARAAgAAAABAAEAAAAKAAUAAAAAAAAAAAAJAAUAAAAAAAAAAAAHAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAFAAQAAAAAAAAAAAAGAAQAAAAAAAAAAAAJAAIAAAAAAAAAAAAJAAEAAAAAAAAAAAAKAAEAAAAAAAAAAAAKAAIAAAAAAAAAAAALAAIAAAAAAAAAAAALAAEAAAAAAAAAAAAMAAEAAAAAAAAAAAAMAAIAAAAAAAAAAAANAAIAAAAAAAAAAAANAAEAAAAAAAAAAAAOAAEAAAAAAAAAAAAPAAEAAAAAAAAAAAAJAAcAAAAAAAAAAAAJAAgAAAAAAAAAAAAJAAkAAAAAAAAAAAAKAAkAAAAAAAAAAAAKAAgAAAAAAAAAAAAKAAcAAAAAAAAAAAALAAgAAAAAAAAAAAALAAkAAAAAAAAAAAAMAAkAAAAAAAAAAAAMAAgAAAAAAAAAAAANAAgAAAAAAAAAAAANAAkAAAAAAAAAAAAOAAkAAAAAAAAAAAAPAAkAAAAAAAAAAAAJAAMAAAAAAAAAAAAKAAMAAAAAAAAAAAAQAAkAAAABAAEAAAA=")
+tile_map_data = PackedByteArray("AAAEAAUAAAAAAAAAAAAFAAUAAAAAAAAAAAAGAAUAAAAAAAAAAAAHAAUAAAAAAAAAAAAIAAUAAAAAAAAAAAAJAAUAAAAAAAAAAAAKAAUAAAAAAAAAAAALAAUAAAAAAAAAAAAMAAUAAAAAAAAAAAANAAUAAAAAAAAAAAAOAAUAAAAAAAAAAAAPAAUAAAAAAAAAAAAQAAUAAAAAAAAAAAAKAAQAAAAAAAAAAAAKAAYAAAAAAAAAAAAKAAcAAAAAAAAAAAAKAAMAAAAAAAAAAAALAAMAAAAAAAAAAAALAAcAAAAAAAAAAAAMAAMAAAAAAAAAAAAMAAcAAAAAAAAAAAAKAAgAAAAAAAAAAAAKAAkAAAAAAAAAAAALAAkAAAAAAAAAAAANAAkAAAAAAAAAAAAMAAkAAAAAAAAAAAAPAAkAAAAAAAAAAAAOAAkAAAAAAAAAAAAQAAkAAAAAAAAAAAAJAAcAAAAAAAAAAAAIAAcAAAAAAAAAAAAJAAMAAAAAAAAAAAAIAAMAAAAAAAAAAAARAAUAAAABAAEAAAARAAkAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_5fnxm")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=664552943]
-tile_set = SubResource("TileSet_6vd2c")
+scale = Vector2(2, 2)
+tile_map_data = PackedByteArray("AAAFAAUAAAAFAAEAAAAGAAUAAAAGAAEAAAAHAAUAAAAFAAEAAAAIAAUAAAAGAAEAAAAJAAUAAAAFAAEAAAAKAAUAAAAHAAQAAAAKAAYAAAAHAAUAAAAKAAcAAAAHAAQAAAAKAAgAAAAHAAUAAAAKAAkAAAAEAAcAAAALAAcAAAAGAAQAAAAJAAcAAAAGAAQAAAALAAkAAAAIAAQAAAAMAAkAAAAJAAQAAAANAAkAAAAIAAQAAAAOAAkAAAAJAAQAAAAPAAkAAAAIAAQAAAAQAAkAAAAKAAoAAAAQAAUAAAAjAAQAAAAPAAUAAAAGAAoAAAAOAAUAAAAJAAoAAAANAAUAAAAIAAoAAAAMAAUAAAAHAAoAAAALAAUAAAAGAAoAAAAMAAcAAAAjAAQAAAAIAAcAAAAYAAcAAAAKAAQAAAABAAUAAAAKAAMAAAAHAAEAAAAJAAMAAAAFAAoAAAALAAMAAAAHAAoAAAAMAAMAAAAKAAoAAAAIAAMAAAAEAAoAAAA=")
+tile_set = ExtResource("3_54ndd")
 
-[node name="HUD" parent="." unique_id=701478321 node_paths=PackedStringArray("defense_container", "logic_grid") instance=ExtResource("3_8j3t6")]
-z_index = 6
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
-grow_horizontal = 1
-grow_vertical = 1
+[node name="GlobalManager" type="Node2D" parent="." unique_id=1350064491 node_paths=PackedStringArray("enemy_controller", "buff_emitter", "player_container")]
+script = ExtResource("5_oxtc6")
+enemy_controller = NodePath("EnemyController")
+buff_emitter = NodePath("BuffEmitter")
+player_container = NodePath("PlayerContainer")
+
+[node name="EnemyController" type="Node2D" parent="GlobalManager" unique_id=925543015 node_paths=PackedStringArray("mount_node", "nav_tile_map")]
+script = ExtResource("6_ahqy1")
+wave_data = SubResource("Resource_bq2j3")
+enemy_catalog = ExtResource("9_d0fy6")
+wave_clear_fragments = null
+mount_node = NodePath("../..")
+nav_tile_map = NodePath("../../BaseMapLayer")
+
+[node name="PathLine" type="Line2D" parent="GlobalManager/EnemyController" unique_id=835293797]
+visible = false
+position = Vector2(180, 27)
+points = PackedVector2Array(897, 324, 114, 320)
+width = 10.035
+
+[node name="PathLine2" type="Line2D" parent="GlobalManager/EnemyController" unique_id=1219067005]
+visible = false
+points = PackedVector2Array(1066, 610, 685, 609, 677, 356, 300, 351)
+
+[node name="PlayerContainer" type="Node2D" parent="GlobalManager" unique_id=1855525682]
+script = ExtResource("10_48m6x")
+
+[node name="ButtonContainer" type="Node2D" parent="GlobalManager" unique_id=737539005]
+
+[node name="Btn_lose_life" parent="GlobalManager/ButtonContainer" unique_id=1060437313 instance=ExtResource("23_ljdc0")]
+position = Vector2(287, 344)
+buff_effect = Array[ExtResource("12_8g11h")]([ExtResource("24_7yr8f")])
+
+[node name="DebugBuffPanel" type="Node2D" parent="GlobalManager" unique_id=1109441250 node_paths=PackedStringArray("enemy_controller", "player_container", "defense_container")]
+script = ExtResource("25_g8krs")
+enemy_controller = NodePath("../EnemyController")
+player_container = NodePath("../PlayerContainer")
 defense_container = NodePath("../DefenceContainer")
-logic_grid = NodePath("../BaseMapLayer")
 
-[node name="DefenceContainer" type="Node2D" parent="." unique_id=1794806368 node_paths=PackedStringArray("level_scene")]
+[node name="BuffEmitter" type="Node2D" parent="GlobalManager" unique_id=727783467 node_paths=PackedStringArray("enemy_controller", "defense_container", "player_container", "button_container")]
+script = ExtResource("26_7hy0q")
+enemy_controller = NodePath("../EnemyController")
+defense_container = NodePath("../DefenceContainer")
+player_container = NodePath("../PlayerContainer")
+button_container = NodePath("../ButtonContainer")
+
+[node name="DefenceContainer" type="Node2D" parent="GlobalManager" unique_id=229470256 node_paths=PackedStringArray("level_scene")]
 script = ExtResource("4_pf8af")
-level_scene = NodePath("..")
+level_scene = NodePath("../..")
+
+[node name="HUD" parent="GlobalManager" unique_id=44537283 node_paths=PackedStringArray("defense_container", "logic_grid", "global_manager", "player_container", "enemy_controller") instance=ExtResource("3_8j3t6")]
+offset_left = -9.0
+offset_top = 24.0
+offset_right = -9.0
+offset_bottom = 24.0
+defense_container = NodePath("../DefenceContainer")
+logic_grid = NodePath("../../BaseMapLayer")
+global_manager = NodePath("..")
+player_container = NodePath("../PlayerContainer")
+enemy_controller = NodePath("../EnemyController")

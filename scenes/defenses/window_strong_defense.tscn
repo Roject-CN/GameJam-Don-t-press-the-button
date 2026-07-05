@@ -1,15 +1,24 @@
 [gd_scene format=3 uid="uid://dxg1hbqi1fnn8"]
 
 [ext_resource type="PackedScene" uid="uid://c8goie1f18fsy" path="res://scenes/defenses/base_defense.tscn" id="1_uqge0"]
-[ext_resource type="Script" uid="uid://cx6602kwbusbn" path="res://scripts/defenses/window_strong_defense.gd" id="2_strong"]
+[ext_resource type="Script" uid="uid://bfjmspvh77osk" path="res://scripts/defenses/window_strong_defense.gd" id="2_strong"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_00320"]
+radius = 106.004715
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_w0yly"]
-radius = 60.99
+radius = 33.24154
 
 [node name="WindowStrongDefense" unique_id=544454214 instance=ExtResource("1_uqge0")]
 script = ExtResource("2_strong")
-lure_count = 5
+lure_count = 10
 strike_range = 48.0
+
+[node name="Sprite2D" parent="." index="0" unique_id=974198124]
+scale = Vector2(0.5, 0.5)
+
+[node name="CollisionShape2D" parent="Area" parent_id_path=PackedInt32Array(1136293830) index="0" unique_id=93802236]
+shape = SubResource("CircleShape2D_00320")
 
 [node name="Area2" type="Area2D" parent="." index="2" unique_id=377225023]
 
@@ -17,7 +26,7 @@ strike_range = 48.0
 shape = SubResource("CircleShape2D_w0yly")
 
 [node name="CounterLabel" type="Label" parent="." index="3" unique_id=920183102]
-offset_left = -22.0
-offset_top = -58.0
-offset_right = 18.0
-offset_bottom = -35.0
+offset_left = -19.0
+offset_top = -31.0
+offset_right = 21.0
+offset_bottom = -8.0

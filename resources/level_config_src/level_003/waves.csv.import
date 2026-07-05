@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dk3kk03o53ch0"
+
+[deps]
+
+files=["res://resources/level_config_src/level_003/waves.wave.translation", "res://resources/level_config_src/level_003/waves.enemy.translation", "res://resources/level_config_src/level_003/waves.path.translation"]
+
+source_file="res://resources/level_config_src/level_003/waves.csv"
+dest_files=["res://resources/level_config_src/level_003/waves.wave.translation", "res://resources/level_config_src/level_003/waves.enemy.translation", "res://resources/level_config_src/level_003/waves.path.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

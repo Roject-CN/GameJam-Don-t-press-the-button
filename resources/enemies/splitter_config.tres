@@ -1,8 +1,9 @@
-[gd_resource type="Resource" script_class="EnemyConfig" format=3]
+[gd_resource type="Resource" script_class="EnemyConfig" format=3 uid="uid://cbg4xwouroylw"]
 
-[ext_resource type="Script" path="res://scripts/enemies/enemy_config.gd" id="1_cfg"]
+[ext_resource type="Script" uid="uid://d0fqqw2h0n06i" path="res://scripts/enemies/enemy_config.gd" id="1_cfg"]
 
 [resource]
 script = ExtResource("1_cfg")
-speed = 150.0
+speed = 60.0
 health = 4
+click_times = 1

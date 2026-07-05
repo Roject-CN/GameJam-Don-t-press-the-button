@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_cfg")
-speed = 120.0
+speed = 60.0
 health = 5
-click_times = 4
+click_times = 1
 taunt_resistance = 1.0
