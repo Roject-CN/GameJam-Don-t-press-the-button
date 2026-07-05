@@ -36,15 +36,11 @@ func _process(delta: float) -> void:
 		return
 
 	# 冷却递减 + 清理死敌
-	var dead: Array[BaseEnemy] = []
-	for e: BaseEnemy in _strike_cd:
-		if not is_instance_valid(e) or e._dying:
-			dead.append(e)
-		else:
+	for e in _strike_cd.keys():
+		if is_instance_valid(e) and not e._dying:
 			_strike_cd[e] -= delta
-	for e: BaseEnemy in dead:
-		_strike_cd.erase(e)
-
+		else:
+			_strike_cd.erase(e)
 	# 清理已死亡的被引诱敌人
 	var i: int = _lured_enemies.size() - 1
 	while i >= 0:
