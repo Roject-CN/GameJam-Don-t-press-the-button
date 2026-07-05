@@ -180,11 +180,12 @@ func _closest_point_on_path(pos: Vector2) -> float:
 
 func set_nav_grid(nav: TileMapLayer, target_pos: Vector2 = Vector2.ZERO) -> void:
 	if nav:
-		nav_agent.set_navigation_map(nav.get_navigation_map())
+		nav_agent.set_navigation_map(nav.get_world_2d().navigation_map)
 		if target_pos != Vector2.ZERO:
 			nav_agent.target_position = target_pos
 		_use_nav_grid = true
 	else:
+		_use_nav_grid = false
 		_use_nav_grid = false
 
 # ══ 引诱系统 ══
@@ -225,6 +226,27 @@ func release_lure(source: Node2D) -> void:
 		_returning_to_path = true
 
 
+## 通过导航网格移向目标点，导航失效时回退直线移动。到达时返回 true
+func _nav_move_toward(delta: float, target: Vector2) -> bool:
+	var dist: float = global_position.distance_to(target)
+	if dist <= 5.0:
+		global_position = target
+		return true
+
+	var next_pos: Vector2 = target
+	if _use_nav_grid and nav_agent:
+		nav_agent.target_position = target
+		var candidate: Vector2 = nav_agent.get_next_path_position()
+		if candidate != Vector2.ZERO and candidate.distance_squared_to(target) < dist * dist:
+			next_pos = candidate
+
+	var to_next: Vector2 = next_pos - global_position
+	var step: float = min(speed * delta, to_next.length())
+	if step > 0.0:
+		global_position += to_next.normalized() * step
+	return false
+
+
 func _physics_process(delta: float) -> void:
 	if _dying or not _setup_done:
 		return
@@ -240,31 +262,16 @@ func _physics_process(delta: float) -> void:
 		return
 
 	if being_temptied:
-		# 引诱源失效 → 自动释放
 		if not is_instance_valid(_lure_source):
 			release_lure(null)
 			return
-		# 向引诱目标移动
-		var dir: Vector2 = _lure_target - global_position
-		var dist: float = dir.length()
-		if dist > 5.0:
-			var move: float = min(speed * delta, dist)
-			global_position += dir.normalized() * move
-		# 到达目标后不继续沿路径移动，等待窗口消耗
+		_nav_move_toward(delta, _lure_target)
 		return
 
-	# 释放引诱后 → 移动回原路径（而非闪现）
 	if _returning_to_path:
-		var ret_dir: Vector2 = _return_target - global_position
-		var ret_dist: float = ret_dir.length()
-		if ret_dist > 5.0:
-			var move: float = min(speed * delta, ret_dist)
-			global_position += ret_dir.normalized() * move
-			return
-		# 已到达原路径，精准吸附
-		global_position = _return_target
-		_returning_to_path = false
-		_return_target = Vector2.ZERO
+		if _nav_move_toward(delta, _return_target):
+			_returning_to_path = false
+			_return_target = Vector2.ZERO
 		return
 
 	# 沿路径移动
