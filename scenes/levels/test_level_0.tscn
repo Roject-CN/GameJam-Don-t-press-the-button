@@ -81,6 +81,9 @@ nav_tile_map = NodePath("../../BaseMapLayer")
 [node name="PathLine" type="Line2D" parent="GlobalManager/EnemyController" unique_id=511748652]
 points = PackedVector2Array(1031, 130, 647, 128, 642, 316, 133, 321)
 
+[node name="PathLine2" type="Line2D" parent="GlobalManager/EnemyController" unique_id=1411624808]
+points = PackedVector2Array(1091, 569, 651, 561, 637, 314, 162, 329)
+
 [node name="PlayerContainer" type="Node2D" parent="GlobalManager" unique_id=1379033782]
 script = ExtResource("10_833sg")
 
