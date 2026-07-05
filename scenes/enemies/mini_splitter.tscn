@@ -1,69 +1,44 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://1vmj2tvxwk6d"]
 
 [ext_resource type="Script" uid="uid://egx2gyublpfy" path="res://scripts/enemies/base_enemy.gd" id="1_r5xb8"]
-[ext_resource type="Texture2D" uid="uid://dbhsmxlbt03rt" path="res://assets/mouse.png" id="2_qf3h2"]
-
-[sub_resource type="Animation" id="Animation_qf3h2"]
-length = 0.2
-
-[sub_resource type="Animation" id="Animation_lkvl6"]
-resource_name = "clicked"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:skew")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [0.0, 0.7278023, 0.0]
-}
-
-[sub_resource type="Animation" id="Animation_n763p"]
-resource_name = "free"
-length = 0.2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:self_modulate")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_n763p"]
-_data = {
-&"RESET": SubResource("Animation_qf3h2"),
-&"clicked": SubResource("Animation_lkvl6"),
-&"free": SubResource("Animation_n763p")
-}
+[ext_resource type="Texture2D" uid="uid://oge0u85ht20b" path="res://assets/enemy-12-02.png" id="2_ca26j"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ufgfk"]
 radius = 44.0
 
-[node name="MiniSplitterEnemy" type="Node2D"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_cipqd"]
+atlas = ExtResource("2_ca26j")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wc7kj"]
+atlas = ExtResource("2_ca26j")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_k1mcd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cipqd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wc7kj")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="MiniSplitterEnemy" type="Node2D" unique_id=2135747104]
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_r5xb8")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-z_index = 99
-rotation = 0.49741885
-scale = Vector2(0.1, 0.1)
-texture = ExtResource("2_qf3h2")
-offset = Vector2(100, 0)
-modulate = Color(1.0, 0.7, 0.3, 1.0)
+[node name="Area2D" type="Area2D" parent="." unique_id=107594542]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries/ = SubResource("AnimationLibrary_n763p")
-
-[node name="Area2D" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1041509234]
 shape = SubResource("CircleShape2D_ufgfk")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=744603262]
+position = Vector2(0, -21.999998)
+scale = Vector2(4.27, 4.27)
+sprite_frames = SubResource("SpriteFrames_k1mcd")
+autoplay = "default"

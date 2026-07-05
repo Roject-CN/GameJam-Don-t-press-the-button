@@ -4,9 +4,8 @@ class_name BaseEnemy
 ## 敌人基类 — 沿 Line2D 路径移动，接近按钮时停止并点击
 
 # 节点
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var area_2d: Area2D = $Area2D
-@onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
+var nav_agent: NavigationAgent2D = null
 
 # 属性
 @export var speed: float = 200.0
@@ -54,6 +53,8 @@ signal enemy_died()
 
 
 func _ready() -> void:
+	if has_node("NavigationAgent2D"):
+		nav_agent = $NavigationAgent2D
 	if config:
 		_apply_config()
 		if path_line:
@@ -100,8 +101,6 @@ func strike() -> void:
 func _die() -> void:
 	_dying = true
 	_clicking = false
-	animation_player.play("free")
-	await animation_player.animation_finished
 	enemy_died.emit()
 	call_deferred("queue_free")
 
@@ -123,13 +122,10 @@ func _find_nearest_button(pos: Vector2) -> BaseClickedButton:
 
 
 func _click_button(btn: BaseClickedButton) -> void:
-	_clicking = true
-	animation_player.play("clicked")
-	btn.press()
-	await animation_player.animation_finished
-	if _dying:
-		_clicking = false
+	if _dying or click_times <= 0:
 		return
+	_clicking = true
+	btn.press()
 	btn.release()
 	click_times -= 1
 	_clicking = false
@@ -179,13 +175,12 @@ func _closest_point_on_path(pos: Vector2) -> float:
 	return best_progress
 
 func set_nav_grid(nav: TileMapLayer, target_pos: Vector2 = Vector2.ZERO) -> void:
-	if nav:
+	if nav and nav_agent:
 		nav_agent.set_navigation_map(nav.get_world_2d().navigation_map)
 		if target_pos != Vector2.ZERO:
 			nav_agent.target_position = target_pos
 		_use_nav_grid = true
 	else:
-		_use_nav_grid = false
 		_use_nav_grid = false
 
 # ══ 引诱系统 ══
@@ -260,7 +255,7 @@ func _physics_process(delta: float) -> void:
 	if btn and btn.global_position.distance_to(global_position) <= click_range:
 		_click_button(btn)
 		return
-
+	
 	if being_temptied:
 		if not is_instance_valid(_lure_source):
 			release_lure(null)

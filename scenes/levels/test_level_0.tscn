@@ -1,8 +1,10 @@
 [gd_scene format=4 uid="uid://dgyb5lw3n28p7"]
 
 [ext_resource type="Script" uid="uid://dt8ute3kkl4vj" path="res://scripts/level_control/level.gd" id="1_67rw1"]
+[ext_resource type="Texture2D" uid="uid://dsynpbyosvtci" path="res://assets/basic000.png" id="2_4vfcw"]
 [ext_resource type="Texture2D" uid="uid://bvugwx4xsj2ds" path="res://assets/debug_res/placeholder.png" id="2_veify"]
 [ext_resource type="Script" uid="uid://idd8y2or3c2k" path="res://scripts/defenses/defence_container.gd" id="3_ldb5k"]
+[ext_resource type="TileSet" uid="uid://dqa6qg5xc6skb" path="res://resources/tiles/base_ground.tres" id="3_svtx6"]
 [ext_resource type="Script" uid="uid://d1c1pdn420m4v" path="res://scripts/global_manager.gd" id="4_47a1b"]
 [ext_resource type="Script" uid="uid://vk2v3ct58qt2" path="res://scripts/buffs/buff_emitter.gd" id="5_57bs3"]
 [ext_resource type="Script" uid="uid://dfiyq0gqv42y2" path="res://scripts/systems/wave_control/wave_entry.gd" id="6_57bs3"]
@@ -18,6 +20,7 @@
 [ext_resource type="Resource" path="res://resources/buff_effect/enemy_slow_down.tres" id="20_buf2"]
 [ext_resource type="Resource" path="res://resources/buff_effect/enemy_health_up.tres" id="21_buf3"]
 [ext_resource type="Resource" path="res://resources/buff_effect/enemy_more_clicks.tres" id="22_buf4"]
+[ext_resource type="PackedScene" uid="uid://c4mcblcyou84k" path="res://scenes/buttons/button_lose_life.tscn" id="22_svtx6"]
 [ext_resource type="Resource" path="res://resources/buff_effect/enemy_taunt_resist.tres" id="23_buf5"]
 [ext_resource type="Resource" path="res://resources/buff_effect/defense_fire_rate_up.tres" id="24_buf6"]
 [ext_resource type="Resource" uid="uid://n6wrhoi8lwrp" path="res://resources/buff_effect/defense_damage_up.tres" id="25_buf7"]
@@ -49,10 +52,20 @@ script = ExtResource("1_67rw1")
 level_id = "level_001"
 next_level_id = "level_002"
 
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=675411637]
+position = Vector2(684, 249)
+scale = Vector2(4, 4)
+texture = ExtResource("2_4vfcw")
+
 [node name="BaseMapLayer" type="TileMapLayer" parent="." unique_id=333896876]
 scale = Vector2(4, 4)
 tile_map_data = PackedByteArray("AAABAAQAAAAAAAEAAAABAAUAAAAAAAEAAAACAAQAAAAAAAEAAAACAAUAAAAAAAEAAAADAAUAAAAAAAAAAAAEAAUAAAAAAAAAAAAFAAUAAAAAAAAAAAAGAAUAAAAAAAAAAAAHAAUAAAAAAAAAAAAIAAUAAAAAAAAAAAARAAEAAAABAAEAAAAQAAEAAAABAAEAAAAPAAIAAAAAAAAAAAAOAAIAAAAAAAAAAAAKAAQAAAAAAAAAAAAKAAYAAAAAAAAAAAAOAAgAAAAAAAAAAAAPAAgAAAAAAAAAAAARAAkAAAABAAEAAAAJAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAADAAQAAAAAAAAAAAAJAAYAAAAAAAAAAAAQAAIAAAABAAEAAAARAAIAAAABAAEAAAAQAAgAAAABAAEAAAARAAgAAAABAAEAAAAKAAUAAAAAAAAAAAAJAAUAAAAAAAAAAAAHAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAFAAQAAAAAAAAAAAAGAAQAAAAAAAAAAAAJAAIAAAAAAAAAAAAJAAEAAAAAAAAAAAAKAAEAAAAAAAAAAAAKAAIAAAAAAAAAAAALAAIAAAAAAAAAAAALAAEAAAAAAAAAAAAMAAEAAAAAAAAAAAAMAAIAAAAAAAAAAAANAAIAAAAAAAAAAAANAAEAAAAAAAAAAAAOAAEAAAAAAAAAAAAPAAEAAAAAAAAAAAAJAAcAAAAAAAAAAAAJAAgAAAAAAAAAAAAJAAkAAAAAAAAAAAAKAAkAAAAAAAAAAAAKAAgAAAAAAAAAAAAKAAcAAAAAAAAAAAALAAgAAAAAAAAAAAALAAkAAAAAAAAAAAAMAAkAAAAAAAAAAAAMAAgAAAAAAAAAAAANAAgAAAAAAAAAAAANAAkAAAAAAAAAAAAOAAkAAAAAAAAAAAAPAAkAAAAAAAAAAAAJAAMAAAAAAAAAAAAKAAMAAAAAAAAAAAAQAAkAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_ukdvg")
+
+[node name="BaseGoundLayer" type="TileMapLayer" parent="." unique_id=1322029702]
+scale = Vector2(2, 2)
+tile_map_data = PackedByteArray("AAABAAQAAAAWAAAAAAABAAUAAAAMAAEAAAACAAQAAAARAAEAAAACAAUAAAARAAoAAAAJAAkAAAAWAAsAAAADAAQAAAARAAEAAAADAAUAAAARAAoAAAAEAAQAAAARAAEAAAAEAAUAAAARAAoAAAAFAAQAAAARAAEAAAAFAAUAAAARAAoAAAAGAAQAAAARAAEAAAAGAAUAAAARAAoAAAAHAAQAAAARAAEAAAAHAAUAAAARAAoAAAAJAAEAAAAWAAAAAAAJAAIAAAANAAUAAAAJAAgAAAANAAYAAAAKAAQAAAAWAAYAAAALAAgAAAAVAAQAAAAMAAgAAAAVAAQAAAANAAgAAAAVAAQAAAAOAAgAAAAVAAQAAAAPAAgAAAAVAAQAAAAKAAcAAAAWAAUAAAAKAAgAAAATAAQAAAAJAAcAAAAZAAQAAAAJAAYAAAANAAYAAAAJAAUAAAAQAAcAAAAIAAUAAAARAAoAAAAIAAQAAAARAAEAAAAJAAQAAAAQAAQAAAAJAAMAAAANAAUAAAAKAAEAAAARAAEAAAAKAAYAAAATAAIAAAAKAAUAAAAWAAUAAAAKAAkAAAAOAAcAAAALAAkAAAAOAAcAAAAMAAkAAAAOAAcAAAANAAkAAAAOAAcAAAAOAAkAAAAOAAcAAAAPAAkAAAAOAAcAAAALAAEAAAAUAAQAAAAMAAEAAAAUAAQAAAANAAEAAAAUAAQAAAAOAAEAAAAUAAQAAAAPAAEAAAAUAAQAAAAKAAMAAAAWAAYAAAALAAIAAAASAAoAAAAMAAIAAAASAAoAAAANAAIAAAASAAoAAAAOAAIAAAASAAoAAAAPAAIAAAASAAoAAAAKAAIAAAATAAcAAAA=")
+tile_set = ExtResource("3_svtx6")
 
 [node name="GlobalManager" type="Node2D" parent="." unique_id=256218982 node_paths=PackedStringArray("enemy_controller", "buff_emitter", "player_container")]
 script = ExtResource("4_47a1b")
@@ -70,64 +83,76 @@ nav_tile_map = NodePath("../../BaseMapLayer")
 [node name="PathLine" type="Line2D" parent="GlobalManager/EnemyController" unique_id=511748652]
 points = PackedVector2Array(1031, 130, 647, 128, 642, 316, 133, 321)
 
+[node name="PathLine2" type="Line2D" parent="GlobalManager/EnemyController" unique_id=1411624808]
+points = PackedVector2Array(1091, 569, 651, 561, 637, 314, 162, 329)
+
 [node name="PlayerContainer" type="Node2D" parent="GlobalManager" unique_id=1379033782]
 script = ExtResource("10_833sg")
 
 [node name="ButtonContainer" type="Node2D" parent="GlobalManager" unique_id=573457783]
 
 [node name="Btn_speed_up" parent="GlobalManager/ButtonContainer" unique_id=2059174619 instance=ExtResource("6_dambs")]
+visible = false
 position = Vector2(200, 40)
 text = "⚡加速"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("19_buf1")])
 
 [node name="Btn_slow_down" parent="GlobalManager/ButtonContainer" unique_id=868699060 instance=ExtResource("6_dambs")]
+visible = false
 position = Vector2(380, 40)
 text = "🐌减速"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("20_buf2")])
 
 [node name="Btn_health_up" parent="GlobalManager/ButtonContainer" unique_id=1561141099 instance=ExtResource("6_dambs")]
+visible = false
 position = Vector2(185, 477)
 text = "❤️加血"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("21_buf3")])
 
 [node name="Btn_more_clicks" parent="GlobalManager/ButtonContainer" unique_id=535240689 instance=ExtResource("6_dambs")]
+visible = false
 position = Vector2(383, 482)
 text = "🖱️多点"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("22_buf4")])
 
 [node name="Btn_taunt_resist" parent="GlobalManager/ButtonContainer" unique_id=183819273 instance=ExtResource("6_dambs")]
+visible = false
 position = Vector2(191, 562)
 text = "🛡️抵抗"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("23_buf5")])
 
 [node name="Btn_fire_rate" parent="GlobalManager/ButtonContainer" unique_id=2009035975 instance=ExtResource("6_dambs")]
+visible = false
 position = Vector2(376, 559)
 text = "🔫射速"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("24_buf6")])
 
 [node name="Btn_damage" parent="GlobalManager/ButtonContainer" unique_id=1946084231 instance=ExtResource("6_dambs")]
+visible = false
 position = Vector2(200, 95)
 text = "💥伤害"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("25_buf7")])
 
 [node name="Btn_lure" parent="GlobalManager/ButtonContainer" unique_id=1064696967 instance=ExtResource("6_dambs")]
+visible = false
 position = Vector2(380, 95)
 text = "🎣引诱"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("26_buf8")])
 
 [node name="Btn_gain_life" parent="GlobalManager/ButtonContainer" unique_id=1555091996 instance=ExtResource("6_dambs")]
+visible = false
 position = Vector2(384, 163)
 text = "💚回血"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("27_buf9")])
 
 [node name="Btn_lose_frags" parent="GlobalManager/ButtonContainer" unique_id=1272712637 instance=ExtResource("6_dambs")]
+visible = false
 position = Vector2(202, 161)
 text = "💰扣费"
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("28_buf10")])
 
-[node name="Btn_lose_life2" parent="GlobalManager/ButtonContainer" unique_id=115424014 instance=ExtResource("6_dambs")]
-position = Vector2(134, 316)
-text = "💀别碰！"
+[node name="Btn_lose_life" parent="GlobalManager/ButtonContainer" unique_id=115424014 instance=ExtResource("22_svtx6")]
+position = Vector2(133, 315)
 buff_effect = Array[ExtResource("7_dsfq4")]([ExtResource("9_jjdy8")])
 
 [node name="DebugBuffPanel" type="Node2D" parent="GlobalManager" unique_id=2030137515 node_paths=PackedStringArray("enemy_controller", "player_container", "defense_container")]
@@ -148,6 +173,10 @@ script = ExtResource("3_ldb5k")
 level_scene = NodePath("../..")
 
 [node name="HUD" parent="GlobalManager" unique_id=701478321 node_paths=PackedStringArray("defense_container", "logic_grid", "global_manager", "player_container", "enemy_controller") instance=ExtResource("13_20cmf")]
+offset_left = -19.0
+offset_top = 59.0
+offset_right = -19.0
+offset_bottom = 59.0
 defense_container = NodePath("../DefenceContainer")
 logic_grid = NodePath("../../BaseMapLayer")
 global_manager = NodePath("..")
