@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://c4mcblcyou84k"]
+
+[ext_resource type="PackedScene" uid="uid://gfcjptk77qr7" path="res://scenes/buttons/base_button.tscn" id="1_g54bw"]
+[ext_resource type="Script" uid="uid://dsttcrnvge301" path="res://scenes/buttons/button_lose_life.gd" id="2_i1457"]
+
+[node name="ButtonLoseLife" unique_id=115424014 instance=ExtResource("1_g54bw")]
+script = ExtResource("2_i1457")
+
+[node name="Button" parent="." index="0" unique_id=734673510]
+visible = false

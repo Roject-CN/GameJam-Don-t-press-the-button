@@ -11,6 +11,7 @@ class_name RouteHijackerEnemy
 var _buffed: Dictionary = {}
 
 
+
 func _ready() -> void:
 	super._ready()
 	if aura_area:

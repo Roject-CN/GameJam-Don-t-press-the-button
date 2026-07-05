@@ -50,16 +50,16 @@ deck = ExtResource("6_deck")
 
 [node name="CountLabel" parent="." unique_id=837785293 instance=ExtResource("4_136eg")]
 layout_mode = 0
-offset_left = 864.0
-offset_top = 305.0
-offset_right = 1148.0
-offset_bottom = 412.0
+offset_left = 979.0
+offset_top = 586.0
+offset_right = 1263.0
+offset_bottom = 693.0
 
 [node name="Ready" type="Button" parent="." unique_id=2063125810]
 layout_mode = 0
-offset_left = 24.0
-offset_top = 300.0
-offset_right = 242.0
-offset_bottom = 405.0
+offset_left = 15.0
+offset_top = 577.0
+offset_right = 233.0
+offset_bottom = 682.0
 theme_override_font_sizes/font_size = 71
 text = "Ready"
