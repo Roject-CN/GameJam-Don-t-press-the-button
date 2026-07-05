@@ -1,0 +1,6 @@
+[gd_resource type="Theme" format=3 uid="uid://dxfc07mvml3sf"]
+
+[ext_resource type="FontFile" uid="uid://bh8k6xvqo2l8" path="res://assets/fonts/VonwaonBitmap-16px.ttf" id="1_pnvfq"]
+
+[resource]
+default_font = ExtResource("1_pnvfq")

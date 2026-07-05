@@ -46,6 +46,8 @@ csv_path = "uid://direplyjnd64q"
 
 [node name="TestLevel0" type="Node2D" unique_id=998247491]
 script = ExtResource("1_67rw1")
+level_id = "level_001"
+next_level_id = "level_002"
 
 [node name="BaseMapLayer" type="TileMapLayer" parent="." unique_id=333896876]
 scale = Vector2(4, 4)

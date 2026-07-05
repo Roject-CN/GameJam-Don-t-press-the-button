@@ -172,6 +172,8 @@ sources/0 = SubResource("TileSetAtlasSource_7juxn")
 
 [node name="TutorialLevel" type="Node2D" unique_id=1308827530]
 script = ExtResource("1_5m6gs")
+level_id = "level_002"
+next_level_id = "level_003"
 
 [node name="BaseMapLayer" type="TileMapLayer" parent="." unique_id=932027402]
 scale = Vector2(4, 4)

@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://vgu3el2xaulr"]
+
+[ext_resource type="Script" uid="uid://dftktyohqvnu6" path="res://scripts/main/level_node.gd" id="1_lnode"]
+[ext_resource type="Texture2D" uid="uid://dhnxeonufjm0j" path="res://icon.svg" id="2_otg6t"]
+
+[node name="LevelNode" type="Control" unique_id=422904285]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 1
+script = ExtResource("1_lnode")
+
+[node name="Button" type="TextureRect" parent="." unique_id=600685298]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 62.0
+offset_bottom = 65.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_otg6t")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="Button" unique_id=33802807]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="self_pos" type="Control" parent="." unique_id=619605597]
+anchors_preset = 0
+offset_left = 1.0
+offset_top = 84.0
+offset_right = 1.0
+offset_bottom = 84.0
+mouse_filter = 2
+
+[node name="next_pos" type="Control" parent="." unique_id=1689373652]
+anchors_preset = 0
+offset_left = 166.0
+offset_top = 84.0
+offset_right = 166.0
+offset_bottom = 84.0
+mouse_filter = 2
+
+[connection signal="gui_input" from="Button" to="." method="_on_button_gui_input"]
+[connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Button" to="." method="_on_button_mouse_exited"]

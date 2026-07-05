@@ -1,0 +1,102 @@
+[gd_scene format=3 uid="uid://l8k8ns4fl0ix"]
+
+[ext_resource type="Script" uid="uid://b76qvxdt24lgh" path="res://scripts/main/level_select.gd" id="1_lselect"]
+[ext_resource type="PackedScene" uid="uid://vgu3el2xaulr" path="res://scenes/main/level_node.tscn" id="2_lnode"]
+[ext_resource type="Resource" uid="uid://if3tl40sqj6f" path="res://resources/levels/level_001.tres" id="3_l001"]
+[ext_resource type="Resource" uid="uid://if3tl50sqj6f" path="res://resources/levels/level_002.tres" id="4_l002"]
+[ext_resource type="Resource" uid="uid://if3tl60sqj6f" path="res://resources/levels/level_003.tres" id="5_l003"]
+
+[node name="LevelSelect" type="Control" unique_id=1316415607]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lselect")
+
+[node name="MapBackground" type="ColorRect" parent="." unique_id=2038880507]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.2, 0.25, 0.35, 1)
+
+[node name="LevelNode_001" parent="." unique_id=1601983043 node_paths=PackedStringArray("next_level_node") instance=ExtResource("2_lnode")]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 200.0
+offset_right = 144.0
+offset_bottom = 264.0
+next_level_node = NodePath("../LevelNode_002")
+level_info = ExtResource("3_l001")
+
+[node name="LevelNode_002" parent="." unique_id=928453827 node_paths=PackedStringArray("next_level_node") instance=ExtResource("2_lnode")]
+layout_mode = 0
+offset_left = 420.0
+offset_top = 109.0
+offset_right = 520.0
+offset_bottom = 209.0
+next_level_node = NodePath("../LevelNode_003")
+level_info = ExtResource("4_l002")
+
+[node name="LevelNode_003" parent="." unique_id=1607904437 instance=ExtResource("2_lnode")]
+layout_mode = 0
+offset_left = 784.0
+offset_top = 285.0
+offset_right = 884.0
+offset_bottom = 385.0
+level_info = ExtResource("5_l003")
+
+[node name="InfoPanel" type="Panel" parent="." unique_id=881151032]
+visible = false
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -260.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="InfoPanel" unique_id=819079667]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InfoPanel/MarginContainer" unique_id=1903351248]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="LevelNameLabel" type="Label" parent="InfoPanel/MarginContainer/VBoxContainer" unique_id=933478031]
+layout_mode = 2
+text = "关卡名称"
+horizontal_alignment = 1
+
+[node name="LevelDescLabel" type="Label" parent="InfoPanel/MarginContainer/VBoxContainer" unique_id=850777348]
+layout_mode = 2
+text = "关卡描述"
+autowrap_mode = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="InfoPanel/MarginContainer/VBoxContainer" unique_id=1958125037]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="ConfirmBtn" type="Button" parent="InfoPanel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=807673175]
+layout_mode = 2
+text = "确认开始"
+
+[node name="CancelBtn" type="Button" parent="InfoPanel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1089177483]
+layout_mode = 2
+text = "取消"

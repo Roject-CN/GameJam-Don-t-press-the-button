@@ -39,6 +39,8 @@ func spawn_defence(defence: BaseDefense) -> void:
 func confirm_placement(defence: BaseDefense) -> void:
 	defence.place()
 	placed_defenses.append(defence)
+	if not defence.defence_remove_requested.is_connected(remove_defence):
+		defence.defence_remove_requested.connect(remove_defence)
 	for buff in buff_container.get_active_buffs():
 		buff.apply(defence)
 

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c8goie1f18fsy"]
 
 [ext_resource type="Texture2D" uid="uid://dhnxeonufjm0j" path="res://icon.svg" id="1_8ic8v"]
-[ext_resource type="Script" uid="uid://d37dxb6vkj1iq" path="res://scripts/defenses/base_defense.gd" id="1_base"]
+[ext_resource type="Script" uid="uid://cj582lg3e7fn" path="res://scripts/defenses/base_defense.gd" id="1_base"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8ic8v"]
 radius = 219.00912
@@ -16,3 +16,21 @@ texture = ExtResource("1_8ic8v")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area" unique_id=93802236]
 shape = SubResource("CircleShape2D_8ic8v")
+
+[node name="destroy" type="Button" parent="." unique_id=610781885]
+self_modulate = Color(1, 1, 1, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -44.0
+offset_top = -24.0
+offset_right = 44.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 40
+text = "摧毁"
+
+[connection signal="mouse_entered" from="destroy" to="." method="_on_destroy_mouse_entered"]
