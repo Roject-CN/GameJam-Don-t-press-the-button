@@ -56,48 +56,75 @@ func _ready() -> void:
 
 
 func _bake_navigation() -> void:
+	if not nav_tile_map: return
+	
 	var tile_size: Vector2 = Vector2(nav_tile_map.tile_set.tile_size) * nav_tile_map.scale
 	var half: Vector2 = tile_size / 2.0
 	var tile_set: Dictionary = {}
-	for cell: Vector2i in nav_tile_map.get_used_cells():
+	
+	# 获取所有使用的单元格并存入集合
+	var used_cells = nav_tile_map.get_used_cells()
+	for cell: Vector2i in used_cells:
 		tile_set[cell] = true
 
 	# 贪心合并为最大矩形
 	var rects: Array[Rect2] = []
 	var visited: Dictionary = {}
-	for cell: Vector2i in nav_tile_map.get_used_cells():
-		if visited.get(cell, false): continue
+	
+	for cell: Vector2i in used_cells:
+		if visited.get(cell, false): 
+			continue
+		
+		# 1. 向右扩展 (X轴)，确保未被访问
 		var max_x: int = cell.x
-		while tile_set.get(Vector2i(max_x + 1, cell.y), false): max_x += 1
+		while tile_set.get(Vector2i(max_x + 1, cell.y), false) and not visited.get(Vector2i(max_x + 1, cell.y), false): 
+			max_x += 1
+		
+		# 2. 向下扩展 (Y轴)，确保整行未被访问且存在瓦片
 		var max_y: int = cell.y
 		var extend: bool = true
 		while extend:
+			var next_y: int = max_y + 1
+			# 检查下一行从 cell.x 到 max_x 的所有单元格
 			for x: int in range(cell.x, max_x + 1):
-				if not tile_set.get(Vector2i(x, max_y + 1), false): extend = false; break
-			if extend: max_y += 1
+				var check_cell := Vector2i(x, next_y)
+				if not tile_set.get(check_cell, false) or visited.get(check_cell, false): 
+					extend = false
+					break
+			if extend: 
+				max_y = next_y
+		
+		# 3. 标记该矩形区域内的所有单元格为已访问
 		for x: int in range(cell.x, max_x + 1):
 			for y: int in range(cell.y, max_y + 1):
 				visited[Vector2i(x, y)] = true
+		
+		# 4. 计算世界坐标并生成矩形
 		var tl: Vector2 = nav_tile_map.to_global(nav_tile_map.map_to_local(Vector2i(cell.x, cell.y))) - half
 		var sz: Vector2 = Vector2((max_x - cell.x + 1) * tile_size.x, (max_y - cell.y + 1) * tile_size.y)
 		rects.append(Rect2(tl, sz))
 
-	# 每个矩形注册为独立 NavigationRegion，避免 outline 共享边冲突
+	# 微微外扩 0.5px 确保相邻矩形边缘重叠，使 NavigationServer 能正确合并导航多边形
+	var outset: float = 0.5
 	for i: int in range(rects.size()):
 		var r: Rect2 = rects[i]
+		r = Rect2(r.position - Vector2(outset, outset), r.size + Vector2(outset * 2, outset * 2))
+		
 		var poly := NavigationPolygon.new()
 		poly.add_outline(PackedVector2Array([
-			r.position, r.position + Vector2(r.size.x, 0),
-			r.position + r.size, r.position + Vector2(0, r.size.y),
+			r.position, 
+			r.position + Vector2(r.size.x, 0),
+			r.position + r.size, 
+			r.position + Vector2(0, r.size.y),
 		]))
 		poly.make_polygons_from_outlines()
+		
 		var region := NavigationRegion2D.new()
-		region.name = "NavRect_%d" % i
+		region.name = "Nav_%d" % i
 		region.navigation_polygon = poly
 		add_child(region)
 
-	print("EnemyController: baked %d tiles → %d regions" % [nav_tile_map.get_used_cells().size(), rects.size()])
-
+	print("EnemyController: baked %d tiles → %d navigation regions" % [used_cells.size(), rects.size()])
 
 func _process(delta: float) -> void:
 	if not _active: return
@@ -159,10 +186,10 @@ func _spawn(entry: WaveEntry) -> void:
 	if not entry.path_line.is_empty():
 		path_line_node = _find_marker(entry.path_line) as Line2D
 
-	enemy.global_position = path_line_node.points[0] if path_line_node and path_line_node.points.size() > 0 else Vector2.ZERO
-
 	var parent := mount_node if mount_node else self
 	parent.add_child(enemy)
+	# 先入树再设 global_position，确保 Godot 正确转换全局→本地坐标，避免首帧闪现
+	enemy.global_position = path_line_node.global_position + path_line_node.points[0] if path_line_node and path_line_node.points.size() > 0 else Vector2.ZERO
 	enemy.enemy_died.connect(_on_enemy_died.bind(enemy))
 	enemies.append(enemy)
 	total_spawned += 1

@@ -4,7 +4,7 @@ class_name EnemyConfig
 ## 敌人配置数据 — 驱动 BaseEnemy 属性和行为
 
 ## 移动速度
-@export var speed: float = 200.0
+@export var speed: float = 60.0
 
 ## 生命值
 @export var health: int = 1

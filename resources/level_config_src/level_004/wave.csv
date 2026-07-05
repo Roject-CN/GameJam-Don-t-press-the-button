@@ -1,0 +1,16 @@
+time_offset,wave_index,enemy_type,path_line
+0.0,1,splitter,PathLine
+2.0,1,splitter,PathLine
+4.0,1,splitter,PathLine
+6.0,1,splitter,PathLine
+0.0,2,splitter,PathLine
+2.0,2,splitter,PathLine
+4.0,2,splitter,PathLine
+0.0,3,splitter,PathLine
+4.0,3,splitter,PathLine
+1.5,4,splitter,PathLine
+3.0,4,splitter,PathLine
+4.5,4,splitter,PathLine
+0.0,5,splitter,PathLine
+1.0,5,splitter,PathLine
+3.0,5,splitter,PathLine

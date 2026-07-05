@@ -1,15 +1,21 @@
 [gd_scene format=3 uid="uid://bl13qg3d5hfr8"]
 
-[ext_resource type="Script" uid="uid://dt2s0abm4w0ij" path="res://scripts/uis/hud/count_label.gd" id="1_tr516"]
+[ext_resource type="Script" uid="uid://kprqtwlttiqc" path="res://scripts/uis/hud/count_label.gd" id="1_tr516"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_tr516"]
 font_size = 60
+
+[sub_resource type="LabelSettings" id="LabelSettings_dy8o7"]
+font_size = 58
 
 [sub_resource type="LabelSettings" id="LabelSettings_ej7l4"]
 font_size = 60
 
 [sub_resource type="LabelSettings" id="LabelSettings_6vd2c"]
 font_size = 60
+
+[sub_resource type="LabelSettings" id="LabelSettings_ujkg3"]
+font_size = 58
 
 [sub_resource type="LabelSettings" id="LabelSettings_xet74"]
 font_size = 60
@@ -28,13 +34,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-columns = 2
+columns = 3
 
 [node name="CurrentCount" type="Label" parent="GridContainer" unique_id=967953223]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0"
 label_settings = SubResource("LabelSettings_tr516")
+
+[node name="Label" type="Label" parent="GridContainer" unique_id=1417731938]
+layout_mode = 2
+text = "/"
+label_settings = SubResource("LabelSettings_dy8o7")
 
 [node name="SumCount" type="Label" parent="GridContainer" unique_id=205353685]
 layout_mode = 2
@@ -47,6 +58,11 @@ horizontal_alignment = 2
 layout_mode = 2
 text = "0"
 label_settings = SubResource("LabelSettings_6vd2c")
+
+[node name="Label2" type="Label" parent="GridContainer" unique_id=361171070]
+layout_mode = 2
+text = "/"
+label_settings = SubResource("LabelSettings_ujkg3")
 
 [node name="SumWave" type="Label" parent="GridContainer" unique_id=151814457]
 layout_mode = 2

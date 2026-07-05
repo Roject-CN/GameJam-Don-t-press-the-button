@@ -2,36 +2,38 @@
 
 [ext_resource type="Script" uid="uid://c0m5ig28q0q7b" path="res://scripts/enemies/enemy_catalog.gd" id="1_cat"]
 [ext_resource type="Script" uid="uid://utqyjnqbsb3h" path="res://scripts/enemies/enemy_type_mapping.gd" id="2_map"]
-[ext_resource type="PackedScene" uid="uid://dp7qcvgcmvebd" path="res://scenes/enemies/base_enemy.tscn" id="3_basic"]
+[ext_resource type="PackedScene" uid="uid://dp7qcvgcmvebd" path="res://scenes/enemies/base_enemy.tscn" id="3_base"]
 [ext_resource type="PackedScene" uid="uid://cmmbc2vrfmtic" path="res://scenes/enemies/route_hijacker_enemy.tscn" id="4_hijacker"]
 [ext_resource type="PackedScene" uid="uid://dmhf6rhxx86wk" path="res://scenes/enemies/splitter_enemy.tscn" id="5_splitter"]
 [ext_resource type="PackedScene" uid="uid://1vmj2tvxwk6d" path="res://scenes/enemies/mini_splitter.tscn" id="6_mini"]
-[ext_resource type="Resource" uid="uid://d0u0a4v4vyyaa" path="res://resources/enemies/hijacker_config.tres" id="7_hcfg"]
-[ext_resource type="Resource" path="res://resources/enemies/splitter_config.tres" id="8_scfg"]
-[ext_resource type="Resource" path="res://resources/enemies/mini_splitter_config.tres" id="9_mcfg"]
+[ext_resource type="Resource" uid="uid://d0uoa4v4vyyab" path="res://resources/enemies/base_enemy_config.tres" id="7_bcfg"]
+[ext_resource type="Resource" uid="uid://d0u0a4v4vyyaa" path="res://resources/enemies/hijacker_config.tres" id="8_hcfg"]
+[ext_resource type="Resource" uid="uid://cbg4xwouroylw" path="res://resources/enemies/splitter_config.tres" id="9_scfg"]
+[ext_resource type="Resource" uid="uid://dn5f7luwu7h8w" path="res://resources/enemies/mini_splitter_config.tres" id="10_mcfg"]
 
 [sub_resource type="Resource" id="basic_map"]
 script = ExtResource("2_map")
 type_name = "basic"
-scene = ExtResource("3_basic")
+scene = ExtResource("3_base")
+enemy_config = ExtResource("7_bcfg")
 
 [sub_resource type="Resource" id="hijacker_map"]
 script = ExtResource("2_map")
 type_name = "hijacker"
 scene = ExtResource("4_hijacker")
-enemy_config = ExtResource("7_hcfg")
+enemy_config = ExtResource("8_hcfg")
 
 [sub_resource type="Resource" id="splitter_map"]
 script = ExtResource("2_map")
 type_name = "splitter"
 scene = ExtResource("5_splitter")
-enemy_config = ExtResource("8_scfg")
+enemy_config = ExtResource("9_scfg")
 
 [sub_resource type="Resource" id="mini_map"]
 script = ExtResource("2_map")
 type_name = "mini_splitter"
 scene = ExtResource("6_mini")
-enemy_config = ExtResource("9_mcfg")
+enemy_config = ExtResource("10_mcfg")
 
 [resource]
 script = ExtResource("1_cat")

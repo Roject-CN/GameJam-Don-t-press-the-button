@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://dmhf6rhxx86wk"]
 
 [ext_resource type="Script" uid="uid://yx5mi6o3qhel" path="res://scripts/enemies/splitter_enemy.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/mini_splitter.tscn" id="3_mini"]
+[ext_resource type="PackedScene" uid="uid://1vmj2tvxwk6d" path="res://scenes/enemies/mini_splitter.tscn" id="3_mini"]
 [ext_resource type="Texture2D" uid="uid://oge0u85ht20b" path="res://assets/enemy-12-02.png" id="3_vrj1d"]
 
 [sub_resource type="CircleShape2D" id="collision_shape"]
-radius = 44.0
+radius = 99.85
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2tog4"]
 atlas = ExtResource("3_vrj1d")
@@ -42,12 +42,13 @@ split_mini_scene = ExtResource("3_mini")
 [node name="Area2D" type="Area2D" parent="." unique_id=1927888203]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=2130582005]
+position = Vector2(4, -104)
 shape = SubResource("collision_shape")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=297549415]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1252055650]
-position = Vector2(1.9999999, -78)
+position = Vector2(3.9999998, -120)
 scale = Vector2(7.87, 7.87)
 sprite_frames = SubResource("SpriteFrames_6vd2c")
 animation = &"move"

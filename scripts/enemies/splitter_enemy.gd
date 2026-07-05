@@ -50,16 +50,24 @@ func _spawn_child(child_speed: float, child_health: int) -> void:
 	var mini := split_mini_scene.instantiate() as BaseEnemy
 	if not mini: return
 
-	mini.global_position = global_position + Vector2(randf_range(-10, 10), randf_range(-10, 10))
+	# 分裂点（父体死亡位置）作为"离线"参考点
+	var split_point: Vector2 = global_position
+
+	# 在分裂点附近小范围随机生成
+	mini.global_position = split_point + Vector2(randf_range(-32, 32), randf_range(-32, 32))
 	mini.speed = child_speed
 	mini.health = child_health
 	mini.click_times = 1
 
-	# 继承路径
+	# 继承路径，以分裂点（而非子体自身位置）计算路径进度
 	if path_line:
 		mini.path_line = path_line
 		mini._path_total_length = mini._build_segments(path_line.points)
-		mini._path_progress = mini._closest_point_on_path(mini.global_position)
+		mini._path_progress = mini._closest_point_on_path(split_point)
+
+	# 先导航回分裂点，再沿原路径继续行动
+	mini._return_target = split_point
+	mini._returning_to_path = true
 
 	mini._setup_done = true
 

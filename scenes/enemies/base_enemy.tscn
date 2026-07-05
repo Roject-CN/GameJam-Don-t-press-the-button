@@ -50,16 +50,18 @@ animations = [{
 [node name="BaseEnemy" type="Node2D" unique_id=1293915282]
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_r5xb8")
+speed = 60.0
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1177999024]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=2073683460]
+position = Vector2(0, -42)
 shape = SubResource("CircleShape2D_ufgfk")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=1830522481]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=804594116]
-position = Vector2(0, -34)
+position = Vector2(-2, -70)
 scale = Vector2(6, 6)
 sprite_frames = SubResource("SpriteFrames_6vd2c")
 animation = &"move"

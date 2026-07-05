@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LevelInfo" format=3 uid="uid://dnb4m3dycdgts"]
+
+[ext_resource type="Script" uid="uid://ckxnwy2xl6v7m" path="res://scripts/main/level_info.gd" id="1_aegr6"]
+
+[resource]
+script = ExtResource("1_aegr6")
+level_id = "level_004"
+level_name = "教程关 2"
+scene_path = "res://scenes/levels/tutorial_level_2.tscn"
+description = "分裂者狂欢！谨慎使用钓鱼窗口，延缓分裂者们的进攻！"
