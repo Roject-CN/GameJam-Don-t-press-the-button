@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LevelInfo" load_steps=2 format=3 uid="uid://blevel003000000"]
+
+[ext_resource type="Script" path="res://scripts/main/level_info.gd" id="1_level_info"]
+
+[resource]
+script = ExtResource("1_level_info")
+level_id = "level_003"
+level_name = "教程关 2"
+scene_path = "res://scenes/levels/tutorial_level_2.tscn"
+description = "教程第二关。敌人更强更多，合理搭配防御设施是取胜的关键。"

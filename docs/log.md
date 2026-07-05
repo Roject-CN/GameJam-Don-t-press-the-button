@@ -1,5 +1,28 @@
 # 更新日志 — "别按那个键"
 
+## 2026-07-05 — menu_and_defense
+
+### 菜单系统
+- 新增 MainMenu（主菜单）：开始游戏/继续游戏/退出，新游戏覆盖存档确认弹窗
+- 新增 LevelSelect（选关地图）：关卡节点链表 + 贝塞尔虚线连线
+- 新增 LevelNode：三态按钮（锁定/可选/已完成）
+- 新增 LevelInfo Resource：关卡元数据（id/名称/场景路径/描述）
+- 新增 SaveManager：ConfigFile 持久化，记录关卡解锁/完成状态
+
+### 防御放置验证
+- BaseDefense._ghost() 实时网格吸附 + tile 类型检查 + 重叠检测，无效变红
+- 新增 allowed_tiles 导出：不同防御可配置允许的 tile atlas 坐标（炮塔空地+地形，窗口仅地形）
+- card_unit._end_drag() 放置前二次验证，无效则取消
+
+### 防御拆除
+- 已放置防御 hover 显示摧毁按钮（self_modulate 淡入淡出）
+- defence_remove_requested 信号 → DefenceContainer.remove_defence()
+
+### 关卡流程
+- level.gd 新增 level_id / next_level_id 导出
+- GlobalManager._settle() 胜利时写存档自动解锁下一关
+- HUD 游戏结束 AcceptDialog 确认后返回选关
+
 ## 2026-07-01 — enemy_subclasses
 - 新增 RouteHijackerEnemy（路由劫持者）：移动光环塔，复用基类 LURED + A* 寻路在失败按钮间漫游，AuraArea 实时修改 300px 内友方敌人 speed/health
 - 新增 SplitterEnemy（分裂者）：死亡时隐藏本体生成 2 个 mini_splitter（50% 血量/70% 速度/1 次点击），子体死完后才 queue_free

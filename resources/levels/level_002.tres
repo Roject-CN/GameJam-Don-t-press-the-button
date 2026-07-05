@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LevelInfo" load_steps=2 format=3 uid="uid://blevel002000000"]
+
+[ext_resource type="Script" path="res://scripts/main/level_info.gd" id="1_level_info"]
+
+[resource]
+script = ExtResource("1_level_info")
+level_id = "level_002"
+level_name = "教程关 1"
+scene_path = "res://scenes/levels/tutorial_level_1.tscn"
+description = "教程第一关。学习如何使用炮塔和窗口防御来阻挡敌人进攻。"

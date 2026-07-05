@@ -68,4 +68,13 @@ func _settle(is_win: bool) -> void:
 	if buff_emitter:
 		buff_emitter.disconnect_all()
 	enemy_controller.stop_wave()
+
+	# 胜利时写存档：标记当前关卡完成 + 解锁下一关
+	if is_win:
+		var lvl := get_parent() as level
+		if lvl and lvl.level_id != "":
+			SaveManager.complete_level(lvl.level_id)
+			if lvl.next_level_id != "":
+				SaveManager.unlock_level(lvl.next_level_id)
+
 	game_over.emit(is_win)

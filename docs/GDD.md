@@ -202,7 +202,14 @@ GlobalManager (信号 hub)
 
 > `scripts/defenses/base_defense.gd` | Node2D → class_name BaseDefense
 
-ghost 半透明跟随鼠标，`place()` 恢复不透明并触发 `_on_placed()`。
+| 导出 | 默认 | 说明 |
+|------|------|------|
+| cost | 0 | 放置消耗碎片 |
+| allowed_tiles | [Vector2i(0,0)] | 允许放置的 tile atlas 坐标（-1,-1=空地） |
+
+ghost 阶段每帧网格吸附 + tile 类型验证 + 重叠检测（MIN_DISTANCE=64px），无效时变红。`place()` 恢复不透明并触发 `_on_placed()`。已放置防御 hover 显示摧毁按钮（$destroy，self_modulate 淡入淡出），`defence_remove_requested` 信号触发移除。
+
+方法：`setup_ghost_validator(tilemap, container)` `_is_placement_valid()`
 
 #### TurretDefense — 射击炮塔
 
@@ -261,6 +268,60 @@ ghost 半透明跟随鼠标，`place()` 恢复不透明并触发 `_on_placed()`�
 > `scripts/uis/hud/card_deck.gd` `card_entry.gd` | Resource
 
 CardDeck 包装 `Array[CardEntry]`，CardEntry 含 `card_scene: PackedScene` + `count: int`。
+
+---
+
+### 菜单系统
+
+#### MainMenu — 主菜单
+
+> `scripts/main/main_menu.gd` | `scenes/main/main_menu.tscn` | Control → class_name MainMenu
+
+3 按钮：开始游戏（有存档时弹确认框）/ 继续游戏（无存档时禁用）/ 退出。
+
+#### LevelSelect — 选关地图
+
+> `scripts/main/level_select.gd` | `scenes/main/level_select.tscn` | Control → class_name LevelSelect
+
+遍历子 LevelNode，管理点击选中 + 右侧 InfoPanel。确认后 `change_scene_to_file` 加载关卡。
+
+#### LevelNode — 关卡图标
+
+> `scripts/main/level_node.gd` | `scenes/main/level_node.tscn` | Control → class_name LevelNode
+
+| 导出 | 说明 |
+|------|------|
+| next_level_node | 链表，编辑器拖线连接下一关 |
+| level_info | LevelInfo Resource 引用 |
+
+三态按钮（locked 灰 / available 闪烁 / completed 暗），`_draw()` 画贝塞尔虚线到 next_level_node。信号：`level_selected` `request_open_tooltip` `request_close_tooltip`。
+
+#### LevelInfo — 关卡元数据
+
+> `scripts/main/level_info.gd` | Resource → class_name LevelInfo
+
+| 属性 | 说明 |
+|------|------|
+| level_id | 唯一标识，如 "level_001" |
+| level_name | 显示名称 |
+| scene_path | 关卡 .tscn 路径 |
+| description | 关卡描述 |
+
+---
+
+### 存档系统
+
+#### SaveManager — 存档管理器
+
+> `scripts/systems/save_manager.gd` | class_name SaveManager
+
+全部静态方法，使用 `ConfigFile` 读写 `user://save_data.cfg`。记录关卡状态（locked/available/completed）。
+
+方法：`has_save()` `reset_save()` `get_level_state(id)` `complete_level(id)` `unlock_level(id)`
+
+#### 关卡解锁集成
+
+`level.gd` 新增 `level_id` / `next_level_id` 导出。`GlobalManager._settle()` 胜利时调用 `SaveManager.complete_level()` + `unlock_level()` 自动解锁下一关。
 
 ---
 

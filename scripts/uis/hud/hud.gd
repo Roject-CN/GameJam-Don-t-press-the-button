@@ -56,3 +56,12 @@ func _on_fragments_changed(_new_amount: int) -> void:
 func _on_game_over(is_win: bool) -> void:
 	game_over_label.text = "you_win" if is_win else "you_lose"
 	game_over_label.visible = true
+
+	var dialog := AcceptDialog.new()
+	dialog.title = "胜利" if is_win else "失败"
+	dialog.dialog_text = "恭喜通关！" if is_win else "再接再厉！"
+	dialog.confirmed.connect(
+		func(): get_tree().change_scene_to_file("res://scenes/main/level_select.tscn")
+	)
+	add_child(dialog)
+	dialog.popup_centered()

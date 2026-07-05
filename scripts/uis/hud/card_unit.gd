@@ -103,6 +103,7 @@ func _start_drag() -> void:
 		_is_dragging = false
 		return
 	_defence.is_placed = false
+	_defence.setup_ghost_validator(_logic_grid, _defence_container)
 	if _defence_container:
 		_defence_container.spawn_defence(_defence)
 
@@ -117,6 +118,11 @@ func _end_drag() -> void:
 
 	if _logic_grid:
 		_defence.global_position = _snap_to_grid(_defence.global_position)
+
+	# 验证放置位置，无效则取消
+	if not _defence._is_placement_valid():
+		_cancel_drag()
+		return
 
 	if _defence_container:
 		_defence_container.confirm_placement(_defence)

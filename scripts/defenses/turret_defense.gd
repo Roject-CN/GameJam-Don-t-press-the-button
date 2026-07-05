@@ -3,6 +3,9 @@ class_name TurretDefense
 
 ## 射击炮塔 — 自动索敌，发射弹丸造成伤害
 
+func _ready() -> void:
+	allowed_tiles = [Vector2i(0, 0), Vector2i(-1, -1)]
+
 ## 射击间隔（秒）
 @export var fire_rate: float = 1.5
 
